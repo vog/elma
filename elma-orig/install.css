@@ -1,0 +1,16 @@
+body {
+    font-weight:bold;
+}
+
+span#red {
+    color: red;
+}
+    
+span#green {
+    color: green;
+}
+
+span#italic {
+    font-style: italic;
+    font-weight: normal;
+}
