@@ -1,4 +1,4 @@
-
+<?php
 // ######## LDAP Settings ########
 
 
@@ -11,4 +11,11 @@ define ("LDAP_DOMAIN_ROOT_DN","ou=domains,".LDAP_BASEDN);
 
 // ######## Language Settings #### 
 
-define ("DEFAULT_LANGUAGE","en";
+define ("DEFAULT_LANGUAGE","de");
+
+
+// ######## Template Settings ####
+
+define ("TEMPLATE","simple");
+
+?>
