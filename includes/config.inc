@@ -11,7 +11,7 @@ define ("LDAP_DOMAIN_ROOT_DN","ou=domains,".LDAP_BASEDN);
 
 // ######## Language Settings #### 
 
-define ("DEFAULT_LANGUAGE","de");
+define ("DEFAULT_LANGUAGE","de_DE");
 
 
 // ######## Template Settings ####
