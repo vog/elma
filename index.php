@@ -12,18 +12,17 @@ else if ( isset($_GET["module"]) ) $module = $_GET["module"];
 else $module = "";
 
 
-if ( !isset($_SESSION["elmalogin"]) ) {
+if ( !isset($_SESSION["login"]) ) {
     session_destroy();
     $smarty->display("header.tpl");
     $smarty->display("login.tpl");
     $smarty->display("footer.tpl");
 } else {
+    require('modules/modules.class.php');
     $content_module = &modules::factory($module);
     $content_module->smarty = $smarty;
     $content_module->proceed();
 
-    $smarty->assign('menutitle',$content_module->getMenuTitle());
-    $smarty->assign('menu',$content_module->getMenu());
     $smarty->assign('username',$_SESSION['username']);
 
     $content = $content_module->getContent();

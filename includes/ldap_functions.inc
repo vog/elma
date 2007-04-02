@@ -24,7 +24,7 @@ function my_ldapBind ( $cid, $binddn, $bindpw) {
 }
 
 function my_ldap_delete($ldap,$dn,$recursive=false) {
-    if($recursive == false) {
+    if ( $recursive == false ) {
         return(ldap_delete($ldap,$dn));
     } else {
         //searching for sub entries
