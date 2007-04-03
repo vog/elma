@@ -26,6 +26,5 @@ define ("TEMPLATE","simple");
 
 // ######## Application Settings ####
 
-define('__APPROOT__',getcwd());
-
+define('APPROOT',getcwd());
 ?>
