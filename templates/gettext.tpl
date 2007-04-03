@@ -1,2 +1,0 @@
-
-{t}Hello World{/t}
