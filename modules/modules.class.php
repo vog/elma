@@ -49,8 +49,7 @@ class modules {
 
 class module_base {
     var $smarty;
-    var $menutitle = "";
-    var $menu = array();
+    var $ldap;
     var $output = "";
     var $errors = "";
 
@@ -58,14 +57,19 @@ class module_base {
      * Constructor of this class
      */
     function module_base() {
-
+        $crypt = new mycrypt();
+        $this->ldap = new ELMA(LDAP_HOSTNAME);
+        $this->ldap->connect();
+        $this->ldap->binddn = $crypt->decrypt($_SESSION["ldap_binddn"]);
+        $this->ldap->bindpw = $crypt->decrypt($_SESSION["ldap_bindpass"]);
+        $this->ldap->bind($this->ldap->binddn,$this->ldap->bindpw);
 	}
 
     /**
      * This method is called after the constructor by the main page
      */
     function proceed() {
-
+    
 	}
 
     /**

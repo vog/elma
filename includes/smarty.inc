@@ -6,6 +6,7 @@ $smarty->template_dir = getcwd().'/templates/'.TEMPLATE.'/';
 $smarty->caching = false;
 $smarty->php_handling = SMARTY_PHP_REMOVE;
 $smarty->assign('_SELF',$_SERVER['PHP_SELF']);
+$smarty->assign('template_path',"templates/".TEMPLATE);
 
 // vim:tabstop=4:expandtab:shiftwidth=4:filetype=php:syntax:ruler:
 ?>

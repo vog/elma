@@ -1,16 +1,16 @@
 <?php
+session_start();
+
 require("includes/config.inc");
 include("includes/smarty.inc");
 require("includes/gettext.inc");
 require("includes/ldap_functions.inc");
 require("includes/my_functions.inc");
-
-session_start();
+require("includes/crypt.inc");
 
 if ( isset($_POST["module"]) ) $module = $_POST["module"];
 else if ( isset($_GET["module"]) ) $module = $_GET["module"];
 else $module = "";
-
 
 if ( !isset($_SESSION["login"]) ) {
     session_destroy();
@@ -28,6 +28,7 @@ if ( !isset($_SESSION["login"]) ) {
     $content = $content_module->getContent();
 
     $smarty->display("header.tpl");
+    $smarty->display("navigation.tpl");
     echo $content;
     $smarty->display("footer.tpl");
 }

@@ -19,6 +19,10 @@ define ("LDAP_USERS_ROOT_DN","ou=users,".LDAP_BASEDN);
 // ######## Language Settings #### 
 
 define ("DEFAULT_LANGUAGE","de_DE");
+define ("AVAILABLE_LANGUAGES",serialize(array("deutsch" => "de_DE",
+                                              "english" => "en_US"
+                                             ))
+       );
 
 // ######## Template Settings ####
 
@@ -27,4 +31,6 @@ define ("TEMPLATE","simple");
 // ######## Application Settings ####
 
 define('APPROOT',getcwd());
+
+define('MYCRYPT_KEY',"my little key");
 ?>

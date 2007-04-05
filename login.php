@@ -1,11 +1,13 @@
 <?php
 require("includes/config.inc");
-include("includes/smarty.inc");
-require("includes/gettext.inc");
 require("includes/ldap_functions.inc");
 require("includes/my_functions.inc");
+require("includes/crypt.inc");
 
 session_start ();
+
+$ldap = new ELMA(LDAP_HOSTNAME);
+$ldap->connect();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST")
 {
@@ -20,11 +22,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
     }
   
     if ( isset($LDAP_BINDDN) && isset($LDAP_BINDPASS) ) {
-	$ldap_cid = my_ldapConnect(LDAP_HOSTNAME,LDAP_USE_TLS);
-	if ( my_ldapBind($ldap_cid,$LDAP_BINDDN,$LDAP_BINDPASS) == 0 ) {
+	if ( $ldap->bind($LDAP_BINDDN,$LDAP_BINDPASS) == 0 ) {
             $_SESSION["login"] = TRUE;
             $_SESSION["logintime"] = time();
-            $_SESSION["username"] = $_POST["username"];
+	    $_SESSION["username"] = $_POST["username"];
+	    $_SESSION["language"] = $_POST["language"];
+
+	    $crypt = new mycrypt();
+	    $_SESSION["ldap_binddn"] = $crypt->encrypt($LDAP_BINDDN);
+	    $_SESSION["ldap_bindpass"] = $crypt->encrypt($LDAP_BINDPASS);
+	
 	    header ("Location: index.php");
             exit;
 	} else  {
