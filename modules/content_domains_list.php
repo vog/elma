@@ -8,13 +8,13 @@
 *
 */
 
-class content_domains extends module_base {
+class content_domains_list extends module_base {
 
     /**
      * Constructor of this class
      *
      */
-    function content_domains() {
+    function content_domains_list() {
         parent::module_base();
     }
 
@@ -34,7 +34,7 @@ class content_domains extends module_base {
      * @return string
      */
     function getContent() {
-        $_content = $this->smarty->fetch('content_domains.tpl');
+        $_content = $this->smarty->fetch('content_domains_list.tpl');
         return $_content;
     }
 }
