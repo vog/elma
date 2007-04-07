@@ -53,4 +53,5 @@ class content_template extends module_base
    	return $_content;
   }
 }
+// vim:tabstop=4:expandtab:shiftwidth=4:filetype=php:syntax:ruler:
 ?>

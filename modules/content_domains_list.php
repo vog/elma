@@ -24,7 +24,16 @@ class content_domains_list extends module_base {
      *
      */
     function proceed() {
-        $this->smarty->assign('domains',$this->ldap->listDomains());   
+        $my_domains = array();
+
+        $domains = $this->ldap->listDomains();
+        for ( $i = 0; $i < $domains["count"]; $i++ ) {
+            $domain['dc'] = $domains[$i]["dc"][0]; 
+            $domain['link'] = $_SERVER['PHP_SELF']."?module=domain_edit&domain=".$domain['dc'];       
+            array_push($my_domains,$domain);
+        }
+
+        $this->smarty->assign('domains',$my_domains);   
 	}
 
     /**

@@ -31,6 +31,10 @@ hr {
   text-align: left;
 }
 
+table#Content {
+  width: 100%;
+}
+
 th {
   text-align: center;
 }
@@ -90,7 +94,7 @@ ul#Navigation a:active {
 }
 
 div#Content {
-  margin: 1em 0 1em 7.5em;
+  margin: 1em 1em 1em 7.5em;
   padding: 0;
 }
 * html div#Content {
