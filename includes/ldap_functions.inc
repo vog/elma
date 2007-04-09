@@ -60,11 +60,19 @@ class ELMA {
     # DOMAIN
 
     function listDomains () {
-        $result = ldap_list($this->cid, LDAP_DOMAINS_ROOT_DN, "dc=*");
-        $domains = ldap_get_entries($this->cid, $result);
+        //$result = ldap_list($this->cid, LDAP_DOMAINS_ROOT_DN, "dc=*");
+        //$domains = ldap_get_entries($this->cid, $result);
+        $domains = $this->getDomain();
         return($domains);
     }
-     
+
+    function getDomain ($domain_dc = "*") {
+        $result = ldap_list($this->cid, LDAP_DOMAINS_ROOT_DN, "dc=".$domain_dc);
+        $domain = ldap_get_entries($this->cid, $result);
+        if ( $domain_dc !== "*" ) $domain = $domain[0];
+        return($domain);
+    }
+ 
     function addDomain ( $domain ) {
         $domain["objectclass"] = "mailDomain";
         ldap_add($this->cid, "dc=".$domain['dc'].",".LDAP_DOMAINS_ROOT_DN, $domain);

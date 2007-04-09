@@ -29,6 +29,7 @@ class content_domains_list extends module_base {
         $domains = $this->ldap->listDomains();
         for ( $i = 0; $i < $domains["count"]; $i++ ) {
             $domain['dc'] = $domains[$i]["dc"][0]; 
+            $domain['mailstatus'] = $domains[$i]["mailstatus"][0];
             $domain['link'] = $_SERVER['PHP_SELF']."?module=domain_edit&domain=".$domain['dc'];       
             array_push($my_domains,$domain);
         }
