@@ -26,20 +26,25 @@ class content_domain_edit extends module_base
      */
 	function proceed() 
     {
+        $domain = $_GET["domain"]; 
+        
+        // new domain created or existing domain altert 
         if ( isset($_POST["submit"]) ) {
             // remove all non LDAP objects from submited form
             // an the submit and mode value
-            $domain = remove_key_by_str($_POST,"nlo_");
-            unset($domain["submit"]);
-            unset($domain["mode"]);
+            $my_domain = remove_key_by_str($_POST,"nlo_");
+            unset($my_domain["submit"]);
+            unset($my_domain["mode"]);
+            
+            ( isset($_POST["mailstatus"]) ? $my_domain["mailstatus"] = "TRUE" : $my_domain["mailstatus"] = "FALSE");
 
             switch ($_POST["mode"]) {
                 case "add":
-                    $this->ldap->addDomain($domain);
+                    $this->ldap->addDomain($my_domain);
+                    $domain = $my_domain["dc"];
                 break;
                 case "modify": 
-                    ( isset($_POST["mailstatus"]) ? $domain["mailstatus"] = "TRUE" : $domain["mailstatus"] = "FALSE");
-                    $this->ldap->modifyDomain($domain);
+                    $this->ldap->modifyDomain($my_domain);
                 break;
             }
             $submit_status = ldap_errno($this->ldap->cid);
@@ -47,13 +52,12 @@ class content_domain_edit extends module_base
         } else {
             $this->smarty->assign("submit_status",-1);
         }
-      
 
-        if ( $_GET["domain"] == "new" ) {
+        if ( $domain == "new" ) {
             $this->smarty->assign("mode","add");
         } else {
             $this->smarty->assign("mode","modify");
-            $this->smarty->assign("domain",$this->ldap->getDomain($_GET["domain"]));
+            $this->smarty->assign("domain",$this->ldap->getDomain($domain));
         }
 	}
 

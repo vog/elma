@@ -14,7 +14,7 @@ function my_ldap_delete($cid,$dn,$recursive=false) {
             return($result);
         }
     }
-    return (@ldap_delete($this->cid,$dn));
+    return (ldap_delete($cid,$dn));
   }
 }
 
@@ -95,7 +95,7 @@ class ELMA {
     }
 
     function deleteDomain ( $domain ) {
-        my_ldap_delete($this->cid,"dc=$domain,".LDAP_DOMAINS_ROOT_DN,$recursive=true);
+        my_ldap_delete($this->cid,"dc=$domain,".LDAP_DOMAINS_ROOT_DN,true);
         if ( ldap_errno($this->cid) !== 0 ) {
             $result = ldap_error($this->cid);
         } else {
