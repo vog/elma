@@ -108,10 +108,18 @@ class ELMA {
     # USER 
 
     function listUsers( $domain ) {
-         $result = ldap_list($this->cid,"dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, "(&(objectclass=mailUser))");
-         $users = ldap_get_entries($this->cid, $result);
-         return($users);
+        //$result = ldap_list($this->cid,"dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, "(&(objectclass=mailUser))");
+        //$users = ldap_get_entries($this->cid, $result);
+        $users = $this->getUser( $domain );
+        return($users);
     }
+
+    function getUser ( $domain, $user_uid = "*") {
+        $result = ldap_list($this->cid, "dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, "uid=".$user_uid);
+        $user = ldap_get_entries($this->cid, $result);
+        if ( $user_uid !== "*" ) $user = $user[0];
+        return($user);
+    } 
 
     function addUser ( $domain, $user) {
         $user["objectclass"] = "mailUser"; 
