@@ -1,8 +1,8 @@
 <?php
-require("includes/config.inc");
-require("includes/ldap_functions.inc");
-require("includes/my_functions.inc");
-require("includes/crypt.inc");
+require("includes/config.inc.php");
+require("includes/ldap_functions.inc.php");
+require("includes/my_functions.inc.php");
+require("includes/crypt.inc.php");
 
 session_start ();
 

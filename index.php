@@ -1,12 +1,12 @@
 <?php
 session_start();
 
-require("includes/config.inc");
-include("includes/smarty.inc");
-require("includes/gettext.inc");
-require("includes/ldap_functions.inc");
-require("includes/my_functions.inc");
-require("includes/crypt.inc");
+require("includes/config.inc.php");
+include("includes/smarty.inc.php");
+require("includes/gettext.inc.php");
+require("includes/ldap_functions.inc.php");
+require("includes/my_functions.inc.php");
+require("includes/crypt.inc.php");
 
 if ( isset($_POST["module"]) ) $module = $_POST["module"];
 else if ( isset($_GET["module"]) ) $module = $_GET["module"];
