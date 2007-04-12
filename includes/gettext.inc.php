@@ -11,7 +11,7 @@ setlocale(LC_ALL, $set_language);
 
 // Set the text domain as 'messages'
 $domain = 'messages';
-bindtextdomain($domain, "/home/dweuthen/public_html/elma/templates/".TEMPLATE."/locale");
+bindtextdomain($domain, getcwd()."/templates/".TEMPLATE."/locale");
 textdomain($domain);
 
 ?>
