@@ -35,12 +35,12 @@ class content_domains_list extends module_base {
         for ( $i = 0; $i < $domains["count"]; $i++ ) {
             $domain['dc'] = $domains[$i]["dc"][0]; 
             $domain['mailstatus'] = $domains[$i]["mailstatus"][0];
-            $domain['userslink'] = $_SERVER['PHP_SELF']."?module=users_list&domain=".$domain['dc'];
-            $domain['deletelink'] = $_SERVER['PHP_SELF']."?module=domains_list&domain=".$domain['dc']."&mode=delete";
-            $domain['editlink'] = $_SERVER['PHP_SELF']."?module=domain_edit&domain=".$domain['dc']; 
+            $domain['userslink'] = $_SERVER['PHP_SELF']."?module=users_list&amp;domain=".$domain['dc'];
+            $domain['deletelink'] = $_SERVER['PHP_SELF']."?module=domains_list&amp;domain=".$domain['dc']."&amp;mode=delete";
+            $domain['editlink'] = $_SERVER['PHP_SELF']."?module=domain_edit&amp;domain=".$domain['dc']; 
             array_push($my_domains,$domain);
         }
-        $this->smarty->assign("link_newdomain",$_SERVER['PHP_SELF']."?module=domain_edit&domain=new");
+        $this->smarty->assign("link_newdomain",$_SERVER['PHP_SELF']."?module=domain_edit&amp;domain=new");
         $this->smarty->assign('domains',$my_domains);   
 	}
 
