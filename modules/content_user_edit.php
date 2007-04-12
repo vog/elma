@@ -35,8 +35,9 @@ class content_user_edit extends module_base
             $my_user = remove_key_by_str($_POST,"nlo_");
             unset($my_user["submit"]);
             unset($my_user["mode"]);
-            
-            ( isset($_POST["mailstatus"]) ? $my_user["mailstatus"] = "TRUE" : $my_user["mailstatus"] = "FALSE");
+
+            ( isset($_POST["mailstatus"]) ? $my_user["mailstatus"] = "TRUE" : $my_user["mailstatus"] = "FALSE" );
+            $my_user["userpassword"] =  $my_user["clearpassword"];
 
             switch ($_POST["mode"]) {
                 case "add":

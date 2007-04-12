@@ -36,11 +36,12 @@ class content_users_list extends module_base {
             $user['uid'] = $users[$i]["uid"][0]; 
             $user['mailstatus'] = $users[$i]["mailstatus"][0];
             $user['deletelink'] = $_SERVER['PHP_SELF']."?module=users_list&domain=".$domain."&user=".$user['uid']."&mode=delete";
-            $user['editlink'] = $_SERVER['PHP_SELF']."?module=domain_edit&domain=".$domain."&user=".$user['uid']; 
+            $user['editlink'] = $_SERVER['PHP_SELF']."?module=user_edit&domain=".$domain."&user=".$user['uid']; 
             array_push($my_users,$user);
         }
         $this->smarty->assign("link_newuser",$_SERVER['PHP_SELF']."?module=user_edit&domain=".$domain."&user=new");
-        $this->smarty->assign('userss',$my_users);   
+        $this->smarty->assign('users',$my_users);   
+        $this->smarty->assign('domain',$domain);
 	}
 
     /**

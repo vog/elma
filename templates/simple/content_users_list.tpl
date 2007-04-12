@@ -1,5 +1,5 @@
                 <div id="Content">
-                    <h2>Users</h2>
+                    <h2>{t}Users for domain{/t} {$domain}</h2>
 		    <table>
 		        <tr><th>Users</th><th>Status</th><th>Command</th></tr>
 		    {section name=users_sec loop=$users}
