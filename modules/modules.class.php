@@ -28,8 +28,8 @@ class modules {
 
         include(APPROOT."/modules/${classname}.php");
 
-        if ( !class_exists($classname) ) {   
-	    echo "error!";
+        if (!class_exists($classname)) {   
+            echo "error!";
         }
         @$obj =& new $classname;
 
@@ -63,21 +63,21 @@ class module_base {
         $this->ldap->binddn = $crypt->decrypt($_SESSION["ldap_binddn"]);
         $this->ldap->bindpw = $crypt->decrypt($_SESSION["ldap_bindpass"]);
         $this->ldap->bind($this->ldap->binddn,$this->ldap->bindpw);
-	}
+    }
 
     /**
      * This method is called after the constructor by the main page
      */
     function proceed() {
     
-	}
+    }
 
     /**
      * return errors (if any)
      */
-	function getErrors() {
-		return $errors;
-	}
+    function getErrors() {
+        return $errors;
+    }
 
     /**
      * This method returns any content that should be echoed by the
@@ -85,7 +85,7 @@ class module_base {
      *
      * @return string
      */
-	function getContent() {
+    function getContent() {
     }
 }
 

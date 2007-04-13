@@ -8,11 +8,13 @@ require("includes/ldap_functions.inc.php");
 require("includes/my_functions.inc.php");
 require("includes/crypt.inc.php");
 
-if ( isset($_POST["module"]) ) $module = $_POST["module"];
-else if ( isset($_GET["module"]) ) $module = $_GET["module"];
+if (isset($_POST["module"])) 
+    $module = $_POST["module"];
+else if (isset($_GET["module"])) 
+    $module = $_GET["module"];
 else $module = "";
 
-if ( !isset($_SESSION["login"]) ) {
+if (!isset($_SESSION["login"])) {
     session_destroy();
     $smarty->display("header.tpl");
     $smarty->display("login.tpl");

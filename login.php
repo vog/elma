@@ -11,11 +11,11 @@ $ldap->connect();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $_SESSION["username"] = $_POST["username"];
-    if (preg_match('/\@/',$_SESSION["username"]) ) {
+    if (preg_match('/\@/',$_SESSION["username"])) {
         list($local_part,$domain) = split("@",$_SESSION["username"]);
         $LDAP_BINDDN = "uid=$local_part,dc=$domain,".LDAP_DOMAINDN;
         $LDAP_BINDPASS = $_POST["password"];
-    } else if (preg_match('/^admin$/',$_SESSION["username"]) ) {
+    } else if (preg_match('/^admin$/',$_SESSION["username"])) {
         $LDAP_BINDDN = "cn=admin,".LDAP_USERS_ROOT_DN;
         $LDAP_BINDPASS = $_POST["password"];
     }
@@ -39,4 +39,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
+// vim:tabstop=4:expandtab:shiftwidth=4:filetype=php:syntax:ruler:
 ?>
