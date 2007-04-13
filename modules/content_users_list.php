@@ -26,7 +26,7 @@ class content_users_list extends module_base {
     function proceed() {
 
         if ((isset($_GET["mode"])) && ($_GET["mode"] == "delete")) {
-            $this->ldap->deleteUser($_GET["user"]);
+            $this->ldap->deleteUser($_GET["domain"],$_GET["user"]);
         }
 
         $my_users = array();
