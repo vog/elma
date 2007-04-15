@@ -1,7 +1,7 @@
 body {
   color: black; 
   background-color: white;
-  font-size: 100%;
+  font-size: 14px;
   font-family: Helvetica,Arial,sans-serif;
   margin: 0; 
   padding: 1em 0;
@@ -16,8 +16,100 @@ div#Page {
   border: 1px solid black;
 }
 
+/* Navigation elements */
+
+div#Navigation {
+  float: left;
+  margin: 4em 1em 0 0;
+  padding: 0;
+}
+
+div#Navigation ul {
+  width: 8em;
+  margin: 0;
+  padding: 0;
+}
+
+div#Navigation li {
+  font-size: 90%;
+  list-style: none;
+  margin: 0;
+  padding: 0.5em;
+}
+
+div#Navigation a {
+  text-decoration: none;
+  display: block;
+  padding: 0.2em;
+  font-weight: bold;
+}
+
+div#Navigation a:link {
+  color: #666; 
+  background-color: white;
+}
+
+div#Navigation a:visited {
+  color: #666; 
+  background-color: white;
+}
+
+div#Navigation a:hover {
+  color: black; 
+  background-color: #eee;
+}
+
+div#Navigation a:active {
+  color: white; 
+  background-color: gray;
+}
+
+/* Content elements */
+
+div#Content {
+  margin: 1em 1em 1em 7.5em;
+  padding: 0;
+}
+
+div#Content p {
+  margin: 1em 0;
+}
+
+div#Content a {
+  text-decoration: none;
+  color: #8899BB;
+}
+
+div#Content a:hover {
+  color: black;
+}
+
+div#Content a:active {
+  color: black;
+}
+
+/* Footer elements */
+
+div#Footer {
+  clear: both;
+  font-size: 83%;
+  margin: 0;
+  padding: 0.1em;
+  padding-right: 1em;
+  text-align: right;
+  background-color: #99CCFF;
+  border-top: 1px solid silver;
+}
+
+div#Footer a {
+ text-decoration: none;
+ color: blue;
+}
+
+/* all other elements */
+
 h1 {
-  font-size: 1.5em;
+  font-size: 150%;
   margin: 0; 
   padding: 0.3em;
   text-align: center;
@@ -25,18 +117,16 @@ h1 {
   background: #99CCFF;
 }
 
+h2 {
+  font-size: 120%;
+  margin: 0;
+  padding: 0 0 1em 0;
+}
+
 hr {
   width: 400px;
-  border: solid lightblue 1px;
+  border: solid #99CCFF 1px;
   text-align: left;
-}
-
-table#Content {
-  width: 100%;
-}
-
-th {
-  text-align: center;
 }
 
 img {
@@ -52,78 +142,15 @@ img#loginlogo {
   font-style:italic;
 }
 
-div#Navigation {
-  float: left;
-  margin: 4em 1em 0 0;
-  padding: 0;
+fieldset {
+  border: 1px #99CCFF solid;
 }
 
-ul#Navigation {
-  font-size: 0.83em;
-  float: left; 
-  width: 10em;
-  margin: 0;
-  padding: 0;
-}
-ul#Navigation li {
-  list-style: none;
-  margin: 0; 
-  padding: 0.5em;
-}
-ul#Navigation a {
-  text-decoration: none;
-  display: block;
-  padding: 0.2em;
+legend {
   font-weight: bold;
+  border: 0;
+  border-left: 2px #99CCFF solid;
+  border-right: 2px #99CCFF solid;
+  padding-left: 5px;
+  width: 15%;
 }
-ul#Navigation a:link {
-  color: #666; 
-  background-color: white;
-}
-ul#Navigation a:visited {
-  color: #666; 
-  background-color: white;
-}
-ul#Navigation a:hover {
-  color: black; 
-  background-color: #eee;
-}
-ul#Navigation a:active {
-  color: white; 
-  background-color: gray;
-}
-
-div#Content {
-  margin: 1em 1em 1em 7.5em;
-  padding: 0;
-}
-* html div#Content {
-  height: 1em;  /* Workaround gegen den 3-Pixel-Bug des Internet Explorer bis Version 6 */
-  margin-bottom: 0;
-}
-div#Content h2 {
-  font-size: 1.2em;
-  margin: 0.2em 0;
-  color: navy;
-}
-div#Content h3 {
-  font-size: 0.9em;
-  margin: 0.2em 0;
-  color: navy;
-}
-div#Content p {
-  font-size: 1em;
-  margin: 1em 0;
-}
-
-div#Footer {
-  clear: both;
-  font-size: 0.83em;
-  margin: 0;
-  padding: 0.1em;
-  padding-right: 1em;
-  text-align: right;
-  background-color: #99CCFF;
-  border-top: 1px solid silver;
-}
-
