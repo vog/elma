@@ -25,10 +25,6 @@ class content_users_list extends module_base {
      */
     function proceed() {
 
-        if ((isset($_GET["mode"])) && ($_GET["mode"] == "delete")) {
-            $this->ldap->deleteUser($_GET["domain"],$_GET["user"]);
-        }
-
         $domain = $_GET["domain"];
         $this->smarty->assign('domain',$domain);
 
@@ -40,7 +36,7 @@ class content_users_list extends module_base {
         for ($i = 0; $i < $users["count"]; $i++) {
             $user['uid'] = $users[$i]["uid"][0]; 
             $user['mailstatus'] = $users[$i]["mailstatus"][0];
-            $user['deletelink'] = $_SERVER['PHP_SELF']."?module=users_list&amp;domain=".$domain."&amp;user=".$user['uid']."&amp;mode=delete";
+            $user['deletelink'] = $_SERVER['PHP_SELF']."?module=user_delete&amp;domain=".$domain."&amp;uid=".$user['uid']."&amp;mode=delete";
             $user['editlink'] = $_SERVER['PHP_SELF']."?module=user_edit&amp;domain=".$domain."&amp;user=".$user['uid']; 
             array_push($my_users,$user);
         }
