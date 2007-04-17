@@ -115,7 +115,7 @@ class ELMA {
     }
 
     function getUser ( $domain, $user_uid = "*") {
-        $result = ldap_list($this->cid, "dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, "uid=".$user_uid);
+        $result = ldap_list($this->cid, "dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, "(&(objectclass=mailUser)(uid=$user_uid))");
         $user = ldap_get_entries($this->cid, $result);
         if ( $user_uid !== "*" ) $user = $user[0];
         return($user);
@@ -155,9 +155,15 @@ class ELMA {
     # ALIAS
 
     function listAliases( $domain ) {
-        $result = ldap_list($this->cid,"dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, "(&(objectclass=mailAlias))");
-        $aliases = ldap_get_entries($this->cid, $result);
+        $aliases = $this->getAlias( $domain );
         return($aliases);
+    }
+
+    function getAlias ( $domain, $alias_uid = "*") {
+        $result = ldap_list($this->cid,"dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, "(&(objectclass=mailAlias)(uid=$alias_uid))");
+        $alias = ldap_get_entries($this->cid, $result);
+        if ( $alias_uid !== "*" ) $alias = $alias[0];
+        return($alias);
     }
 
     function addAlias ( $domain, $alias) {

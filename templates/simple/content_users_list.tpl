@@ -4,7 +4,7 @@
                     <tr>
                         <th>Users</th>
                         <th>Status</th>
-                        <th>Command</th>
+                        <th class="command">Command</th>
                     </tr>
 		            {section name=users_sec loop=$users}
                     <tr>
@@ -18,7 +18,7 @@
                             <img src="{$template_path}/images/button_cancel.png" alt="inactive"/>
                         {/if}
                         </td>
-                        <td>
+                        <td class="command">
                             <a href="{$users[users_sec].editlink}">{t}edit{/t}</a> 
                             <a href="{$users[users_sec].deletelink}">{t}delete{/t}</a>
                         </td>
@@ -27,8 +27,40 @@
                     <tr>
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
-                        <td>
+                        <td class="command">
                             <a href="{$link_newuser}">{t}new user{/t}</a>
+                        </td>
+                    </tr>
+		        </table>
+                <div class="space25"></div>
+                <table>
+                    <tr>
+                        <th>Alias</th>
+                        <th>Alias for</th>
+                        <th class="command">Command</th>
+                    </tr>
+		            {section name=aliases_sec loop=$aliases}
+                    <tr>
+                        <td>
+                            {$aliases[aliases_sec].uid}
+                        </td>
+                        <td>
+
+                        {section name=mailaliasedname_sec loop=$aliases[aliases_sec].mailaliasedname}
+                            {$aliases[aliases_sec].mailaliasedname[mailaliasedname_sec]}<br/>
+                        {/section}
+                        </td>
+                        <td class="command">
+                            <a href="{$aliases[aliases_sec].editlink}">{t}edit{/t}</a> 
+                            <a href="{$aliases[aliases_sec].deletelink}">{t}delete{/t}</a>
+                        </td>
+                    </tr>
+		            {/section}
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td class="command">
+                            <a href="{$link_newalias}">{t}new alias{/t}</a>
                         </td>
                     </tr>
 		        </table>

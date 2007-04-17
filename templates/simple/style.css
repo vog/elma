@@ -20,18 +20,18 @@ div#Page {
 
 div#Navigation {
   float: left;
-  margin: 4em 1em 0 0;
+  margin: 4em 0 0 0;
   padding: 0;
 }
 
 div#Navigation ul {
-  width: 8em;
+  width: 7em;
   margin: 0;
   padding: 0;
 }
 
 div#Navigation li {
-  font-size: 90%;
+  font-size: 13px;
   list-style: none;
   margin: 0;
   padding: 0.5em;
@@ -88,11 +88,33 @@ div#Content a:active {
   color: black;
 }
 
+div#Content table {
+  padding: 0;
+  margin: 0;
+  border-spacing: 0;
+  width: 100%;
+}
+
+div#Content th {
+  padding: 0 10px 0 10px;
+  border-bottom: 1px black solid;
+}
+
+div#Content td {
+  padding: 1px 10px 1px 10px;
+  vertical-align: top;
+}
+
+div#Content td.command {
+  width: 20%;
+  background: #EEE
+}
+
 /* Footer elements */
 
 div#Footer {
   clear: both;
-  font-size: 83%;
+  font-size: 12px;
   margin: 0;
   padding: 0.1em;
   padding-right: 1em;
@@ -109,7 +131,7 @@ div#Footer a {
 /* all other elements */
 
 h1 {
-  font-size: 150%;
+  font-size: 18px;
   margin: 0; 
   padding: 0.3em;
   text-align: center;
@@ -118,7 +140,7 @@ h1 {
 }
 
 h2 {
-  font-size: 120%;
+  font-size: 16px;
   margin: 0;
   padding: 0 0 1em 0;
 }
@@ -153,4 +175,8 @@ legend {
   border-right: 2px #99CCFF solid;
   padding-left: 5px;
   width: 15%;
+}
+
+.space25 {
+  height: 25px;
 }
