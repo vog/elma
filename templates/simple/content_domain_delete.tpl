@@ -1,5 +1,5 @@
             <div id="Content">
-                <h2>{t}Delete User{/t}</h2>
+                <h2>{t}Delete Domain{/t}</h2>
 		        {if $smarty.post.submit}
                     {if $submit_status == "0"}
                         <div>
@@ -13,12 +13,11 @@
                 {else}
 		        <form action="{$smarty.server.php_self}" method="post">
 			        <fieldset>
-			            <legend>{$user.uid.0}@{$domain}</legend>
+			            <legend>{$domain}</legend>
 			            <table>
 			                <tr>
                                 <td>
-                                    {t 1=$user.uid.0 2=$domain}Are you sure you want to delete user %1@%2?{/t}
-                                    <input type="hidden" name="uid" value="{$user.uid.0}" />
+                                    {t 1=$domain}Are you sure you want to delete domain %1?{/t}
                                     <input type="hidden" name="domain" value="{$domain}" />
                                 </td>
 				            </tr>

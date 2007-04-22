@@ -174,7 +174,7 @@ legend {
   border-left: 2px #99CCFF solid;
   border-right: 2px #99CCFF solid;
   padding-left: 5px;
-  width: 15%;
+  padding-right: 5px;
 }
 
 .space25 {

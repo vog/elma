@@ -8,16 +8,16 @@
  *
  */
 
-class content_user_delete extends module_base
+class content_alias_delete extends module_base
 {
 
     /**
      * Constructor of this class
      *
      */
-    function content_template() 
+    function content_alias_delete() 
     {
-
+        parent::module_base();
     }
 
     /**
@@ -29,14 +29,14 @@ class content_user_delete extends module_base
         if ( isset($_POST["submit"]) ) {
             $uid = $_POST["uid"];
             $domain =  $_POST["domain"];
-            $this->ldap->deleteUser($domain,$uid);
+            $this->ldap->deleteAlias($domain,$uid);
             $submit_status = ldap_errno($this->ldap->cid);
             ($submit_status == "0" ? $this->smarty->assign("submit_status",$submit_status) : $this->smarty->assign("submit_status",ldap_err2str($submit_status)));
         } else {
-            $uid = $_GET["user"];
+            $uid = $_GET["alias"];
             $domain =  $_GET["domain"];
             $this->smarty->assign("domain",$domain);
-            $this->smarty->assign("user",$this->ldap->getUser($domain,$uid));
+            $this->smarty->assign("alias",$this->ldap->getAlias($domain,$uid));
             $this->smarty->assign("submit_status",-1);
         }
     }
@@ -49,7 +49,7 @@ class content_user_delete extends module_base
      */
     function getContent() 
     {
-        $_content = $this->smarty->fetch('content_user_delete.tpl');
+        $_content = $this->smarty->fetch('content_alias_delete.tpl');
         return $_content;
     }
 }

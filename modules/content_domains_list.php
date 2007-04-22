@@ -25,10 +25,6 @@ class content_domains_list extends module_base {
      */
     function proceed() {
 
-        if ((isset($_GET["mode"])) && ($_GET["mode"] == "delete")) {
-            $this->ldap->deleteDomain($_GET["domain"]);
-        }
-
         $my_domains = array();
 
         $domains = $this->ldap->listDomains();
@@ -36,7 +32,7 @@ class content_domains_list extends module_base {
             $domain['dc'] = $domains[$i]["dc"][0]; 
             $domain['mailstatus'] = $domains[$i]["mailstatus"][0];
             $domain['userslink'] = $_SERVER['PHP_SELF']."?module=users_list&amp;domain=".$domain['dc'];
-            $domain['deletelink'] = $_SERVER['PHP_SELF']."?module=domains_list&amp;domain=".$domain['dc']."&amp;mode=delete";
+            $domain['deletelink'] = $_SERVER['PHP_SELF']."?module=domain_delete&amp;domain=".$domain['dc'];
             $domain['editlink'] = $_SERVER['PHP_SELF']."?module=domain_edit&amp;domain=".$domain['dc']; 
             array_push($my_domains,$domain);
         }

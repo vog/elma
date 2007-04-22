@@ -32,7 +32,7 @@
 			                    </tr>
 			                    <tr>
 			                        <td>&nbsp;</td>
-                                    <td><input type="submit" name="submit" /></td>
+                                    <td><input type="submit" name="submit" value="{t}Save{/t}" /></td>
 			                    </tr>
 	                        </table>
                         </fieldset>
@@ -59,7 +59,7 @@
 			                    <tr>
 			                        <td>&nbsp;</td>
                                     <td>
-                                        <input type="submit" name="submit" />
+                                        <input type="submit" name="submit" value="{t}Save{/t}"/>
                                     </td>
 			                    </tr>
 	                        </table>

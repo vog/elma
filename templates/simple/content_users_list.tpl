@@ -2,9 +2,9 @@
                 <h2>{t}Users for domain{/t} {$domain}</h2>
                 <table>
                     <tr>
-                        <th>Users</th>
-                        <th>Status</th>
-                        <th class="command">Command</th>
+                        <th>{t}User{/t}</th>
+                        <th>{t}Status{/t}</th>
+                        <th class="command">{t}Command{/t}</th>
                     </tr>
 		            {section name=users_sec loop=$users}
                     <tr>
@@ -35,9 +35,9 @@
                 <div class="space25"></div>
                 <table>
                     <tr>
-                        <th>Alias</th>
-                        <th>Alias for</th>
-                        <th class="command">Command</th>
+                        <th>{t}Alias{/t}</th>
+                        <th>{t}Alias for{/t}</th>
+                        <th class="command">{t}Command{/t}</th>
                     </tr>
 		            {section name=aliases_sec loop=$aliases}
                     <tr>

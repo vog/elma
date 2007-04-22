@@ -2,9 +2,9 @@
                 <h2>Domains</h2>
 		        <table>
 		            <tr>
-                        <th>Domain</th>
-                        <th>Status</th>
-                        <th class="command">Command</th>
+                        <th>{t}Domain{/t}</th>
+                        <th>{t}Status{/t}</th>
+                        <th class="command">{t}Command{/t}</th>
                     </tr>
 		            {section name=domains_sec loop=$domains}
 		            <tr>

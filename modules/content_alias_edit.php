@@ -28,6 +28,8 @@ class content_alias_edit extends module_base
     {
         $alias = $_GET["alias"]; 
         $domain =  $_GET["domain"];
+        $this->smarty->assign("domain",$domain);
+
         // new alias created or existing alias altert 
         if (isset($_POST["submit"])) {
             // remove all non LDAP objects from submited form
@@ -38,10 +40,11 @@ class content_alias_edit extends module_base
 
             $my_alias["mailaliasedname"] = explode("\n", $_POST['nlo_mailaliasedname']);
 
+            $alias = $my_alias["uid"];
+            
             switch ($_POST["mode"]) {
                 case "add":
                     $this->ldap->addAlias($domain,$my_alias);
-                    $alias = $my_alias["uid"];
                 break;
                 case "modify": 
                     $this->ldap->modifyAlias($domain,$my_alias);
@@ -59,6 +62,7 @@ class content_alias_edit extends module_base
             $this->smarty->assign("mode","modify");
             $this->smarty->assign("alias",$this->ldap->getAlias($domain,$alias));
         }
+        
     }
 
     /**

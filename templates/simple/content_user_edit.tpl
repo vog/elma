@@ -17,7 +17,7 @@
                     </div>
 			        <fieldset>
 			        {if $mode == "modify"}
-			            <legend>{$user.uid.0}</legend>
+			            <legend>{$user.uid.0}@{$domain}</legend>
 			            <table>
 			                <tr>
                                 <td>
@@ -32,7 +32,7 @@
                                     {t}User{/t}
                                 </td>
                                 <td>
-                                    <input type="text" name="uid" value="{$user.uid.0}" />
+                                    <input type="text" name="uid" value="{$user.uid.0}" />@{$domain}
                                 </td>
 				            </tr>
                     {/if}
@@ -76,7 +76,7 @@
 				            <tr>
 			                    <td>&nbsp;</td>
                                 <td>
-                                    <input type="submit" name="submit" />
+                                    <input type="submit" name="submit" value="{t}Save{/t}"/>
                                 </td>
 				            </tr>
  	                    </table>

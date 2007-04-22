@@ -15,7 +15,7 @@ class content_user_edit extends module_base
      * Constructor of this class
      *
      */
-    function content_template() 
+    function content_user_edit() 
     {
 
     }
@@ -28,6 +28,8 @@ class content_user_edit extends module_base
     {
         $user = $_GET["user"]; 
         $domain =  $_GET["domain"];
+        $this->smarty->assign("domain",$domain);
+
         // new user created or existing user altert 
         if (isset($_POST["submit"])) {
             // remove all non LDAP objects from submited form
@@ -38,11 +40,12 @@ class content_user_edit extends module_base
 
             (isset($_POST["mailstatus"]) ? $my_user["mailstatus"] = "TRUE" : $my_user["mailstatus"] = "FALSE");
             $my_user["userpassword"] =  $my_user["clearpassword"];
+            
+            $user = $my_user["uid"];
 
             switch ($_POST["mode"]) {
                 case "add":
                     $this->ldap->addUser($domain,$my_user);
-                    $user = $my_user["uid"];
                 break;
                 case "modify": 
                     $this->ldap->modifyUser($domain,$my_user);

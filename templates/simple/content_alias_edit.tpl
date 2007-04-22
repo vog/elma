@@ -17,7 +17,7 @@
                     </div>
 			        <fieldset>
 			        {if $mode == "modify"}
-			            <legend>{$alias.uid.0}</legend>
+			            <legend>{$alias.uid.0}@{$domain}</legend>
 			            <table>
 			                <tr>
                                 <td>
@@ -53,7 +53,7 @@
 				            <tr>
 			                    <td>&nbsp;</td>
                                 <td>
-                                    <input type="submit" name="submit" />
+                                    <input type="submit" name="submit" value="{t}Save{/t}"/>
                                 </td>
 				            </tr>
  	                    </table>
