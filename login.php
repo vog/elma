@@ -21,7 +21,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
   
     if (isset($LDAP_BINDDN) && isset($LDAP_BINDPASS)) {
-        if ($ldap->bind($LDAP_BINDDN,$LDAP_BINDPASS) == 0) {
+        $ldap->binddn = $LDAP_BINDDN;
+        $ldap->bindpw = $LDAP_BINDPASS;
+        
+        if ( $ldap->bind() ) {
             $_SESSION["login"] = TRUE;
             $_SESSION["logintime"] = time();
             $_SESSION["username"] = $_POST["username"];
@@ -34,9 +37,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header ("Location: index.php");
             exit;
         } else  {
-            echo "error";
+            echo $ldap->last_error();
             session_destroy();
         }
+    } else {
+        echo "Invalid username.";
     }
 }
 // vim:tabstop=4:expandtab:shiftwidth=4:filetype=php:syntax:ruler:

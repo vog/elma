@@ -15,9 +15,9 @@ class content_alias_edit extends module_base
      * Constructor of this class
      *
      */
-    function content_template() 
+    function content_alias_edit() 
     {
-
+        parent::module_base();
     }
 
     /**

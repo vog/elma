@@ -62,7 +62,7 @@ class module_base {
         $this->ldap->connect();
         $this->ldap->binddn = $crypt->decrypt($_SESSION["ldap_binddn"]);
         $this->ldap->bindpw = $crypt->decrypt($_SESSION["ldap_bindpass"]);
-        $this->ldap->bind($this->ldap->binddn,$this->ldap->bindpw);
+        if ( ! $this->ldap->bind() ) echo $this->ldap->last_error();
     }
 
     /**

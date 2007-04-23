@@ -50,11 +50,17 @@ class ELMA {
     } 
 
     function bind () {
-        if ($bind = ldap_bind($this->cid, $this->binddn, $this->bindpw)) {
-            $this->result = 0;
+        if ( @ldap_bind($this->cid, $this->binddn, $this->bindpw) ) {
+            $this->result = TRUE;
         } else {
-            $this->result = "Could not bind ".$this->binddn." to host ".$this->hostname;
+            $this->result = FALSE;
         }
+        return($this->result);
+    }
+
+    function last_error () {
+        $error = @ldap_error($this->cid);
+        return($error);
     }
 
     # DOMAIN

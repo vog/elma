@@ -15,9 +15,9 @@ class content_domain_edit extends module_base
      * Constructor of this class
      *
      */
-    function content_template() 
+    function content_domain_edit() 
     {
-
+        parent::module_base();
     }
 
     /**
@@ -27,6 +27,7 @@ class content_domain_edit extends module_base
     function proceed() 
     {
         $domain = $_GET["domain"]; 
+        $this->smarty->assign("domain",$domain);
         
         // new domain created or existing domain altert 
         if (isset($_POST["submit"])) {
@@ -38,10 +39,11 @@ class content_domain_edit extends module_base
             
             (isset($_POST["mailstatus"]) ? $my_domain["mailstatus"] = "TRUE" : $my_domain["mailstatus"] = "FALSE");
 
+            $domain = $my_domain["dc"];
+
             switch ($_POST["mode"]) {
                 case "add":
                     $this->ldap->addDomain($my_domain);
-                    $domain = $my_domain["dc"];
                 break;
                 case "modify": 
                     $this->ldap->modifyDomain($my_domain);

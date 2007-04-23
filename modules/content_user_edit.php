@@ -17,7 +17,7 @@ class content_user_edit extends module_base
      */
     function content_user_edit() 
     {
-
+        parent::module_base();
     }
 
     /**
