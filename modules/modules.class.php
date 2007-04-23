@@ -1,24 +1,46 @@
 <?php
 /**
+ * @author Daniel Weuthen <daniel@weuthen-net.de> and Rudolph Bott <rbott@megabit.net>
+ * @version $LastChangedRevision$
+ * @package ELMA
+ *
+ * $Id$
+ * $LastChangedBy$
+ *
+ * =====================================================================
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA
+ *
+ * =====================================================================
+ */
+
+/**
  * module factory
  *
  * This class contains a factory to call modules. This makes
  * calling modules by index.php much easier.
- *
- * $Id:: $
- * $LastChangedBy:: $
- * $LastChangedDate:: $
- * $LastChangedRevision:: $
- *
  */
 
 class modules {
+
     /**
      * factory-method
      *
      * @param string type
      * @return object class on success, error message on error
-     *
      */
     function &factory($type = "main") {  
         if (!file_exists(APPROOT."/modules/content_${type}.php")) {   
@@ -43,7 +65,6 @@ class modules {
  * This is the base class for all content modules
  * All modules should be inherited from this class!
  *
- * @author Rudolph Bott
  *
  */
 
@@ -59,10 +80,16 @@ class module_base {
     function module_base() {
         $crypt = new mycrypt();
         $this->ldap = new ELMA(LDAP_HOSTNAME);
-        $this->ldap->connect();
+        
+        if (! $this->ldap->connect()) {
+           echo $this->ldap->last_error();
+        }
+        
         $this->ldap->binddn = $crypt->decrypt($_SESSION["ldap_binddn"]);
         $this->ldap->bindpw = $crypt->decrypt($_SESSION["ldap_bindpass"]);
-        if ( ! $this->ldap->bind() ) echo $this->ldap->last_error();
+        if (! $this->ldap->bind()) {
+           echo $this->ldap->last_error();
+        }
     }
 
     /**
@@ -70,13 +97,6 @@ class module_base {
      */
     function proceed() {
     
-    }
-
-    /**
-     * return errors (if any)
-     */
-    function getErrors() {
-        return $errors;
     }
 
     /**
@@ -88,6 +108,4 @@ class module_base {
     function getContent() {
     }
 }
-
 // vim:tabstop=4:expandtab:shiftwidth=4:filetype=php:syntax:ruler:
-?>

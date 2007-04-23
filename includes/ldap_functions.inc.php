@@ -1,4 +1,36 @@
 <?php
+/**
+ * @author Daniel Weuthen <daniel@weuthen-net.de>
+ * @version $LastChangedRevision$
+ * @package ELMA
+ *
+ * $Id$
+ * $LastChangedBy$
+ *
+ * =====================================================================
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA
+ *
+ * =====================================================================
+ */
+
+
+/**
+ * function to delete a complete ldap subtree recursivly
+ */
 function my_ldap_delete($cid,$dn,$recursive=false) {
     if ( $recursive == false ) {
         return(ldap_delete($cid,$dn));
@@ -11,19 +43,19 @@ function my_ldap_delete($cid,$dn,$recursive=false) {
         $result = my_ldap_delete($cid,$info[$i]['dn'],$recursive);
         if (!$result) {
             //return result code, if delete fails
-            return($result);
+            return $result;
         }
     }
-    return (ldap_delete($cid,$dn));
+    return ldap_delete($cid,$dn);
   }
 }
+
 
 
 class ELMA {
     var $tls       = false; // Don't use TLS by default
     var $basedn    = "";    // Base DN of LDAP Tree
     var $cid;               // Connection ID
-    var $error     = "";    // Any error messages to be returned, value of 0 if no error, otherwise error string
     var $binddn    = "";    // DN for binding to LDAP
     var $bindpw    = "";    // Password for DN
     var $hostname  = "";    // Hostname or IP of LDAP Server
@@ -55,28 +87,26 @@ class ELMA {
         } else {
             $this->result = FALSE;
         }
-        return($this->result);
+        return $this->result;
     }
 
     function last_error () {
         $error = @ldap_error($this->cid);
-        return($error);
+        return $error;
     }
 
     # DOMAIN
 
     function listDomains () {
-        //$result = ldap_list($this->cid, LDAP_DOMAINS_ROOT_DN, "dc=*");
-        //$domains = ldap_get_entries($this->cid, $result);
         $domains = $this->getDomain();
-        return($domains);
+        return $domains;
     }
 
     function getDomain ($domain_dc = "*") {
         $result = ldap_list($this->cid, LDAP_DOMAINS_ROOT_DN, "dc=".$domain_dc);
         $domain = ldap_get_entries($this->cid, $result);
         if ( $domain_dc !== "*" ) $domain = $domain[0];
-        return($domain);
+        return $domain;
     }
  
     function addDomain ( $domain ) {
@@ -87,7 +117,7 @@ class ELMA {
         } else {
             $result = 0;
         }
-        return ($result);
+        return $result;
     } 
 
     function modifyDomain ( $domain ) {
@@ -97,7 +127,7 @@ class ELMA {
         } else {
             $result = 0;
         }
-        return ($result);
+        return $result;
     }
 
     function deleteDomain ( $domain ) {
@@ -107,24 +137,22 @@ class ELMA {
         } else {
             $result = 0;
         }
-        return ($result);
+        return $result;
     }
 
 
     # USER 
 
     function listUsers( $domain ) {
-        //$result = ldap_list($this->cid,"dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, "(&(objectclass=mailUser))");
-        //$users = ldap_get_entries($this->cid, $result);
         $users = $this->getUser( $domain );
-        return($users);
+        return $users;
     }
 
     function getUser ( $domain, $user_uid = "*") {
         $result = ldap_list($this->cid, "dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, "(&(objectclass=mailUser)(uid=$user_uid))");
         $user = ldap_get_entries($this->cid, $result);
         if ( $user_uid !== "*" ) $user = $user[0];
-        return($user);
+        return $user;
     } 
 
     function addUser ( $domain, $user) {
@@ -135,7 +163,7 @@ class ELMA {
         } else {
             $result = 0;
         }
-        return ($result);
+        return $result;
     }
 
     function modifyUser ( $domain, $user) {
@@ -145,7 +173,7 @@ class ELMA {
         } else {
             $result = 0;
         }
-        return ($result);
+        return $result;
     }
 
     function deleteUser ( $domain, $user) {
@@ -155,21 +183,21 @@ class ELMA {
         } else {
             $result = 0;
         }
-        return ($result);
+        return $result;
     }
 
     # ALIAS
 
     function listAliases( $domain ) {
         $aliases = $this->getAlias( $domain );
-        return($aliases);
+        return $aliases;
     }
 
     function getAlias ( $domain, $alias_uid = "*") {
         $result = ldap_list($this->cid,"dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, "(&(objectclass=mailAlias)(uid=$alias_uid))");
         $alias = ldap_get_entries($this->cid, $result);
         if ( $alias_uid !== "*" ) $alias = $alias[0];
-        return($alias);
+        return $alias;
     }
 
     function addAlias ( $domain, $alias) {
@@ -180,7 +208,7 @@ class ELMA {
         } else {
             $result = 0;
         }
-        return ($result);
+        return $result;
     }
 
     function modifyAlias ( $domain, $alias) {
@@ -190,7 +218,7 @@ class ELMA {
         } else {
             $result = 0;
         }
-        return ($result);
+        return $result;
     }
 
     function deleteAlias ( $domain, $alias) {
@@ -201,8 +229,7 @@ class ELMA {
         } else {
             $result = 0;
         }
-        return ($result);
+        return $result;
     }
 }
 // vim:tabstop=4:expandtab:shiftwidth=4:filetype=php:syntax:ruler:
-?>

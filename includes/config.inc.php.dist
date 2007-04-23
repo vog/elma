@@ -1,36 +1,74 @@
 <?php
-// ######## LDAP Settings ########
+/**
+ * @author Daniel Weuthen <daniel@weuthen-net.de>
+ * @version $LastChangedRevision$
+ * @package ELMA
+ *
+ * $Id$
+ * $LastChangedBy$
+ *
+ * =====================================================================
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA
+ *
+ * =====================================================================
+ */
 
-/* LDAP Server hostname */
+/**
+ * This is the global configuration file for ELMA
+ */
+
+/* ######## LDAP Settings ######## */
+
+// LDAP Server hostname
 define ("LDAP_HOSTNAME","ldap://127.0.0.1");
 
-/* use TLS for LDAP connection */
+// use TLS for LDAP connection
 define ("LDAP_USE_TLS","0");
 
-/* LDAP Servers Base DN */
-define ("LDAP_BASEDN","o=megabit");
+// LDAP Servers Base DN 
+define ("LDAP_BASEDN","o=mycorp");
 
-/* LDAP Servers Base DN for domains*/
+// LDAP Servers Base DN for domains
 define ("LDAP_DOMAINS_ROOT_DN","ou=domains,".LDAP_BASEDN);
 
-/* LDAP Servers Base DN for system user (e.g. admin)*/
+// LDAP Servers Base DN for system user (e.g. admin)
 define ("LDAP_USERS_ROOT_DN","ou=users,".LDAP_BASEDN);
 
-// ######## Language Settings #### 
+/* ######## Language Settings #### */
 
+// Set the default language
 define ("DEFAULT_LANGUAGE","de_DE");
+
+// Set all languages which should be available at login
 define ("AVAILABLE_LANGUAGES",serialize(array("deutsch" => "de_DE",
                                               "english" => "en_US"
-                                             ))
-       );
+                                             )));
 
-// ######## Template Settings ####
+/* ######## Template Settings #### */
 
+// Define template to use
 define ("TEMPLATE","simple");
 
-// ######## Application Settings ####
+/* ######## Application Settings #### */
 
+// Define the applications root directory, getcwd() should work in most cases
 define('APPROOT',getcwd());
 
+// Define the session variable encryption key
 define('MYCRYPT_KEY',"my little key");
-?>
+
+// vim:tabstop=4:expandtab:shiftwidth=4:filetype=php:syntax:ruler:
