@@ -70,15 +70,16 @@ class ELMA {
 
 
     function connect() {
-        if ($this->cid = ldap_connect($this->hostname)) {
-            ldap_set_option($this->cid, LDAP_OPT_PROTOCOL_VERSION, 3);
+        if ($this->cid = @ldap_connect($this->hostname)) {
+            @ldap_set_option($this->cid, LDAP_OPT_PROTOCOL_VERSION, 3);
             if (function_exists("ldap_start_tls") && $this->tls) {
-                ldap_start_tls($this->cid);
+                @ldap_start_tls($this->cid);
             }
-            $this->result = 0;
+            $this->result = TRUE;
         } else {
-          $this->result = "Could not connect to LDAP server ".$this->hostname;
+          $this->result = FALSE;
         }
+        return $this->result;
     } 
 
     function bind () {
