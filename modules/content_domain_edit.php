@@ -67,8 +67,8 @@ class content_domain_edit extends module_base
                 $my_domain["mailstatus"] = "FALSE";
             }
          
-            echo validate_domain($my_domain);
-            if (validate_domain($my_domain)) {
+            $validation_errors = validate_domain($my_domain);
+            if (count($validation_errors) == 0) {
                 switch ($_POST["mode"]) {
                     case "add":
                         $this->ldap->addDomain($my_domain);
@@ -85,7 +85,8 @@ class content_domain_edit extends module_base
                     $this->smarty->assign("submit_status",ldap_err2str($submit_status));
                 }
             } else {
-                $this->smarty->assign("submit_status","Invalid domain name.");
+                $this->smarty->assign("submit_status","Invalid Data");
+                $this->smarty->assign("validation_errors",$validation_errors);
             }
         } else {
             $this->smarty->assign("submit_status",-1);

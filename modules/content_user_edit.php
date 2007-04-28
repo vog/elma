@@ -62,29 +62,35 @@ class content_user_edit extends module_base
             unset($my_user["submit"]);
             unset($my_user["mode"]);
 
-            if (isset($_POST["mailstatus"]) {
+            if (isset($_POST["mailstatus"])) {
                 $my_user["mailstatus"] = "TRUE";
             } else {    
                 $my_user["mailstatus"] = "FALSE";
             }
 
             $my_user["userpassword"] =  $my_user["clearpassword"];
-            $user = $my_user["uid"];
 
-            switch ($_POST["mode"]) {
-                case "add":
-                    $this->ldap->addUser($domain,$my_user);
-                break;
-                case "modify": 
-                    $this->ldap->modifyUser($domain,$my_user);
-                break;
-            }
-            
-            $submit_status = ldap_errno($this->ldap->cid);
-            if ($submit_status == "0") {
-                $this->smarty->assign("submit_status",$submit_status);
+            $validation_errors = validate_user($my_user);
+            if (count($validation_errors) == 0) {
+                switch ($_POST["mode"]) {
+                    case "add":
+                        $this->ldap->addUser($domain,$my_user);
+                    break;
+                    case "modify": 
+                        $this->ldap->modifyUser($domain,$my_user);
+                    break;
+                }
+
+                $submit_status = ldap_errno($this->ldap->cid);
+                if ($submit_status == "0") {
+                    $this->smarty->assign("submit_status",$submit_status);
+                    $user = $my_user["uid"];
+                } else {
+                    $this->smarty->assign("submit_status",ldap_err2str($submit_status));
+                }
             } else {
-                $this->smarty->assign("submit_status",ldap_err2str($submit_status));
+               $this->smarty->assign("submit_status","Invalid Data");
+               $this->smarty->assign("validation_errors",$validation_errors);
             }
         } else {
             $this->smarty->assign("submit_status",-1);

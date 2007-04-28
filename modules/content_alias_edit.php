@@ -63,22 +63,27 @@ class content_alias_edit extends module_base
             unset($my_alias["mode"]);
 
             $my_alias["mailaliasedname"] = explode("\n", $_POST['nlo_mailaliasedname']);
-
-            $alias = $my_alias["uid"];
             
-            switch ($_POST["mode"]) {
-                case "add":
-                    $this->ldap->addAlias($domain,$my_alias);
-                break;
-                case "modify": 
-                    $this->ldap->modifyAlias($domain,$my_alias);
-                break;
-            }
-            $submit_status = ldap_errno($this->ldap->cid);
-            if ($submit_status == "0") {
-                $this->smarty->assign("submit_status",$submit_status);
+            $validation_errors = validate_alias($my_alias);
+            if (count($validation_errors) == 0) {
+                switch ($_POST["mode"]) {
+                    case "add":
+                        $this->ldap->addAlias($domain,$my_alias);
+                    break;
+                    case "modify": 
+                        $this->ldap->modifyAlias($domain,$my_alias);
+                    break;
+                }
+                $submit_status = ldap_errno($this->ldap->cid);
+                if ($submit_status == "0") {
+                    $this->smarty->assign("submit_status",$submit_status);
+                    $alias = $my_alias["uid"];
+                } else {
+                     $this->smarty->assign("submit_status",ldap_err2str($submit_status));
+                }
             } else {
-                 $this->smarty->assign("submit_status",ldap_err2str($submit_status));
+                $this->smarty->assign("submit_status","Invalid Data");
+                $this->smarty->assign("validation_errors",$validation_errors);
             } 
         } else {
             $this->smarty->assign("submit_status",-1);
