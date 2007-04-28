@@ -7,7 +7,7 @@
                         </div>
                     {else}
                         <div>
-                            {t}Sorry, your data could not be saved. The following LDAP error occured:{/t} {$submit_status}
+                            {t}Sorry, your data could not be saved. The following error occured:{/t} {$submit_status}
                         </div>
                     {/if}
                 {/if}

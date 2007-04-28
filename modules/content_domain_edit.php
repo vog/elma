@@ -61,28 +61,31 @@ class content_domain_edit extends module_base
             unset($my_domain["submit"]);
             unset($my_domain["mode"]);
             
-            if (isset($_POST["mailstatus"]) {
+            if (isset($_POST["mailstatus"])) {
                 $my_domain["mailstatus"] = "TRUE";
             } else {
-                 $my_domain["mailstatus"] = "FALSE");
+                $my_domain["mailstatus"] = "FALSE";
             }
-
-            $domain = $my_domain["dc"];
-
-            switch ($_POST["mode"]) {
-                case "add":
-                    $this->ldap->addDomain($my_domain);
-                break;
-                case "modify": 
-                    $this->ldap->modifyDomain($my_domain);
-                break;
-            }
-            
-            $submit_status = ldap_errno($this->ldap->cid);
-            if ($submit_status == "0") {
-                $this->smarty->assign("submit_status",$submit_status);
-            } else { 
-                $this->smarty->assign("submit_status",ldap_err2str($submit_status));
+         
+            echo validate_domain($my_domain);
+            if (validate_domain($my_domain)) {
+                switch ($_POST["mode"]) {
+                    case "add":
+                        $this->ldap->addDomain($my_domain);
+                        break;
+                    case "modify": 
+                        $this->ldap->modifyDomain($my_domain);
+                        break;
+                }
+                $submit_status = ldap_errno($this->ldap->cid);
+                if ($submit_status == "0") {
+                    $this->smarty->assign("submit_status",$submit_status);
+                    $domain = $my_domain["dc"];
+                } else { 
+                    $this->smarty->assign("submit_status",ldap_err2str($submit_status));
+                }
+            } else {
+                $this->smarty->assign("submit_status","Invalid domain name.");
             }
         } else {
             $this->smarty->assign("submit_status",-1);
