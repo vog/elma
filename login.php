@@ -65,11 +65,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header ("Location: index.php");
             exit;
         } else  {
-            echo $ldap->last_error();
             session_destroy();
+            header ("Location: index.php?loginerror=TRUE");
         }
     } else {
-        echo "Invalid username.";
+        header ("Location: index.php?loginerror=TRUE");
     }
 }
 // vim:tabstop=4:expandtab:shiftwidth=4:filetype=php:syntax:ruler:

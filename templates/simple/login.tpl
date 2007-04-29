@@ -2,9 +2,21 @@
                 <form action="login.php" method="post">
 		            <table>
                         <tr>
-			                <th colspan="3">
+			                <th colspan="3" class="login">
                                 Exim Ldap Mail Administrator - Login
                             </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                &nbsp;
+                            </td>
+                            <td colspan="2">
+                                {if $loginerror == TRUE}
+                                    <font color="red">{t}Invalid username and/or password.{/t}</font>
+                                {else}
+                                    &nbsp;
+                                {/if}
+                            </td>
                         </tr>
 		                <tr>
                             <td rowspan="4">

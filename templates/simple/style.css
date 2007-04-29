@@ -16,11 +16,18 @@ div#Page {
   border: 1px solid black;
 }
 
+/* Banner */
+
+div#Banner {
+  margin: 0;
+  padding: 0;
+}
+
 /* Navigation elements */
 
 div#Navigation {
   float: left;
-  margin: 4em 0 0 0;
+  margin: 1em 0 0 0;
   padding: 0;
 }
 
@@ -67,7 +74,7 @@ div#Navigation a:active {
 /* Content elements */
 
 div#Content {
-  margin: 1em 1em 1em 7.5em;
+  margin: 1.5em 1em 1em 7.5em;
   padding: 0;
 }
 

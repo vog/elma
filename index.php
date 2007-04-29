@@ -45,6 +45,7 @@ else $module = "";
 
 if (!isset($_SESSION["login"])) {
     session_destroy();
+    if (isset($_GET["loginerror"])) $smarty->assign("loginerror",$_GET["loginerror"]);
     $smarty->display("header.tpl");
     $smarty->display("login.tpl");
     $smarty->display("footer.tpl");
@@ -59,6 +60,7 @@ if (!isset($_SESSION["login"])) {
     $content = $content_module->getContent();
 
     $smarty->display("header.tpl");
+    $smarty->display("banner.tpl");
     $smarty->display("navigation.tpl");
     echo $content;
     $smarty->display("footer.tpl");

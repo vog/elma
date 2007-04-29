@@ -1,5 +1,9 @@
             <div id="Content">
+                {if $mode == "modify"}
                 <h2>{t}Edit Domain{/t}</h2>
+                {else}
+                <h2>{t}New Domain{/t}</h2>
+                {/if}
 		        {if $smarty.post.submit}
 			        {if $submit_status == "0"}
                         <div>
@@ -24,7 +28,7 @@
 			                <table>
 			                    <tr>
 			                        <td>
-                                        {t}Status{/t}
+                                        {t}Activated{/t}
                                     </td>
                                     <td>
                                         <input type="checkbox" name="mailstatus" {if $domain.mailstatus.0 eq "TRUE"}checked="checked"{/if} />

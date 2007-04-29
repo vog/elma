@@ -1,5 +1,9 @@
             <div id="Content">
+                {if $mode == "modify"}
                 <h2>{t}Edit User{/t}</h2>
+                {else}
+                <h2>{t}New User{/t}</h2>
+                {/if}
 		        {if $smarty.post.submit}
                     {if $submit_status == "0"}
                         <div>
@@ -7,7 +11,7 @@
                         </div>
                     {else}
                         <div>
-                            {t}Sorry, your data could not be saved. The following LDAP error occured:{/t} {$submit_status}
+                            {t}Sorry, your data could not be saved. The following error occured:{/t} {$submit_status}
                         </div>
                     {/if}
                 {/if}
@@ -54,7 +58,7 @@
                             </tr>
 			                <tr>
 				                <td>
-                                    {t}Status{/t}
+                                    {t}Activated{/t}
                                 </td>
                                 <td>
                                     <input type="checkbox" name="mailstatus" {if $user.mailstatus.0 eq "FALSE"}{else}checked="checked"{/if} />

@@ -1,5 +1,5 @@
             <div id="Content">
-                <h2>{t}Users for domain{/t} {$domain}</h2>
+                <h2>{t}Users and aliases for domain{/t} {$domain}</h2>
                 <table>
                     <tr>
                         <th>{t}User{/t}</th>
