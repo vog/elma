@@ -1,7 +1,7 @@
 # common Attributes
 attributetype ( 1.3.6.1.4.1.25287.1.1.2.1
   NAME 'mailStatus'
-  DESC 'Enable/Disable domain or user.'
+  DESC 'Enable/Disable domain, user or alias.'
   EQUALITY booleanMatch
   SYNTAX 1.3.6.1.4.1.1466.115.121.1.7 
   SINGLE-VALUE )
@@ -23,8 +23,8 @@ attributetype ( 1.3.6.1.4.1.25287.1.1.2.201
 objectclass ( 1.3.6.1.4.1.25287.1.1.1.200 
   NAME 'mailUser'
   DESC 'Mail router user' SUP person STRUCTURAL
-  MUST ( uid $ userPassword $ clearpassword)
-  MAY ( mailStatus) )
+  MUST ( uid $ userPassword )
+  MAY ( mailStatus $ clearpassword) )
 
 # mailAlias
 attributetype ( 1.3.6.1.4.1.25287.1.1.2.301 NAME 'mailAliasedName'
@@ -32,6 +32,7 @@ attributetype ( 1.3.6.1.4.1.25287.1.1.2.301 NAME 'mailAliasedName'
 
 objectclass ( 1.3.6.1.4.1.25287.1.1.2.300 NAME 'mailAlias'
   DESC 'Mail alias' SUP top STRUCTURAL
-  MUST ( uid $ mailAliasedName ) )
+  MUST ( uid $ mailAliasedName ) 
+  MAY ( mailStatus) )
 
 

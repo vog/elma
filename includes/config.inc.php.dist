@@ -40,7 +40,7 @@ define ("LDAP_HOSTNAME","ldap://127.0.0.1");
 define ("LDAP_USE_TLS","0");
 
 // LDAP Servers Base DN 
-define ("LDAP_BASEDN","o=mycorp");
+define ("LDAP_BASEDN","o=mybase");
 
 // LDAP Servers Base DN for domains
 define ("LDAP_DOMAINS_ROOT_DN","ou=domains,".LDAP_BASEDN);
@@ -51,7 +51,7 @@ define ("LDAP_USERS_ROOT_DN","ou=users,".LDAP_BASEDN);
 /* ######## Language Settings #### */
 
 // Set the default language
-define ("DEFAULT_LANGUAGE","de_DE");
+define ("DEFAULT_LANGUAGE","en_US");
 
 // Set all languages which should be available at login
 define ("AVAILABLE_LANGUAGES",serialize(array("deutsch" => "de_DE",
@@ -69,6 +69,9 @@ define ("TEMPLATE","simple");
 define('APPROOT',getcwd());
 
 // Define the session variable encryption key
-define('MYCRYPT_KEY',"my little key");
+define('MYCRYPT_KEY',"my mcrypt encryption key");
 
-// vim:tabstop=4:expandtab:shiftwidth=4:filetype=php:syntax:ruler:
+// Should ELMA save the cleartext password in the LDAP database (needed for cram-md5 authentification)
+// a value with anything else than an empty string will enable cleatext password saving!!
+define('SAVECLEARPASS',"TRUE");
+?>

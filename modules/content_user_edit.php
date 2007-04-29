@@ -68,8 +68,15 @@ class content_user_edit extends module_base
                 $my_user["mailstatus"] = "FALSE";
             }
 
-            $my_user["userpassword"] =  $my_user["clearpassword"];
 
+my_print_r($my_user);
+
+            $my_user["userpassword"] =  "{MD5}".base64_encode(pack("H*",md5($my_user["clearpassword"])));
+            if (! defined(SAVECLEARPASS)) {
+                unset($my_user["clearpassword"]);
+            }
+
+            my_print_r($my_user);
             $validation_errors = validate_user($my_user);
             if (count($validation_errors) == 0) {
                 switch ($_POST["mode"]) {

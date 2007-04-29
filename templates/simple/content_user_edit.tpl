@@ -5,15 +5,7 @@
                 <h2>{t}New User{/t}</h2>
                 {/if}
 		        {if $smarty.post.submit}
-                    {if $submit_status == "0"}
-                        <div>
-                            {t}Data saved successfully.{/t}
-                        </div>
-                    {else}
-                        <div>
-                            {t}Sorry, your data could not be saved. The following error occured:{/t} {$submit_status}
-                        </div>
-                    {/if}
+                    {include file="print_submit_status.tpl"}
                 {/if}
 		        <form action="{$smarty.server.php_self}" method="post">
 			        <div>

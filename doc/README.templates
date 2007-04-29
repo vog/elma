@@ -2,7 +2,8 @@ New templates must contain at least the following files, which are included
 by the framework:
 
 header.tpl       : <html>,<head></head>,<title></title>,<meta>,<link> and 
-                   the <body> tag should only be used here
+                   the <body> tag should only be used
+banner.tpl       : shows the product logo or text banner
 content_main.tpl : this must contain a default page which will be displayed 
                    if no module is called.
 navigation.tpl   : global navigation menu 

@@ -62,6 +62,12 @@ class content_alias_edit extends module_base
             unset($my_alias["submit"]);
             unset($my_alias["mode"]);
 
+            if (isset($_POST["mailstatus"])) {
+                $my_alias["mailstatus"] = "TRUE";
+            } else {
+                $my_alias["mailstatus"] = "FALSE";
+            }
+
             $my_alias["mailaliasedname"] = explode("\n", $_POST['nlo_mailaliasedname']);
             
             $validation_errors = validate_alias($my_alias);

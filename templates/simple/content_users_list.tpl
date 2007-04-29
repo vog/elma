@@ -2,8 +2,8 @@
                 <h2>{t}Users and aliases for domain{/t} {$domain}</h2>
                 <table>
                     <tr>
-                        <th>{t}User{/t}</th>
-                        <th>{t}Status{/t}</th>
+                        <th>{t}Username{/t}</th>
+                        <th class="status">{t}Status{/t}</th>
                         <th class="command">{t}Command{/t}</th>
                     </tr>
 		            {section name=users_sec loop=$users}
@@ -11,7 +11,7 @@
                         <td>
                             {$users[users_sec].uid}
                         </td>
-                        <td>
+                        <td class="status">
                         {if $users[users_sec].mailstatus == "TRUE"}
                             <img src="{$template_path}/images/button_ok.png" alt="active"/>
                         {else}
@@ -25,9 +25,9 @@
                     </tr>
 		            {/section}
                     <tr>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td class="command">
+                        <td class="last">&nbsp;</td>
+                        <td class="last">&nbsp;</td>
+                        <td class="last command">
                             <a href="{$link_newuser}">{t}new user{/t}</a>
                         </td>
                     </tr>
@@ -37,6 +37,7 @@
                     <tr>
                         <th>{t}Alias{/t}</th>
                         <th>{t}Alias for{/t}</th>
+                        <th class="status">{t}Status{/t}</th>
                         <th class="command">{t}Command{/t}</th>
                     </tr>
 		            {section name=aliases_sec loop=$aliases}
@@ -50,6 +51,13 @@
                             {$aliases[aliases_sec].mailaliasedname[mailaliasedname_sec]}<br/>
                         {/section}
                         </td>
+                        <td class="status">
+                        {if $aliases[aliases_sec].mailstatus == "TRUE"}
+                            <img src="{$template_path}/images/button_ok.png" alt="active"/>
+                        {else}
+                            <img src="{$template_path}/images/button_cancel.png" alt="inactive"/>
+                        {/if}
+                        </td>
                         <td class="command">
                             <a href="{$aliases[aliases_sec].editlink}">{t}edit{/t}</a> 
                             <a href="{$aliases[aliases_sec].deletelink}">{t}delete{/t}</a>
@@ -57,9 +65,10 @@
                     </tr>
 		            {/section}
                     <tr>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td class="command">
+                        <td class="last">&nbsp;</td>
+                        <td class="last">&nbsp;</td>
+                        <td class="last status">&nbsp;</td>
+                        <td class="last command">
                             <a href="{$link_newalias}">{t}new alias{/t}</a>
                         </td>
                     </tr>

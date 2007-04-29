@@ -3,7 +3,7 @@
 		        <table>
 		            <tr>
                         <th>{t}Domain{/t}</th>
-                        <th>{t}Status{/t}</th>
+                        <th class="status">{t}Status{/t}</th>
                         <th class="command">{t}Command{/t}</th>
                     </tr>
 		            {section name=domains_sec loop=$domains}
@@ -11,7 +11,7 @@
                         <td>
                             <a href="{$domains[domains_sec].userslink}">{$domains[domains_sec].dc}</a>
                         </td>
-                        <td>
+                        <td class="status">
                         {if $domains[domains_sec].mailstatus == "TRUE"}
                             <img src="{$template_path}/images/button_ok.png" alt="active"/>
                         {else}
@@ -25,9 +25,9 @@
                     </tr>
 		            {/section}
                     <tr>
-		                <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td class="command">
+		                <td class="last">&nbsp;</td>
+                        <td class="last">&nbsp;</td>
+                        <td class="last command">
                             <a href="{$link_newdomain}">{t}new domain{/t}</a>
                         </td>
                     </tr>

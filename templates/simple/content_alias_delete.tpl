@@ -1,15 +1,7 @@
             <div id="Content">
                 <h2>{t}Delete Alias{/t}</h2>
 		        {if $smarty.post.submit}
-                    {if $submit_status == "0"}
-                        <div>
-                            {t}Data saved successfully.{/t}
-                        </div>
-                    {else}
-                        <div>
-                            {t}Sorry, your data could not be saved. The following LDAP error occured:{/t} {$submit_status}
-                        </div>
-                    {/if}
+                    {include file="print_submit_status.tpl"}
                 {else}
 		        <form action="{$smarty.server.php_self}" method="post">
 			        <fieldset>
@@ -26,7 +18,7 @@
 			                    <td>&nbsp;</td>
                                 <td>
                                     <input type="submit" name="submit" value="{t}Yes{/t}"/>
-                                    <input type="reset" name="reset" value="{t}No{/t}"/>
+                                    <input type="reset" name="reset" value="{t}No{/t}" onClick="javascript:history.back()"/>
                                 </td>
 				            </tr>
  	                    </table>

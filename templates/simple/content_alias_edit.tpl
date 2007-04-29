@@ -5,15 +5,7 @@
                 <h2>{t}New Alias{/t}</h2>
                 {/if}
 		        {if $smarty.post.submit}
-                    {if $submit_status == "0"}
-                        <div>
-                            {t}Data saved successfully.{/t}
-                        </div>
-                    {else}
-                        <div>
-                            {t}Sorry, your data could not be saved. The following error occured:{/t} {$submit_status}
-                        </div>
-                    {/if}
+                    {include file="print_submit_status.tpl"}
                 {/if}
 		        <form action="{$smarty.server.php_self}" method="post">
 			        <div>
@@ -52,6 +44,14 @@
                                             {/section}
                                         </textarea>
                                     {/strip}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    {t}Activated{/t}
+                                </td>
+                                <td>
+                                    <input type="checkbox" name="mailstatus" {if $alias.mailstatus.0 eq "FALSE"}{else}checked="checked"{/if} />
                                 </td>
                             </tr>
 				            <tr>

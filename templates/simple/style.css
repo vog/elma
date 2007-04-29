@@ -112,10 +112,20 @@ div#Content td {
   vertical-align: top;
 }
 
+div#Content td.status,th.status {
+  width: 15%;
+  text-align: center;
+}
+
 div#Content td.command {
   width: 20%;
   background: #EEE
 }
+
+div#Content td.last {
+  border-top: 1px silver solid;
+}
+
 
 /* Footer elements */
 
@@ -148,8 +158,11 @@ h1 {
 
 h2 {
   font-size: 16px;
-  margin: 0;
-  padding: 0 0 1em 0;
+  margin: 0 0 0.5em 0;
+  padding: 0 0 0 0.5em;
+  font-style: italic;
+  border-left: 20px #99CCFF solid;
+  border-bottom: 1px #99CCFF solid;
 }
 
 hr {
@@ -187,3 +200,5 @@ legend {
 .space25 {
   height: 25px;
 }
+
+
