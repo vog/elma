@@ -94,7 +94,7 @@ function validate_alias ($alias) {
     $valid_alias_data = array();
     if (! validate_data($alias["uid"],"uid")) $valid_alias_data["uid"] = FALSE;
     for ($i = 0; $i < count($alias["mailaliasedname"]); $i++) {
-        if (! validate_data($alias["mailaliasedname"][$i],"mailaliasedname")) $valid_alias_data["mailaliasedname"] = FALSE;
+        if (! validate_data(rtrim($alias["mailaliasedname"][$i]),"mailaliasedname")) $valid_alias_data["mailaliasedname"] = FALSE;
         if ((isset($valid_alias_data["mailaliasedname"])) && ($valid_alias_data["mailaliasedname"] == FALSE)) break;
     }
     return $valid_alias_data;

@@ -3,7 +3,7 @@
 		        <table>
 		            <tr>
                         <th>{t}Domain{/t}</th>
-                        <th class="status">{t}Status{/t}</th>
+                        <th class="status">{t}Active{/t}</th>
                         <th class="command">{t}Command{/t}</th>
                     </tr>
 		            {section name=domains_sec loop=$domains}

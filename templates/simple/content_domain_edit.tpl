@@ -20,7 +20,7 @@
 			                <table>
 			                    <tr>
 			                        <td>
-                                        {t}Activated{/t}
+                                        {t}Is active?{/t}
                                     </td>
                                     <td>
                                         <input type="checkbox" name="mailstatus" {if $domain.mailstatus.0 eq "TRUE"}checked="checked"{/if} />

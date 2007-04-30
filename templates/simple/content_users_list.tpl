@@ -3,7 +3,7 @@
                 <table>
                     <tr>
                         <th>{t}Username{/t}</th>
-                        <th class="status">{t}Status{/t}</th>
+                        <th class="status">{t}Active{/t}</th>
                         <th class="command">{t}Command{/t}</th>
                     </tr>
 		            {section name=users_sec loop=$users}
@@ -37,7 +37,7 @@
                     <tr>
                         <th>{t}Alias{/t}</th>
                         <th>{t}Alias for{/t}</th>
-                        <th class="status">{t}Status{/t}</th>
+                        <th class="status">{t}Active{/t}</th>
                         <th class="command">{t}Command{/t}</th>
                     </tr>
 		            {section name=aliases_sec loop=$aliases}
@@ -48,7 +48,7 @@
                         <td>
 
                         {section name=mailaliasedname_sec loop=$aliases[aliases_sec].mailaliasedname}
-                            {$aliases[aliases_sec].mailaliasedname[mailaliasedname_sec]}<br/>
+                            {$aliases[aliases_sec].mailaliasedname[mailaliasedname_sec]}
                         {/section}
                         </td>
                         <td class="status">

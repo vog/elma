@@ -50,7 +50,7 @@
                             </tr>
 			                <tr>
 				                <td>
-                                    {t}Activated{/t}
+                                    {t}Is active?{/t}
                                 </td>
                                 <td>
                                     <input type="checkbox" name="mailstatus" {if $user.mailstatus.0 eq "FALSE"}{else}checked="checked"{/if} />
