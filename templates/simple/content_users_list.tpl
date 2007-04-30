@@ -46,10 +46,11 @@
                             {$aliases[aliases_sec].uid}
                         </td>
                         <td>
-
+                            <ul>
                         {section name=mailaliasedname_sec loop=$aliases[aliases_sec].mailaliasedname}
-                            {$aliases[aliases_sec].mailaliasedname[mailaliasedname_sec]}
+                                <li>{$aliases[aliases_sec].mailaliasedname[mailaliasedname_sec]}</li>
                         {/section}
+                            </ul>
                         </td>
                         <td class="status">
                         {if $aliases[aliases_sec].mailstatus == "TRUE"}

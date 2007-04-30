@@ -78,6 +78,17 @@ div#Content {
   padding: 0;
 }
 
+div#Content ul {
+  margin: 0;
+  padding: 0;
+}
+
+div#Content li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
 div#Content p {
   margin: 1em 0;
 }
