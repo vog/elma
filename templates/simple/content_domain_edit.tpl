@@ -20,7 +20,7 @@
 			                <table>
 			        {else}
             	        <fieldset>
-			                <legend>{t}new Domain{/t}</legend>
+			                <legend>{t}new domain{/t}</legend>
 			                <table>
 			                    <tr>
 			                        <td>

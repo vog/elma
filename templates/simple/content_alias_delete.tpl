@@ -1,5 +1,5 @@
             <div id="Content">
-                <h2>{t}Delete Alias{/t}</h2>
+                <h2>{t}Delete alias{/t} {$alias.uid.0}@{$domain}</h2>
 		        {if $smarty.post.submit}
                     {include file="print_submit_status.tpl"}
                 {else}
