@@ -1,0 +1,43 @@
+# global config
+################
+
+include         /etc/ldap/schema/core.schema
+include         /etc/ldap/schema/cosine.schema
+include         /etc/ldap/schema/inetorgperson.schema
+include         /etc/ldap/schema/elma-0.1.schema
+
+schemacheck     on
+pidfile         /var/run/slapd/slapd.pid
+argsfile        /var/run/slapd/slapd.args
+modulepath      /usr/lib/ldap
+moduleload      back_bdb
+
+TLSCACertificateFile  /etc/ssl/certs/cacert.pem
+TLSCertificateFile    /etc/ldap/slapd_cert.pem
+TLSCertificateKeyFile /etc/ldap/slapd_key.pem
+
+TLSVerifyClient never 
+
+# first database
+#################
+backend         bdb
+database 	bdb
+directory 	"/var/lib/slapd/"
+suffix          "o=mybasedn"
+index           objectClass eq
+lastmod         on
+
+
+access to attrs=userPassword
+        by dn="cn=admin,ou=users,o=megabit" write
+	by dn="cn=exim4,ou=users,o=megabit" read
+        by anonymous auth
+        by self write
+        by * none
+
+
+access to *
+        by dn="cn=admin,ou=users,o=megabit" write
+	by dn="cn=exim4,ou=users,o=megabit" read
+        by * none
+
