@@ -1,5 +1,5 @@
             <div id="Content">
-                <h2>Domains</h2>
+                <h2>Domain overview</h2>
 		        <table>
 		            <tr>
                         <th>{t}Domain{/t}</th>

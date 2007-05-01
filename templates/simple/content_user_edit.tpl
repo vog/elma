@@ -1,8 +1,8 @@
             <div id="Content">
                 {if $mode == "modify"}
-                <h2>{t}Edit User{/t}</h2>
+                <h2>{t}Edit user{/t} {$user.uid.0}@{$domain}</h2>
                 {else}
-                <h2>{t}New User{/t}</h2>
+                <h2>{t}New user{/t}</h2>
                 {/if}
 		        {if $smarty.post.submit}
                     {include file="print_submit_status.tpl"}
@@ -21,11 +21,11 @@
                                 </td>
 				            </tr>
 			        {else}
-			            <legend>{t}new User{/t}</legend>
+			            <legend>{t}new user{/t}</legend>
 			            <table>
 			                <tr>
 				                <td>
-                                    {t}User{/t}
+                                    {t}Username{/t}
                                 </td>
                                 <td>
                                     <input type="text" name="uid" value="{$user.uid.0}" />@{$domain}
@@ -34,7 +34,7 @@
                     {/if}
 		                    <tr>
 				                <td>
-                                    {t}First Name{/t}
+                                    {t}First name{/t}
                                 </td>
                                 <td>
                                     <input type="text" name="cn" value="{$user.cn.0}" />
@@ -42,7 +42,7 @@
 				            </tr>
                             <tr>
                                 <td>
-                                    {t}Last Name{/t}
+                                    {t}Last name{/t}
                                 </td>
                                 <td>
                                     <input type="text" name="sn" value="{$user.sn.0}" />

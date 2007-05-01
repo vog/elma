@@ -1,8 +1,8 @@
             <div id="Content">
                 {if $mode == "modify"}
-                <h2>{t}Edit Alias{/t}</h2>
+                <h2>{t}Edit alias{/t} {$alias.uid.0}@{$domain}</h2>
                 {else}
-                <h2>{t}New Alias{/t}</h2>
+                <h2>{t}New alias{/t}</h2>
                 {/if}
 		        {if $smarty.post.submit}
                     {include file="print_submit_status.tpl"}
@@ -21,7 +21,7 @@
                                 </td>
 				            </tr>
 			        {else}
-			            <legend>{t}new Alias{/t}</legend>
+			            <legend>{t}new alias{/t}</legend>
 			            <table>
 			                <tr>
 				                <td>

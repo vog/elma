@@ -1,8 +1,8 @@
             <div id="Content">
                 {if $mode == "modify"}
-                <h2>{t}Edit Domain{/t}</h2>
+                <h2>{t }Edit domain{/t} {$domain.dc.0}</h2>
                 {else}
-                <h2>{t}New Domain{/t}</h2>
+                <h2>{t}New domain{/t}</h2>
                 {/if}
 		        {if $smarty.post.submit}
                     {include file="print_submit_status.tpl"}
@@ -18,20 +18,6 @@
 			            <fieldset>
 			                <legend>{$domain.dc.0}</legend>
 			                <table>
-			                    <tr>
-			                        <td>
-                                        {t}Is active?{/t}
-                                    </td>
-                                    <td>
-                                        <input type="checkbox" name="mailstatus" {if $domain.mailstatus.0 eq "TRUE"}checked="checked"{/if} />
-                                    </td>
-			                    </tr>
-			                    <tr>
-			                        <td>&nbsp;</td>
-                                    <td><input type="submit" name="submit" value="{t}Save{/t}" /></td>
-			                    </tr>
-	                        </table>
-                        </fieldset>
 			        {else}
             	        <fieldset>
 			                <legend>{t}new Domain{/t}</legend>
@@ -44,23 +30,21 @@
                                         <input type="text" name="dc" />
                                     </td>
 			                    </tr>
-			                    <tr>
-			                        <td>
-                                        {t}Status{/t}
-                                    </td>
-                                    <td>
-                                        <input type="checkbox" name="mailstatus" checked="checked" />
-                                    </td>
-			                    </tr>
-			                    <tr>
-			                        <td>&nbsp;</td>
-                                    <td>
-                                        <input type="submit" name="submit" value="{t}Save{/t}"/>
-                                    </td>
-			                    </tr>
-	                        </table>
-                        </fieldset>
                     {/if}
+			                <tr>
+			                    <td>
+                                    {t}Is active?{/t}
+                                </td>
+                                <td>
+                                    <input type="checkbox" name="mailstatus" {if $domain.mailstatus.0 eq "FALSE"}{else}checked="checked"{/if} />
+                                </td>
+			                </tr>
+			                <tr>
+			                    <td>&nbsp;</td>
+                                <td><input type="submit" name="submit" value="{t}Save{/t}" /></td>
+			                </tr>
+	                    </table>
+                    </fieldset>
 			    </form>
             </div>
 
