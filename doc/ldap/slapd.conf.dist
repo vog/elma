@@ -1,43 +1,72 @@
-# global config
-################
+# This is the main slapd configuration file. See slapd.conf(5) for more
+# info on the configuration options.
 
+#######################################################################
+# Global Directives:
+
+# Features to permit
+#allow bind_v2
+
+# Schema and objectClass definitions
 include         /etc/ldap/schema/core.schema
 include         /etc/ldap/schema/cosine.schema
+include         /etc/ldap/schema/nis.schema
 include         /etc/ldap/schema/inetorgperson.schema
 include         /etc/ldap/schema/elma-0.1.schema
 
-schemacheck     on
+# Where the pid file is put. The init.d script
+# will not stop the server if you change this.
 pidfile         /var/run/slapd/slapd.pid
+
+# List of arguments that were passed to the server
 argsfile        /var/run/slapd/slapd.args
-modulepath      /usr/lib/ldap
-moduleload      back_bdb
 
-TLSCACertificateFile  /etc/ssl/certs/cacert.pem
-TLSCertificateFile    /etc/ldap/slapd_cert.pem
-TLSCertificateKeyFile /etc/ldap/slapd_key.pem
+# Read slapd.conf(5) for possible values
+loglevel        0
 
-TLSVerifyClient never 
+# Where the dynamically loaded modules are stored
+modulepath	/usr/lib/ldap
+moduleload	back_bdb
 
-# first database
-#################
-backend         bdb
-database 	bdb
-directory 	"/var/lib/slapd/"
+#######################################################################
+# Specific Backend Directives for bdb:
+# Backend specific directives apply to this backend until another
+# 'backend' directive occurs
+backend		bdb
+
+#######################################################################
+# Specific Directives for database #1, of type bdb:
+# Database specific directives apply to this databasse until another
+# 'database' directive occurs
+database        bdb
+
+# The base of your directory in database #1
 suffix          "o=mybasedn"
+
+# Where the database file are physically stored for database #1
+directory       "/var/lib/slapd/"
+
+# Indexing options for database #1
 index           objectClass eq
+
+# Save the time that the entry gets modified, for database #1
 lastmod         on
 
-
-access to attrs=userPassword
-        by dn="cn=admin,ou=users,o=megabit" write
-	by dn="cn=exim4,ou=users,o=megabit" read
+# The userPassword by default can be changed
+# by the entry owning it if they are authenticated.
+# Others should not be able to see it, except the
+# admin entry below
+# These access lines apply to database #1 only
+access to attrs=userPassword,shadowLastChange
+        by dn="uid=admin,ou=users,o=mybasedn" write
+	by dn="uid=exim4,ou=users,o=mybasedn" read
         by anonymous auth
         by self write
         by * none
 
-
-access to *
+# The admin dn has full write access, everyone else
+# can read everything.
+access to attrs=userPassword
         by dn="cn=admin,ou=users,o=megabit" write
 	by dn="cn=exim4,ou=users,o=megabit" read
-        by * none
-
+	by * none

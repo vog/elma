@@ -1,0 +1,33 @@
+dn: o=mybasedn
+objectClass: top
+objectClass: organization
+o: mybasedn
+structuralObjectClass: organization
+
+dn: ou=users,o=mybasedn
+objectClass: top
+objectClass: organizationalUnit
+ou: users
+structuralObjectClass: organizationalUnit
+
+dn: uid=admin,ou=users,o=mybasedn
+uid: admin
+userPassword:: e01ENX1KZVR1VHBJcE9YdHJGM2RyL09yNDV3PT0=
+objectClass: account
+objectClass: simpleSecurityObject
+objectClass: top
+structuralObjectClass: account
+
+dn: uid=exim4,ou=users,o=mybasedn
+uid: exim4
+userPassword:: e01ENX1iNFJMbXJZL3NxUGpURmN3V2g3c1FnPT0=
+objectClass: account
+objectClass: simpleSecurityObject
+objectClass: top
+structuralObjectClass: account
+
+dn: ou=domains,o=mybasedn
+ou: domains
+objectClass: top
+objectClass: organizationalUnit
+structuralObjectClass: organizationalUnit
