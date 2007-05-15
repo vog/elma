@@ -26,7 +26,7 @@ LDAP_BASEDN = o=mybasedn
 LDAP_DOMAINS_ROOT_DN = ou=domains,LDAP_BASEDN
 LDAP_USERS_ROOT_DN = ou=users,LDAP_BASEDN
 LDAP_USER = cn=exim,LDAP_USERS_ROOT_DN
-LDAP_PASS = eximusersldappass
+LDAP_PASS = exim4pass
 LDAP_DEFAULT_SERVERS = 127.0.0.1::389
 
 MAILHOME = /var/mailhome

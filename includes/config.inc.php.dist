@@ -40,13 +40,16 @@ define ("LDAP_HOSTNAME","ldap://127.0.0.1");
 define ("LDAP_USE_TLS","0");
 
 // LDAP Servers Base DN 
-define ("LDAP_BASEDN","o=mybase");
+define ("LDAP_BASEDN","o=mybasedn");
 
 // LDAP Servers Base DN for domains
 define ("LDAP_DOMAINS_ROOT_DN","ou=domains,".LDAP_BASEDN);
 
 // LDAP Servers Base DN for system user (e.g. admin)
 define ("LDAP_USERS_ROOT_DN","ou=users,".LDAP_BASEDN);
+
+// DN for LDAP admin user with access to the complete tree
+define ("LDAP_ADMIN_DN","uid=admin,".LDAP_USERS_ROOT_DN);
 
 /* ######## Language Settings #### */
 

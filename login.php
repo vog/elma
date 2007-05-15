@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $LDAP_BINDDN = "uid=$local_part,dc=$domain,".LDAP_DOMAINDN;
         $LDAP_BINDPASS = $_POST["password"];
     } else if (preg_match('/^admin$/',$_SESSION["username"])) {
-        $LDAP_BINDDN = "cn=admin,".LDAP_USERS_ROOT_DN;
+        $LDAP_BINDDN = LDAP_ADMIN_DN;
         $LDAP_BINDPASS = $_POST["password"];
     }
   
