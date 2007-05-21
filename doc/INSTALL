@@ -27,7 +27,8 @@ Start with an empty LDAP tree and run
 
    # slapadd -l examples/ldap/example.ldif
 
-from within the directory where this INSTALL file is located.
+from within the directory where this INSTALL file is located. This will create an admin user 
+with the dn "uid=admin,ou=users,o=mybasedn" and the password "admin".
 
 1.2 INSTALLATION
 
@@ -39,4 +40,13 @@ Extract the tarball in your webserver's document root directory.
 
    # tar -xzvf elma-0.1.tar.gz
 
+Create the smart's template cache directory called "template_c" and make it writable for you 
+webserver's user (e.g www-data)
 
+   # mkdir /var/www/templates_c/
+   # chown www-data:www-data /var/www/templates_c/
+   # chmod 775 /var/www/templates_c/
+
+Now you should be able to log in to ELAM via a webbrowser using the user "admin" with password "admin".
+To change the admin's user password you have to use the ldap tools of you distribution or usw something 
+similar like "phpLdapAdmin" or "gq".
