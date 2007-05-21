@@ -1,0 +1,42 @@
+########## ELMA 0.1 Installation Guide ##########
+
+1.1 REQUIREMENTS
+
+The requirements are based on the current Debian GNU/Linux stable branch also known as "Etch". 
+ELMA has been developed and test on that distribution. If you have successfully installed and 
+run it on any other distributions plaese send a short mail and this list will be completed.
+
+1.1.1 Debian Etch
+
+        * Apache 2.2.3
+        * PHP 4.4.4 
+        * OpenLDAP 2.3.30
+        * Smarty 2.6.14
+        * Smarty-Gettext 1.0b1 
+
+
+1.2 PREPARATIONS
+
+1.2.1 LDAP Server
+
+ELMA has been testet only to work with OpenLDAP Server.
+
+Install and set up your ldap server as described in your distriubution's manual. 
+There is an example openldap slapd.conf in the ldap subdirectory.
+Start with an empty LDAP tree and run
+
+   # slapadd -l examples/ldap/example.ldif
+
+from within the directory where this INSTALL file is located.
+
+1.2 INSTALLATION
+
+Copy the downloaded tarball to your webserver's document root directory (e.g. /var/www). 
+ 
+   # cp elma-0.1.tar.gz /var/www
+
+Extract the tarball in your webserver's document root directory.
+
+   # tar -xzvf elma-0.1.tar.gz
+
+
