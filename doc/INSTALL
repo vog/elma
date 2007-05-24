@@ -1,4 +1,4 @@
-########## ELMA 0.1 Installation Guide ##########
+########## ELMA 0.1 Quick Installation Guide ##########
 
 1.1 REQUIREMENTS
 
@@ -28,7 +28,10 @@ Start with an empty LDAP tree and run
    # slapadd -l examples/ldap/example.ldif
 
 from within the directory where this INSTALL file is located. This will create an admin user 
-with the dn "uid=admin,ou=users,o=mybasedn" and the password "admin".
+with the dn "uid=admin,ou=users,o=mybasedn" and the password "adminpass". Also a exim user 
+("uid=exim4,ou=users,o=mybasedn") with read only access to the tree will be created. The password 
+is "exim4pass". I think it is obvious to tell you that you should change the passwords of your
+installation.
 
 1.2 INSTALLATION
 
@@ -47,6 +50,6 @@ webserver's user (e.g www-data)
    # chown www-data:www-data /var/www/templates_c/
    # chmod 775 /var/www/templates_c/
 
-Now you should be able to log in to ELAM via a webbrowser using the user "admin" with password "admin".
-To change the admin's user password you have to use the ldap tools of you distribution or usw something 
-similar like "phpLdapAdmin" or "gq".
+Now you should be able to log in to ELAM via a webbrowser using the user "admin" with password 
+"adminpass". To change the admin's user password you have to use the ldap tools of you distribution 
+or use something similar like "phpLdapAdmin" or "gq".
