@@ -1,3 +1,11 @@
+2007-05-24 Daniel Weuthen <daniel@weuthen-net.de>
+    * Bugfix 1712754: missing documentation
+	* Bugfix 1712706: Ldap config not complete
+	* Bugfix 1712690: inconsistence in slapd.conf
+	* Bugfix 1712643: No example in exim4.conf for disable user / domain or
+                      alias
+
+
 2007-05-01 Daniel Weuthen <daniel@weuthen-net.de>
 	* Initial release: consider this software to be in alpha stadium
 
