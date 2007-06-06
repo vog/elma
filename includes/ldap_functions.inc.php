@@ -1,6 +1,6 @@
 <?php
 /**
- * @author Daniel Weuthen <daniel@weuthen-net.de>
+ * @author Daniel Weuthen <daniel@weuthen-net.de> & Sven Ludwig <adan0s@adan0s.net
  * @version $LastChangedRevision$
  * @package ELMA
  *
@@ -157,13 +157,15 @@ class ELMA {
     } 
 
     function addUser ( $domain, $user) {
-        $user["objectclass"] = "mailUser"; 
         ldap_add($this->cid, "uid=".$user['uid'].",dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, $user);
         if ( ldap_errno($this->cid) !== 0 ) {
             $result = ldap_error($this->cid);
         } else {
             $result = 0;
         }
+
+        print_r($user);
+
         return $result;
     }
 
@@ -248,11 +250,67 @@ class ELMA {
     }
 
     function getSystemuserinfo ( $member ) { 
-        $parts = explode(",", $member);
-        $result = ldap_list($this->cid, LDAP_USERS_ROOT_DN, $parts[0]);
-        $user = ldap_get_entries($this->cid, $result);
+        if ( strstr($member, ",") ) {
+            $parts = explode(",", $member);
+            $result = ldap_list($this->cid, LDAP_USERS_ROOT_DN, $parts[0]);
+            $user = ldap_get_entries($this->cid, $result);
+        } else {
+            $result = ldap_list($this->cid, LDAP_USERS_ROOT_DN, "uid=".$member);
+            $user = ldap_get_entries($this->cid, $result);   
+        }
         $user = $user[0];
         return $user;
+    }
+
+    function addSystemuser ( $user ) {
+        $user["objectClass"][0] = "inetOrgPerson"; 
+        $user["objectClass"][1] = "simpleSecurityObject";
+
+        ldap_add($this->cid, "uid=".$user['uid'].",".LDAP_USERS_ROOT_DN, $user);
+        if ( ldap_errno($this->cid) !== 0 ) {
+            $result = ldap_error($this->cid);
+        } else {
+            $result = 0;
+        }
+
+        $admingroup["member"] = "uid=".$user["uid"].",".LDAP_USERS_ROOT_DN;
+        ldap_mod_add($this->cid, LDAP_ADMIN_GROUP.",".LDAP_USERS_ROOT_DN, $admingroup);
+
+        if ( ldap_errno($this->cid) !== 0 ) {
+            $result = ldap_error($this->cid);
+        } else {
+            $result = 0;
+        }
+        return $result;
+    }
+    
+    function modifySystemuser ( $user ) {
+        ldap_modify($this->cid, "uid=".$user['uid'].",".LDAP_USERS_ROOT_DN, $user);
+        if ( ldap_errno($this->cid) !== 0 ) {
+            $result = ldap_error($this->cid);
+        } else {
+            $result = 0;
+        }
+        return $result;
+    }
+
+    function deleteSystemuser ( $user ) {
+        ldap_delete($this->cid, "uid=".$user.",".LDAP_USERS_ROOT_DN);
+        if ( ldap_errno($this->cid) !== 0 ) {
+            $result = ldap_error($this->cid);
+        } else {
+            $result = 0;
+        }
+
+        $admingroup["member"] = "uid=".$user.",".LDAP_USERS_ROOT_DN;
+        ldap_mod_del($this->cid, LDAP_ADMIN_GROUP.",".LDAP_USERS_ROOT_DN, $admingroup);
+
+        if ( ldap_errno($this->cid) !== 0 ) {
+            $result = ldap_error($this->cid);
+        } else {
+            $result = 0;
+        }
+        return $result;
     }
 }
 // vim:tabstop=4:expandtab:shiftwidth=4:filetype=php:syntax:ruler:

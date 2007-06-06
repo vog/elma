@@ -1,6 +1,6 @@
 <?php
 /**
- * @author Daniel Weuthen <daniel@weuthen-net.de>
+ * @author Sven Ludwig <adan0s@adan0s.net>
  * @version $LastChangedRevision$
  * @package ELMA
  *
@@ -34,7 +34,7 @@
  * form and handling the submited data.
  */
 
-class content_systemsystemuser_edit extends module_base
+class content_systemuser_edit extends module_base
 {
 
     /**
@@ -50,9 +50,8 @@ class content_systemsystemuser_edit extends module_base
      */
     function proceed() 
     {
-        $systemuser = $_GET["systemuser"]; 
-        $domain =  $_GET["domain"];
-        $this->smarty->assign("domain",$domain);
+        $systemuser = $_GET["user"]; 
+        $this->smarty->assign("uid",$systemuser);
 
         // new systemuser created or existing systemuser modified
         if (isset($_POST["submit"])) {
@@ -62,28 +61,24 @@ class content_systemsystemuser_edit extends module_base
             unset($my_systemuser["submit"]);
             unset($my_systemuser["mode"]);
 
-            if (isset($_POST["mailstatus"])) {
-                $my_systemuser["mailstatus"] = "TRUE";
-            } else {    
-                $my_systemuser["mailstatus"] = "FALSE";
+            if (! $my_systemuser["clearpassword"] == "") { 
+                $my_systemuser["userpassword"] =  "{MD5}".base64_encode(pack("H*",md5($my_systemuser["clearpassword"])));
             }
 
-            if (! $my_systemuser["clearpassword"] == "") { 
-                $my_systemuser["systemuserpassword"] =  "{MD5}".base64_encode(pack("H*",md5($my_systemuser["clearpassword"])));
-            }
-        
             if (! defined(SAVECLEARPASS)) {
                 unset($my_systemuser["clearpassword"]);
             }
-                   
+
+            unset($my_systemuser["clearpassword"]);
+
             $validation_errors = validate_systemuser($my_systemuser);
             if (count($validation_errors) == 0) {
                 switch ($_POST["mode"]) {
                     case "add":
-                        $this->ldap->addUser($domain,$my_systemuser);
+                        $this->ldap->addSystemuser($my_systemuser);
                     break;
                     case "modify": 
-                        $this->ldap->modifyUser($domain,$my_systemuser);
+                        $this->ldap->modifySystemuser($my_systemuser);
                     break;
                 }
 
@@ -106,7 +101,7 @@ class content_systemsystemuser_edit extends module_base
             $this->smarty->assign("mode","add");
         } else {
             $this->smarty->assign("mode","modify");
-            $this->smarty->assign("systemuser",$this->ldap->getUser($domain,$systemuser));
+            $this->smarty->assign("user",$this->ldap->getSystemuserinfo($systemuser));
         }
     }
 

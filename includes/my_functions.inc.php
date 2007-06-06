@@ -83,12 +83,16 @@ function validate_user ($user) {
     if (! validate_data($user["uid"],"uid")) $valid_user_data["uid"] = FALSE;
     if (! validate_data($user["sn"],"sn")) $valid_user_data["sn"] = FALSE;
     if (! validate_data($user["cn"],"cn")) $valid_user_data["cn"] = FALSE;
-    if (! validate_data($user["userpassword"],"password")) $valid_user_data["userpassword"] = FALSE;
+    if (isset($user["userpassword"])) {
+        if (! validate_data($user["userpassword"],"password")) $valid_user_data["userpassword"] = FALSE;
+    } else {
+        $valid_user_data["userpassword"] = FALSE;
+    }
     return $valid_user_data;
 }
 
-/**]
- * validate user
+/**
+ * validate alias
  */
 function validate_alias ($alias) {
     $valid_alias_data = array();
@@ -98,6 +102,22 @@ function validate_alias ($alias) {
         if ((isset($valid_alias_data["mailaliasedname"])) && ($valid_alias_data["mailaliasedname"] == FALSE)) break;
     }
     return $valid_alias_data;
+}
+
+/**
+ * validate user
+ */
+function validate_systemuser ($user) {
+    $valid_user_data = array();
+    if (! validate_data($user["uid"],"uid")) $valid_user_data["uid"] = FALSE;
+    if (! validate_data($user["sn"],"sn")) $valid_user_data["sn"] = FALSE;
+    if (! validate_data($user["cn"],"cn")) $valid_user_data["cn"] = FALSE;
+    if (isset($user["userpassword"])) {
+        if (! validate_data($user["userpassword"],"password")) $valid_user_data["userpassword"] = FALSE;
+    } else {
+        $valid_user_data["userpassword"] = FALSE;
+    }
+    return $valid_user_data;
 }
 
 /**

@@ -70,9 +70,6 @@ class content_user_edit extends module_base
 
             if (! $my_user["clearpassword"] == "") { 
                 $my_user["userpassword"] =  "{MD5}".base64_encode(pack("H*",md5($my_user["clearpassword"])));
-            }
-        
-            if (! defined(SAVECLEARPASS)) {
                 unset($my_user["clearpassword"]);
             }
                    

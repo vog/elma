@@ -28,20 +28,20 @@
  */
 
 /**
- * Content Module Systmusers
+ * Content User Delete
  * 
- * This content module is used to list system users
+ * This content module is used to get a delete confirmation for users.
  */
 
-class content_systemusers_list extends module_base
+class content_systemuser_delete extends module_base
 {
 
     /**
      * Constructor of this class
      */
-    function content_systemusers_list() 
+    function content_template() 
     {
-        parent::module_base();
+
     }
 
     /**
@@ -49,35 +49,22 @@ class content_systemusers_list extends module_base
      */
     function proceed() 
     {
-        $my_users = array();
-
-        $users = $this->ldap->listSystemusers();
-        
-        for ( $i = 0; $i < $users['member']["count"]; $i++ ) {
-            $user['member'] = $users['member'][$i]; 
-
-            /*
-             * grab the uid from the member string
-             */
-            $parts = explode(",", $user['member']);
-            $parts = explode("=", $parts[0]);
-            $user['uid'] = $parts[1];
-
-            $userinfo = $this->ldap->getSystemuserinfo($user['member']);
-
-            $user['lname'] = $userinfo['cn'][0];
-            $user['fname'] = $userinfo['sn'][0];
-
-            $user['deletelink'] = $_SERVER['PHP_SELF']."?module=systemuser_delete&amp;user=".$user['uid'];
-            $user['editlink'] = $_SERVER['PHP_SELF']."?module=systemuser_edit&amp;user=".$user['uid']; 
-            array_push($my_users,$user);
-
+        if ( isset($_POST["submit"]) ) {
+            $uid = $_POST["uid"];
+            $this->ldap->deleteSystemuser($uid);
+            
+            $submit_status = ldap_errno($this->ldap->cid);
+            if ($submit_status == "0") {
+                $this->smarty->assign("submit_status",$submit_status);
+            } else { 
+                $this->smarty->assign("submit_status",ldap_err2str($submit_status));
+            }
+        } else {
+            $uid = $_GET["user"];
+            $this->smarty->assign("user",$this->ldap->getSystemuserinfo($uid));
+            $this->smarty->assign("submit_status",-1);
         }
-        
-        $this->smarty->assign("link_newsystemuser",$_SERVER['PHP_SELF']."?module=systemuser_edit&amp;user=new");
-        $this->smarty->assign('systemusers',$my_users);   
     }
-
 
     /**
      * This method returns any content that should be echoed by the
@@ -87,7 +74,7 @@ class content_systemusers_list extends module_base
      */
     function getContent() 
     {
-        $_content = $this->smarty->fetch('content_systemusers_list.tpl');
+        $_content = $this->smarty->fetch('content_systemuser_delete.tpl');
         return $_content;
     }
 }

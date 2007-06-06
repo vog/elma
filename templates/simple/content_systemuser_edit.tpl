@@ -1,6 +1,6 @@
             <div id="Content">
                 {if $mode == "modify"}
-                <h2>{t}Edit systemuser{/t} {$systemuser.uid.0}</h2>
+                <h2>{t}Edit systemuser{/t} {$user.uid.0}</h2>
                 {else}
                 <h2>{t}New systemuser{/t}</h2>
                 {/if}
@@ -13,11 +13,11 @@
                     </div>
 			        <fieldset>
 			        {if $mode == "modify"}
-			            <legend>{$systemuser.uid.0}</legend>
+			            <legend>{$user.uid.0}</legend>
 			            <table>
 			                <tr>
                                 <td>
-                                    <input type="hidden" name="uid" value="{$systemuser.uid.0}" />
+                                    <input type="hidden" name="uid" value="{$user.uid.0}" />
                                 </td>
 				            </tr>
 			        {else}
@@ -28,7 +28,7 @@
                                     {t}Username{/t}
                                 </td>
                                 <td>
-                                    <input type="text" name="uid" value="{$systemuser.uid.0}" />
+                                    <input type="text" name="uid" value="{$user.uid.0}" />
                                 </td>
 				            </tr>
                     {/if}
@@ -37,7 +37,7 @@
                                     {t}First name{/t}
                                 </td>
                                 <td>
-                                    <input type="text" name="cn" value="{$systemuser.cn.0}" />
+                                    <input type="text" name="cn" value="{$user.cn.0}" />
                                 </td>
 				            </tr>
                             <tr>
@@ -45,7 +45,7 @@
                                     {t}Last name{/t}
                                 </td>
                                 <td>
-                                    <input type="text" name="sn" value="{$systemuser.sn.0}" />
+                                    <input type="text" name="sn" value="{$user.sn.0}" />
                                 </td>
                             </tr>
 				            <tr>
@@ -56,9 +56,14 @@
 				            <tr>
                                 <td>
                                     {t}Password{/t}
+                                    {if $mode == "modify"}
+                                    <br>
+                                    {t}(leave empty to keep password){/t}
+                                    {/if}
                                 </td>
                                 <td>
-                                    <input type="text" name="clearpassword" value="{$systemuser.clearpassword.0}" />
+                                    <input type="hidden" name="userpassword" value="{$user.userpassword.0}" />
+                                    <input type="text" name="clearpassword" value="{$user.clearpassword.0}" />
                                 </td>
                             </tr>
 				            <tr>
