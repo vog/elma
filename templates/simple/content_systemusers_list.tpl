@@ -8,7 +8,7 @@
 		            {section name=systemusers_sec loop=$systemusers}
                     <tr>
                         <td>
-                            {$systemusers[systemusers_sec].uid}
+                            {$systemusers[systemusers_sec].lname} {$systemusers[systemusers_sec].fname} ( {$systemusers[systemusers_sec].uid} )
                         </td>
                         <td class="command">
                             <a href="{$systemusers[systemusers_sec].editlink}">{t}edit{/t}</a> 

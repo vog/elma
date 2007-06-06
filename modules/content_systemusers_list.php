@@ -1,6 +1,6 @@
 <?php
 /**
- * @author Daniel Weuthen <daniel@weuthen-net.de>
+ * @author Sven Ludwig <adan0s@adan0s.net>
  * @version $LastChangedRevision$
  * @package ELMA
  *
@@ -56,9 +56,17 @@ class content_systemusers_list extends module_base
         for ( $i = 0; $i < $users['member']["count"]; $i++ ) {
             $user['member'] = $users['member'][$i]; 
 
+            /*
+             * grab the uid from the member string
+             */
             $parts = explode(",", $user['member']);
             $parts = explode("=", $parts[0]);
             $user['uid'] = $parts[1];
+
+            $userinfo = $this->ldap->getSystemuserinfo($user['member']);
+
+            $user['lname'] = $userinfo['cn'][0];
+            $user['fname'] = $userinfo['sn'][0];
 
             $user['deletelink'] = $_SERVER['PHP_SELF']."?module=systemuser_delete&amp;domain=".$user['member'];
             $user['editlink'] = $_SERVER['PHP_SELF']."?module=systemuser_edit&amp;domain=".$user['member']; 
