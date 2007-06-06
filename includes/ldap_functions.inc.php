@@ -232,5 +232,22 @@ class ELMA {
         }
         return $result;
     }
+
+    # SYSTEMUSER
+    
+    function listSystemusers ()
+    {
+        $users = $this->getSystemuser();
+        return $users;
+    }
+
+    function getSystemuser ()
+    {
+        $result = ldap_list($this->cid, LDAP_USERS_ROOT_DN, LDAP_ADMIN_GROUP);
+        $user = ldap_get_entries($this->cid, $result);
+        $user = $user[0];
+        return $user;
+    } 
+
 }
 // vim:tabstop=4:expandtab:shiftwidth=4:filetype=php:syntax:ruler:

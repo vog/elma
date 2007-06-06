@@ -51,6 +51,9 @@ define ("LDAP_USERS_ROOT_DN","ou=users,".LDAP_BASEDN);
 // DN for LDAP admin user with access to the complete tree
 define ("LDAP_ADMIN_DN","uid=admin,".LDAP_USERS_ROOT_DN);
 
+// CN for the LDAP admingroup
+define ("LDAP_ADMIN_GROUP", "cn=admingroup");
+
 /* ######## Language Settings #### */
 
 // Set the default language

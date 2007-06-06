@@ -41,7 +41,7 @@ class content_systemusers_list extends module_base
      */
     function content_systemusers_list() 
     {
-
+        parent::module_base();
     }
 
     /**
@@ -49,7 +49,25 @@ class content_systemusers_list extends module_base
      */
     function proceed() 
     {
+        $my_users = array();
 
+        $users = $this->ldap->listSystemusers();
+        
+        for ( $i = 0; $i < $users['member']["count"]; $i++ ) {
+            $user['member'] = $users['member'][$i]; 
+
+            $parts = explode(",", $user['member']);
+            $parts = explode("=", $parts[0]);
+            $user['uid'] = $parts[1];
+
+            $user['deletelink'] = $_SERVER['PHP_SELF']."?module=systemuser_delete&amp;domain=".$user['member'];
+            $user['editlink'] = $_SERVER['PHP_SELF']."?module=systemuser_edit&amp;domain=".$user['member']; 
+            array_push($my_users,$user);
+
+        }
+        
+        $this->smarty->assign("link_newuser",$_SERVER['PHP_SELF']."?module=systemuser_edit&amp;user=new");
+        $this->smarty->assign('systemusers',$my_users);   
     }
 
 
@@ -62,7 +80,7 @@ class content_systemusers_list extends module_base
     function getContent() 
     {
         $_content = $this->smarty->fetch('content_systemusers_list.tpl');
-       return $_content;
+        return $_content;
     }
 }
 // vim:tabstop=4:expandtab:shiftwidth=4:filetype=php:syntax:ruler:
