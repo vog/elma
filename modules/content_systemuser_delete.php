@@ -61,7 +61,7 @@ class content_systemuser_delete extends module_base
             }
         } else {
             $uid = $_GET["user"];
-            $this->smarty->assign("user",$this->ldap->getSystemuserinfo($uid));
+            $this->smarty->assign("user",$this->ldap->getSystemuser($uid));
             $this->smarty->assign("submit_status",-1);
         }
     }

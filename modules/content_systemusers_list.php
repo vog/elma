@@ -52,28 +52,19 @@ class content_systemusers_list extends module_base
         $my_users = array();
 
         $users = $this->ldap->listSystemusers();
-        
-        for ( $i = 0; $i < $users['member']["count"]; $i++ ) {
-            $user['member'] = $users['member'][$i]; 
 
-            /*
-             * grab the uid from the member string
-             */
-            $parts = explode(",", $user['member']);
-            $parts = explode("=", $parts[0]);
-            $user['uid'] = $parts[1];
+        for ($i=0; $i < $users["count"]; $i++) {
 
-            $userinfo = $this->ldap->getSystemuserinfo($user['member']);
+            $user['uid'] = $users[$i]["uid"][0];
 
-            $user['lname'] = $userinfo['cn'][0];
-            $user['fname'] = $userinfo['sn'][0];
+            $user['lname'] = $users[$i]['cn'][0];
+            $user['fname'] = $users[$i]['sn'][0];
 
             $user['deletelink'] = $_SERVER['PHP_SELF']."?module=systemuser_delete&amp;user=".$user['uid'];
             $user['editlink'] = $_SERVER['PHP_SELF']."?module=systemuser_edit&amp;user=".$user['uid']; 
             array_push($my_users,$user);
-
         }
-        
+
         $this->smarty->assign("link_newsystemuser",$_SERVER['PHP_SELF']."?module=systemuser_edit&amp;user=new");
         $this->smarty->assign('systemusers',$my_users);   
     }

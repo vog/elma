@@ -101,7 +101,7 @@ class content_systemuser_edit extends module_base
             $this->smarty->assign("mode","add");
         } else {
             $this->smarty->assign("mode","modify");
-            $this->smarty->assign("user",$this->ldap->getSystemuserinfo($systemuser));
+            $this->smarty->assign("user",$this->ldap->getSystemuser($systemuser));
         }
     }
 
