@@ -212,4 +212,12 @@ legend {
   height: 25px;
 }
 
+td#sendcenter {
+  text-align: center;
+}
+
+select {
+  width: 15em;
+}
+
 

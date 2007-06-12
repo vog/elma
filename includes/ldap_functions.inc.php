@@ -110,7 +110,7 @@ class ELMA {
         return $domain;
     }
  
-    function addDomain ( $domain ) {
+    function addDomain ( $domain , $admins ) {
         $domain["objectclass"] = "mailDomain";
         ldap_add($this->cid, "dc=".$domain['dc'].",".LDAP_DOMAINS_ROOT_DN, $domain);
         if ( ldap_errno($this->cid) !== 0 ) {
@@ -118,6 +118,11 @@ class ELMA {
         } else {
             $result = 0;
         }
+
+        $group["cn"] = "admingroup";
+        $group["objectclass"] = "groupOfNames";
+        $group["member"] = $admins;
+        ldap_add($this->cid, "cn=".$group["cn"].",dc=".$domain['dc'].",".LDAP_DOMAINS_ROOT_DN, $group);
         return $result;
     } 
 
@@ -285,5 +290,61 @@ class ELMA {
         }
         return $result;
     }
+
+    # ADMINGROUP
+
+    function listGroupusers ($domain="users") {
+        $users = $this->getGroupuser($domain);
+        return $users;
+    }
+
+    function getGroupuser ($domain="users") {
+        if ($domain != "users") {
+            $result = ldap_list($this->cid, "dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, "cn=admingroup");
+            $user = ldap_get_entries($this->cid, $result);   
+        } else {
+            $result = ldap_list($this->cid, LDAP_USERS_ROOT_DN, "cn=admingroup");
+            $user = ldap_get_entries($this->cid, $result);
+        }
+
+        return $user;
+    }
+
+    function addGroupusers ($domain=null, $users) {
+
+        $tmpusers["member"] = $users;
+
+        if ($domain != null) {
+            ldap_mod_add($this->cid, "cn=admingroup,dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, $tmpusers);
+        } else {
+            ldap_mod_add($this->cid, "cn=admingroup,".LDAP_USERS_ROOT_DN, $tmpusers);
+        }
+        
+        if ( ldap_errno($this->cid) !== 0 ) {
+            $result = ldap_error($this->cid);
+        } else {
+            $result = 0;
+        }
+        return $result;
+    }
+    
+    function delGroupusers ($domain=null, $users) {
+
+        $tmpusers["member"] = $users;
+
+        if ($domain != null) {
+            ldap_mod_del($this->cid, "cn=admingroup,dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, $tmpusers);
+        } else {
+            ldap_mod_del($this->cid, "cn=admingroup,".LDAP_USERS_ROOT_DN, $tmpusers);
+        }
+        
+        if ( ldap_errno($this->cid) !== 0 ) {
+            $result = ldap_error($this->cid);
+        } else {
+            $result = 0;
+        }
+        return $result;
+    }
+
 }
 // vim:tabstop=4:expandtab:shiftwidth=4:filetype=php:syntax:ruler:
