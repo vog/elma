@@ -39,12 +39,20 @@ class content_main extends module_base
      * Constructor of this class
      */
     function content_main() {
+        parent::module_base();
     }
 
     /**
      * This method is called after the constructor by the main page
      */
     function proceed() {
+        $this->smarty->assign("userCountOverall", $this->ldap->userCount());
+        $this->smarty->assign("aliasCountOverall", $this->ldap->aliasCount());
+        $this->smarty->assign("domainCount", $this->ldap->domainCount());
+        $this->smarty->assign("userCountActive", $this->ldap->userCount(null, "TRUE"));
+        $this->smarty->assign("aliasCountActive", $this->ldap->aliasCount(null, "TRUE"));
+        $this->smarty->assign("domainCountActive", $this->ldap->domainCount("TRUE"));
+        
     }
 
     /**

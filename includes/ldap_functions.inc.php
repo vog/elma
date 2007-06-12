@@ -162,15 +162,13 @@ class ELMA {
     } 
 
     function addUser ( $domain, $user) {
+        $user["objectclass"] = "mailUser";
         ldap_add($this->cid, "uid=".$user['uid'].",dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, $user);
         if ( ldap_errno($this->cid) !== 0 ) {
             $result = ldap_error($this->cid);
         } else {
             $result = 0;
         }
-
-        print_r($user);
-
         return $result;
     }
 
@@ -346,5 +344,65 @@ class ELMA {
         return $result;
     }
 
+    # Statistical functions
+    function userCount ($domain=null, $active="*") {
+        if ($domain != null) {
+            $result = ldap_list($this->cid, "dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, "(&(mailStatus=$active)(&(objectclass=mailUser)(uid=*)))");
+            $result = ldap_get_entries($this->cid, $result);
+            $tmpcount = $result["count"];
+        } else {
+            $result = ldap_list($this->cid, LDAP_DOMAINS_ROOT_DN, "dc=*");
+
+            $tmpresult = ldap_get_entries($this->cid, $result);
+            $count = $tmpresult["count"];
+            $tmpcount = 0;
+
+            for ($i=0; $i<$count; $i++) {
+                $tmpusersresult = ldap_list($this->cid, "dc=".$tmpresult[$i]["dc"][0].",".LDAP_DOMAINS_ROOT_DN, "(&(mailStatus=$active)(&(objectclass=mailUser)(uid=*)))"); 
+                $tmpusersresult = ldap_get_entries($this->cid, $tmpusersresult);
+                $tmpcount += $tmpusersresult["count"];
+            }
+        }
+        return $tmpcount;
+    }
+    
+    function aliasCount ($domain=null, $active="*") {
+        if ($domain != null) {
+            $result = ldap_list($this->cid, "dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, "(&(mailStatus=$active)(&(objectclass=mailAlias)(uid=*)))");
+            $result = ldap_get_entries($this->cid, $result);
+            $tmpcount = $result["count"];
+        } else {
+            $result = ldap_list($this->cid, LDAP_DOMAINS_ROOT_DN, "dc=*");
+
+            $tmpresult = ldap_get_entries($this->cid, $result);
+            $count = $tmpresult["count"];
+            $tmpcount = 0;
+
+            for ($i=0; $i<$count; $i++) {
+                $tmpusersresult = ldap_list($this->cid, "dc=".$tmpresult[$i]["dc"][0].",".LDAP_DOMAINS_ROOT_DN, "(&(mailStatus=$active)(&(objectclass=mailAlias)(uid=*)))"); 
+                $tmpusersresult = ldap_get_entries($this->cid, $tmpusersresult);
+                $tmpcount += $tmpusersresult["count"];
+            }
+        }
+        return $tmpcount;
+    }
+
+    function domainCount ($active="*") {
+            $result = ldap_list($this->cid, LDAP_DOMAINS_ROOT_DN, "(&(mailStatus=$active)(dc=*))");
+            $result = ldap_get_entries($this->cid, $result);
+            $tmpcount = $result["count"];
+
+            return $tmpcount;
+    }
+
+    function systemuserCount () {
+            $result = ldap_list($this->cid, LDAP_USERS_ROOT_DN, "(uid=*)");
+            $result = ldap_get_entries($this->cid, $result);
+            $tmpcount = $result["count"];
+
+            return $tmpcount;
+
+    }
+
 }
-// vim:tabstop=4:expandtab:shiftwidth=4:filetype=php:syntax:ruler:
+// vim:tabstop=4:expandtab:shiftwidth=4:filetype=php:syntax:ruler: 

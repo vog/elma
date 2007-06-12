@@ -71,6 +71,7 @@ class content_users_list extends module_base {
         for ($i = 0; $i < $aliases["count"]; $i++) {
             $alias['uid'] = $aliases[$i]["uid"][0]; 
             $alias['mailaliasedname'] = $aliases[$i]["mailaliasedname"];
+            $alias['mailstatus'] = $aliases[$i]["mailstatus"][0];
             $alias['deletelink'] = $_SERVER['PHP_SELF']."?module=alias_delete&amp;domain=".$domain."&amp;alias=".$alias['uid'];
             $alias['editlink'] = $_SERVER['PHP_SELF']."?module=alias_edit&amp;domain=".$domain."&amp;alias=".$alias['uid']; 
             array_push($my_aliases,$alias);
