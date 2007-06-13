@@ -82,11 +82,11 @@ class content_domain_edit extends module_base
             if (count($validation_errors) == 0) {
                 switch ($_POST["mode"]) {
                     case "add":
-                        if (isset($admins)) {
-                            $this->ldap->addDomain($my_domain, $admins);
-                        } else {
-                            exit("Please specify an admin first"); // this needs to be redone
+                        if (!isset($admins)) {
+                            $admins = array();
                         }
+
+                        $this->ldap->addDomain($my_domain, $admins);
                         break;
                     case "modify": 
                         $this->ldap->modifyDomain($my_domain);
@@ -95,38 +95,39 @@ class content_domain_edit extends module_base
                         
                         $count = 0;
 
+                        if (!isset($admins)) {
+                            $admins = array();
+                        }
 
-                        if (isset($admins)) {
-                            foreach ($admins as $admin) {
-                                $isinarray = 0;
-                                for ($c=0; $c < $ldapadmins[0]["member"]["count"]; $c++) {
-                                    if ($admin == $ldapadmins[0]["member"][$c]){
-                                        $isinarray = 1;
-                                        break;
-                                    }
-                                }
-
-                                if ($isinarray == 0) {
-                                    $adminsadd[$count] = $admin;
-                                    $count++;
+                        foreach ($admins as $admin) {
+                            $isinarray = 0;
+                            for ($c=0; $c < $ldapadmins[0]["member"]["count"]; $c++) {
+                                if ($admin == $ldapadmins[0]["member"][$c]){
+                                    $isinarray = 1;
+                                    break;
                                 }
                             }
 
-                            $count = 0;
+                            if ($isinarray == 0) {
+                                $adminsadd[$count] = $admin;
+                                $count++;
+                            }
+                        }
 
-                            for ($i=0; $i < $ldapadmins[0]["member"]["count"]; $i++) {
-                                $isinarray = 0;
-                                foreach ($admins as $admin) {
-                                    if ($ldapadmins[0]["member"][$i] == $admin) {
-                                        $isinarray = 1;
-                                        break;
-                                    }
-                                }
+                        $count = 0;
 
-                                if ($isinarray == 0) {
-                                    $adminsdel[$count] = $ldapadmins[0]["member"][$i];
-                                    $count++;
+                        for ($i=0; $i < $ldapadmins[0]["member"]["count"]; $i++) {
+                            $isinarray = 0;
+                            foreach ($admins as $admin) {
+                                if ($ldapadmins[0]["member"][$i] == $admin) {
+                                    $isinarray = 1;
+                                    break;
                                 }
+                            }
+
+                            if ($isinarray == 0) {
+                                $adminsdel[$count] = $ldapadmins[0]["member"][$i];
+                                $count++;
                             }
                         }
 
@@ -165,12 +166,16 @@ class content_domain_edit extends module_base
                 $tmp = $tmp[1];
                 $nonadmins[$count] = $tmp;
                 $nonadminslong[$count] = $users[$i]["dn"];
+                $nonadminscn[$count] = $users[$i]["cn"][0];
+                $nonadminssn[$count] = $users[$i]["sn"][0];
                 $count++;
             }
 
             if (isset($nonadminslong)) {
-            $this->smarty->assign("nonadmins",$nonadmins);
-            $this->smarty->assign("nonadminslong",$nonadminslong);
+                $this->smarty->assign("nonadmins",$nonadmins);
+                $this->smarty->assign("nonadminslong",$nonadminslong);
+                $this->smarty->assign("nonadminscn", $nonadminscn);
+                $this->smarty->assign("nonadminssn", $nonadminssn);
             }
         } else {
             $this->smarty->assign("mode","modify");

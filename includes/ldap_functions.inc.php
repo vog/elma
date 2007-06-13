@@ -119,9 +119,12 @@ class ELMA {
             $result = 0;
         }
 
+        array_push ($admins, LDAP_GROUP_DUMMY);
+
         $group["cn"] = "admingroup";
         $group["objectclass"] = "groupOfNames";
         $group["member"] = $admins;
+
         ldap_add($this->cid, "cn=".$group["cn"].",dc=".$domain['dc'].",".LDAP_DOMAINS_ROOT_DN, $group);
         return $result;
     } 
@@ -367,10 +370,22 @@ class ELMA {
             $result = ldap_list($this->cid, "dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, "cn=admingroup");
             $user = ldap_get_entries($this->cid, $result);   
         } else {
-            $result = ldap_list($this->cid, LDAP_USERS_ROOT_DN, "cn=admingroup");
+            $result = ldap_list($this->cid, LDAP_USERS_ROOT_DN, "(cn=admingroup)");
             $user = ldap_get_entries($this->cid, $result);
         }
 
+        $tmp = $user[0]["member"];
+        $user[0]["member"] = array();
+        $user[0]["member"]["count"] = $tmp["count"];
+
+        for ($i=0; $i<$tmp["count"]; $i++) {
+            if (!($tmp[$i] == LDAP_GROUP_DUMMY)) {
+                array_push($user[0]["member"], $tmp[$i]);
+            } else {
+                $user[0]["member"]["count"]--;
+            }
+        }
+        
         return $user;
     }
 
