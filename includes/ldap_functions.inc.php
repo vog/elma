@@ -196,16 +196,18 @@ class ELMA {
             for ($c=0; $c<$searchresult[$i]["member"]["count"]; $c++) {
                 $member = explode(",", $searchresult[$i]["member"][$c]);
 
-                if (($member[0] == "uid=".$user) && ($member[2].",".$member[3] == LDAP_DOMAINS_ROOT_DN)) {
-                    $del["member"] = array($searchresult[$i]["member"][$c]);
-                    ldap_mod_del($this->cid, $searchresult[$i]["dn"], $del); 
-                }
-                
-                if ( ldap_errno($this->cid) !== 0 ) {
-                    $result = ldap_error($this->cid);
-                    return $result;
-                } else {
-                    $result = 0;
+                if (isset($member[3])) {
+                    if (($member[0] == "uid=".$user) && ($member[2].",".$member[3] == LDAP_DOMAINS_ROOT_DN)) {
+                        $del["member"] = array($searchresult[$i]["member"][$c]);
+                        ldap_mod_del($this->cid, $searchresult[$i]["dn"], $del); 
+                    }
+                    
+                    if ( ldap_errno($this->cid) !== 0 ) {
+                        $result = ldap_error($this->cid);
+                        return $result;
+                    } else {
+                        $result = 0;
+                    }
                 }
             }
         }
