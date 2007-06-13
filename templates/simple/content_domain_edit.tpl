@@ -44,25 +44,31 @@
                                     <table>
                                         <td>
                                             {t}Admins{/t}
-                                            <br>
-                                            <select name="admins[]" size="5" multiple>
+                                            <br />
+                                            <select name="admins[]" size="8" multiple>
                                             {section name=adminloop loop=$admins}
-                                                <option value="{$adminslong[adminloop]}">{$admins[adminloop]}</option>
+                                                <option value="{$adminslong[adminloop]}">{$admins[adminloop]} ({$adminscn[adminloop]} {$adminssn[adminloop]})</option>
                                             {/section}
                                             </select>
-                                            <br>
-                                            <input type="button" name="delfromlist" value="delfromlist" onClick="del()">
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <br />
+                                                <br />
+                                                <input type="button" name="delfromlist" value=">" onClick="del()">
+                                                <br />
+                                                <br />
+                                                <input type="button" name="addtolist" value="<" onclick="add()">
+                                            </div>
                                         </td>
                                         <td>
                                             {t}Non-Admins{/t}
-                                            <br>
-                                            <select name="nonadmins[]" size="5" multiple>
+                                            <br />
+                                            <select name="nonadmins[]" size="8" multiple>
                                             {section name=nonadminloop loop=$nonadmins}
-                                                <option value="{$nonadminslong[nonadminloop]}">{$nonadmins[nonadminloop]}</option>
+                                                <option value="{$nonadminslong[nonadminloop]}">{$nonadmins[nonadminloop]} ({$nonadminscn[nonadminloop]} {$nonadminssn[nonadminloop]})</option>
                                             {/section}
                                             </select>
-                                            <br>
-                                            <input type="button" name="addtolist" value="addtolist" onclick="add()">
                                         </td>
                                     </table>
                                 </td>

@@ -183,6 +183,33 @@ class ELMA {
     }
 
     function deleteUser ( $domain, $user) {
+        $searchresult = ldap_search($this->cid, LDAP_BASEDN, "(&(member=*)(cn=admingroup))");
+        $searchresult = ldap_get_entries($this->cid, $searchresult);
+        
+        if ( ldap_errno($this->cid) !== 0 ) {
+            $result = ldap_error($this->cid);
+        } else {
+            $result = 0;
+        }
+
+        for ($i=0; $i<$searchresult["count"]; $i++) {
+            for ($c=0; $c<$searchresult[$i]["member"]["count"]; $c++) {
+                $member = explode(",", $searchresult[$i]["member"][$c]);
+
+                if (($member[0] == "uid=".$user) && ($member[2].",".$member[3] == LDAP_DOMAINS_ROOT_DN)) {
+                    $del["member"] = array($searchresult[$i]["member"][$c]);
+                    ldap_mod_del($this->cid, $searchresult[$i]["dn"], $del); 
+                }
+                
+                if ( ldap_errno($this->cid) !== 0 ) {
+                    $result = ldap_error($this->cid);
+                    return $result;
+                } else {
+                    $result = 0;
+                }
+            }
+        }
+
         ldap_delete($this->cid, "uid=".$user.",dc=".$domain.",".LDAP_DOMAINS_ROOT_DN);
         if ( ldap_errno($this->cid) !== 0 ) {
             $result = ldap_error($this->cid);
@@ -240,13 +267,17 @@ class ELMA {
 
     # SYSTEMUSER
     
-    function listSystemusers () {
-        $users = $this->getSystemuser();
+    function listSystemusers ($mode="system") {
+        $users = $this->getSystemuser("*", $mode);
         return $users;
     }
 
-    function getSystemuser ($user_uid="*") {
-        $result = ldap_list($this->cid, LDAP_USERS_ROOT_DN, "(&(objectclass=inetOrgPerson)(uid=$user_uid))");
+    function getSystemuser ($user_uid="*", $mode="system") {
+        if ($mode!="system") {
+            $result = ldap_list($this->cid, LDAP_USERS_ROOT_DN, "(&(objectclass=inetOrgPerson)(uid=$user_uid))");
+        } else {
+            $result = ldap_list($this->cid, LDAP_USERS_ROOT_DN, "(&(userPassword=*)(&(objectclass=inetOrgPerson)(uid=$user_uid)))");
+        }
         $user = ldap_get_entries($this->cid, $result);
 
         if ($user_uid != "*") {
@@ -280,12 +311,45 @@ class ELMA {
     }
 
     function deleteSystemuser ( $user ) {
-        ldap_delete($this->cid, "uid=".$user.",".LDAP_USERS_ROOT_DN);
+        $result = 1;
+
+        $searchresult = ldap_search($this->cid, LDAP_BASEDN, "(&(member=*)(cn=admingroup))");
+        $searchresult = ldap_get_entries($this->cid, $searchresult);
+        
         if ( ldap_errno($this->cid) !== 0 ) {
             $result = ldap_error($this->cid);
         } else {
             $result = 0;
         }
+
+        for ($i=0; $i<$searchresult["count"]; $i++) {
+            for ($c=0; $c<$searchresult[$i]["member"]["count"]; $c++) {
+                $member = explode(",", $searchresult[$i]["member"][$c]);
+
+                if (($member[0] == "uid=".$user) && ($member[1].",".$member[2] == LDAP_USERS_ROOT_DN)) {
+                    $del["member"] = array($searchresult[$i]["member"][$c]);
+                    ldap_mod_del($this->cid, $searchresult[$i]["dn"], $del); 
+                }
+                
+                if ( ldap_errno($this->cid) !== 0 ) {
+                    $result = ldap_error($this->cid);
+                    return $result;
+                } else {
+                    $result = 0;
+                }
+            }
+        }
+
+        if ($result == 0) {
+            ldap_delete($this->cid, "uid=".$user.",".LDAP_USERS_ROOT_DN);
+            
+            if ( ldap_errno($this->cid) !== 0 ) {
+                $result = ldap_error($this->cid);
+            } else {
+                $result = 0;
+            }
+        }
+
         return $result;
     }
 

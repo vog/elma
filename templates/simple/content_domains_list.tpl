@@ -9,7 +9,7 @@
 		            {section name=domains_sec loop=$domains}
 		            <tr>
                         <td>
-                            <a href="{$domains[domains_sec].userslink}">{$domains[domains_sec].dc}</a>
+                            <a href="{$domains[domains_sec].userslink}">{$domains[domains_sec].dc}</a> ({t}Users{/t} {$domains[domains_sec].users}/{$domains[domains_sec].usersactive}) ({t}Aliases{/t} {$domains[domains_sec].aliases}/{$domains[domains_sec].aliases})
                         </td>
                         <td class="status">
                         {if $domains[domains_sec].mailstatus == "TRUE"}

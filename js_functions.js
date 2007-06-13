@@ -24,7 +24,7 @@ function del() {
 
 					newOption = new Option(text, value, false, false);
 
-					document.forms[0].elements[i+2].options[document.forms[0].elements[i+2].options.length] = newOption;
+					document.forms[0].elements[i+3].options[document.forms[0].elements[i+3].options.length] = newOption;
 				}
 			}
 			break;
@@ -38,12 +38,12 @@ function add() {
 
 	for (i=0; i<document.forms[0].elements.length; i++) {
 		if (document.forms[0].elements[i].type == "select-multiple") {
-			for (c=0; c<document.forms[0].elements[i+2].options.length; c++) {
-				if (document.forms[0].elements[i+2].options[c].selected == true) {
-					text = document.forms[0].elements[i+2].options[c].text;
-					value = document.forms[0].elements[i+2].options[c].value;
+			for (c=0; c<document.forms[0].elements[i+3].options.length; c++) {
+				if (document.forms[0].elements[i+3].options[c].selected == true) {
+					text = document.forms[0].elements[i+3].options[c].text;
+					value = document.forms[0].elements[i+3].options[c].value;
 
-					document.forms[0].elements[i+2].options[c] = null;
+					document.forms[0].elements[i+3].options[c] = null;
 
 					newOption = new Option(text, value, false, false);
 

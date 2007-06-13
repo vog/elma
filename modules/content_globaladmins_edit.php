@@ -131,41 +131,56 @@ class content_globaladmins_edit extends module_base
 
         $count=0;
 
-        for ($i=0; $i < $users["count"]; $i++) {
-            $isinarray = 0;
-            for ($c=0; $c < $admins[0]["member"]["count"]; $c++) {
-                if ($users[$i]["dn"] == $admins[0]["member"][$c])
-                {
-                    $isinarray=1;
+        if (isset($admins[0])) {
+            $admins[0]["cn"] = array();
+            $admins[0]["sn"] = array();
+
+            for ($i=0; $i < $users["count"]; $i++) {
+                $isinarray = 0;
+                for ($c=0; $c < $admins[0]["member"]["count"]; $c++) {
+                    if ($users[$i]["dn"] == $admins[0]["member"][$c])
+                    {
+                        $isinarray=1;
+                        array_push($admins[0]["cn"], $users[$i]["cn"][0]);
+                        array_push($admins[0]["sn"], $users[$i]["sn"][0]);
+                    }
+                }
+                
+                if ($isinarray == 0) {
+                    $tmp = explode(",", $users[$i]["dn"]);
+                    $tmp = explode("=", $tmp[0]);
+                    $tmp = $tmp[1];
+                    $nonadmins[$count] = $tmp;
+                    $nonadminslong[$count] = $users[$i]["dn"];
+                    $nonadminscn[$count] = $users[$i]["cn"][0];
+                    $nonadminssn[$count] = $users[$i]["sn"][0];
+                    $count++;
                 }
             }
-            
-            if ($isinarray == 0) {
-                $tmp = explode(",", $users[$i]["dn"]);
+
+            for ($i=0; $i < $admins[0]["member"]["count"]; $i++) {
+                $tmp = explode(",", $admins[0]["member"][$i]);
                 $tmp = explode("=", $tmp[0]);
                 $tmp = $tmp[1];
-                $nonadmins[$count] = $tmp;
-                $nonadminslong[$count] = $users[$i]["dn"];
-                $count++;
+                $tmpadmins[$i] = $tmp;
+                $tmpadminslong[$i] = $admins[0]["member"][$i];
+                $tmpadminscn[$i] = $admins[0]["cn"][$i];
+                $tmpadminssn[$i] = $admins[0]["sn"][$i];
             }
-        }
-
-        for ($i=0; $i < $admins[0]["member"]["count"]; $i++) {
-            $tmp = explode(",", $admins[0]["member"][$i]);
-            $tmp = explode("=", $tmp[0]);
-            $tmp = $tmp[1];
-            $tmpadmins[$i] = $tmp;
-            $tmpadminslong[$i] = $admins[0]["member"][$i];
         }
         
         if (isset($tmpadminslong)) {
             $this->smarty->assign("admins", $tmpadmins);
             $this->smarty->assign("adminslong", $tmpadminslong);
+            $this->smarty->assign("adminscn", $tmpadminscn);
+            $this->smarty->assign("adminssn", $tmpadminssn);
         }
         
         if (isset($nonadminslong)) {
-        $this->smarty->assign("nonadmins",$nonadmins);
-        $this->smarty->assign("nonadminslong",$nonadminslong);
+            $this->smarty->assign("nonadmins",$nonadmins);
+            $this->smarty->assign("nonadminslong",$nonadminslong);
+            $this->smarty->assign("nonadminscn", $nonadminscn);
+            $this->smarty->assign("nonadminssn", $nonadminssn);
         }
     }
 

@@ -216,6 +216,11 @@ td#sendcenter {
   text-align: center;
 }
 
+#buttons {
+  text-align: center;
+  vertical-align: middle;
+}
+
 select {
   width: 15em;
 }

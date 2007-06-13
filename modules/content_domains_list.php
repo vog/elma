@@ -58,6 +58,10 @@ class content_domains_list extends module_base {
             $domain['userslink'] = $_SERVER['PHP_SELF']."?module=users_list&amp;domain=".$domain['dc'];
             $domain['deletelink'] = $_SERVER['PHP_SELF']."?module=domain_delete&amp;domain=".$domain['dc'];
             $domain['editlink'] = $_SERVER['PHP_SELF']."?module=domain_edit&amp;domain=".$domain['dc']; 
+            $domain['users'] = $this->ldap->userCount($domain['dc']);
+            $domain['usersactive'] = $this->ldap->userCount($domain['dc'], "TRUE");
+            $domain['aliases'] = $this->ldap->aliasCount($domain['dc']);
+            $domain['aliasesactive'] = $this->ldap->aliasCount($domain['dc'], "TRUE");
             array_push($my_domains,$domain);
         }
         $this->smarty->assign("link_newdomain",$_SERVER['PHP_SELF']."?module=domain_edit&amp;domain=new");
