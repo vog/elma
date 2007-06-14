@@ -75,10 +75,10 @@ class content_systemuser_edit extends module_base
             if (count($validation_errors) == 0) {
                 switch ($_POST["mode"]) {
                     case "add":
-                        $this->ldap->addSystemuser($my_systemuser);
+                        $this->ldap->addSystemUser($my_systemuser);
                     break;
                     case "modify": 
-                        $this->ldap->modifySystemuser($my_systemuser);
+                        $this->ldap->modSystemUser($my_systemuser);
                     break;
                 }
 
@@ -101,7 +101,7 @@ class content_systemuser_edit extends module_base
             $this->smarty->assign("mode","add");
         } else {
             $this->smarty->assign("mode","modify");
-            $this->smarty->assign("user",$this->ldap->getSystemuser($systemuser));
+            $this->smarty->assign("user",$this->ldap->getSystemUser($systemuser));
         }
     }
 

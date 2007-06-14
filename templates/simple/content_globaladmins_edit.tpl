@@ -15,9 +15,9 @@
                                                 {t}Admins{/t}
                                                 <br />
                                                 <select name="admins[]" size="8" multiple="multiple">
-                                                {section name=adminloop loop=$admins}
-                                                    <option value="{$adminslong[adminloop]}">{$admins[adminloop]} ({$adminscn[adminloop]} {$adminssn[adminloop]})</option>
-                                                {/section}
+                                                {foreach from=$admins item=admin}
+                                                    <option value="{$admin.dn}">{$admin.uid[0]} ({$admin.cn[0]} {$admin.sn[0]})</option>
+                                                {/foreach}
                                                 </select>
                                             </td>
                                             <td>
@@ -34,9 +34,9 @@
                                                 {t}Non-Admins{/t}
                                                 <br />
                                                 <select name="nonadmins[]" size="8" multiple="multiple">
-                                                {section name=nonadminloop loop=$nonadmins}
-                                                    <option value="{$nonadminslong[nonadminloop]}">{$nonadmins[nonadminloop]} ({$nonadminscn[nonadminloop]} {$nonadminssn[nonadminloop]})</option>
-                                                {/section}
+                                                {foreach from=$nonadmins item=nonadmin}
+                                                    <option value="{$nonadmin.dn}">{$nonadmin.uid[0]} ({$nonadmin.cn[0]} {$nonadmin.sn[0]})</option>
+                                                {/foreach}
                                                 </select>
                                             </td>
                                         </tr>

@@ -132,60 +132,45 @@ class content_globaladmins_edit extends module_base
         $this->smarty->assign("mode","modify");
         
         $admins = $this->ldap->listAdminUsers();
-        $users = $this->ldap->listSystemusers();
+        $users = $this->ldap->listSystemUsers();
 
-        $count=0;
+        $tmpadmins = $this->ldap->listAdminUsers();
+        $users = $this->ldap->listSystemUsers();
 
-        if (isset($admins[0])) {
-            $admins[0]["cn"] = array();
-            $admins[0]["sn"] = array();
+        $admins = array();
 
-            for ($i=0; $i < $users["count"]; $i++) {
-                $isinarray = 0;
-                for ($c=0; $c < $admins[0]["member"]["count"]; $c++) {
-                    if ($users[$i]["dn"] == $admins[0]["member"][$c])
-                    {
-                        $isinarray=1;
-                        array_push($admins[0]["cn"], $users[$i]["cn"][0]);
-                        array_push($admins[0]["sn"], $users[$i]["sn"][0]);
+        unset($users["count"]);
+
+        $tmpusers = $users;
+        $users = array();
+
+        if (isset($tmpadmins[0])) {
+            foreach ($tmpusers as $user)
+            {
+                $isset = 0;
+                unset ($tmpadmins[0]["member"]["count"]);
+
+                foreach ($tmpadmins[0]["member"] as $admin) {
+                    if ($user["dn"] == $admin) {
+                        $isset = 1;
+                        $tmp = $this->ldap->getEntry($admin);
+                        array_push($admins, $tmp[0]);
+                        break;
                     }
                 }
-                
-                if ($isinarray == 0) {
-                    $tmp = explode(",", $users[$i]["dn"]);
-                    $tmp = explode("=", $tmp[0]);
-                    $tmp = $tmp[1];
-                    $nonadmins[$count] = $tmp;
-                    $nonadminslong[$count] = $users[$i]["dn"];
-                    $nonadminscn[$count] = $users[$i]["cn"][0];
-                    $nonadminssn[$count] = $users[$i]["sn"][0];
-                    $count++;
+
+                if ($isset == 0) {
+                    array_push($users, $user);
                 }
             }
+        }
 
-            for ($i=0; $i < $admins[0]["member"]["count"]; $i++) {
-                $tmp = explode(",", $admins[0]["member"][$i]);
-                $tmp = explode("=", $tmp[0]);
-                $tmp = $tmp[1];
-                $tmpadmins[$i] = $tmp;
-                $tmpadminslong[$i] = $admins[0]["member"][$i];
-                $tmpadminscn[$i] = $admins[0]["cn"][$i];
-                $tmpadminssn[$i] = $admins[0]["sn"][$i];
-            }
+        if (isset($admins)) {
+            $this->smarty->assign("admins", $admins);
         }
-        
-        if (isset($tmpadminslong)) {
-            $this->smarty->assign("admins", $tmpadmins);
-            $this->smarty->assign("adminslong", $tmpadminslong);
-            $this->smarty->assign("adminscn", $tmpadminscn);
-            $this->smarty->assign("adminssn", $tmpadminssn);
-        }
-        
-        if (isset($nonadminslong)) {
-            $this->smarty->assign("nonadmins",$nonadmins);
-            $this->smarty->assign("nonadminslong",$nonadminslong);
-            $this->smarty->assign("nonadminscn", $nonadminscn);
-            $this->smarty->assign("nonadminssn", $nonadminssn);
+
+        if (isset($users)) {
+            $this->smarty->assign("nonadmins", $users);
         }
     }
 

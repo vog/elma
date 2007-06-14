@@ -51,7 +51,7 @@ class content_systemusers_list extends module_base
     {
         $my_users = array();
 
-        $users = $this->ldap->listSystemusers();
+        $users = $this->ldap->listSystemUsers();
 
         for ($i=0; $i < $users["count"]; $i++) {
 

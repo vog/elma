@@ -51,7 +51,7 @@ class content_systemuser_delete extends module_base
     {
         if ( isset($_POST["submit"]) ) {
             $uid = $_POST["uid"];
-            $this->ldap->deleteSystemuser($uid);
+            $this->ldap->delSystemUser($uid);
             
             $submit_status = ldap_errno($this->ldap->cid);
             if ($submit_status == "0") {
@@ -61,7 +61,7 @@ class content_systemuser_delete extends module_base
             }
         } else {
             $uid = $_GET["user"];
-            $this->smarty->assign("user",$this->ldap->getSystemuser($uid));
+            $this->smarty->assign("user",$this->ldap->getSystemUser($uid));
             $this->smarty->assign("submit_status",-1);
         }
     }

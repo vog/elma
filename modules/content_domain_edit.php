@@ -158,119 +158,65 @@ class content_domain_edit extends module_base
 
         if ($domain == "new") {
             $this->smarty->assign("mode","add");
-            $users = $this->ldap->listSystemusers();
+            $users = $this->ldap->listSystemUsers();
 
-            /* BEGIN: change this to one array and let smart do the output */
-            $count=0;
-
-            for ($i=0; $i < $users["count"]; $i++) {
-                $tmp = explode(",", $users[$i]["dn"]);
-                $tmp = explode("=", $tmp[0]);
-                $tmp = $tmp[1];
-                $nonadmins[$count] = $tmp;
-                $nonadminslong[$count] = $users[$i]["dn"];
-                $nonadminscn[$count] = $users[$i]["cn"][0];
-                $nonadminssn[$count] = $users[$i]["sn"][0];
-                $count++;
+            if (isset($users)) {
+                unset($users["count"]);
+                $this->smarty->assign("nonadmins",$users);
             }
-
-            if (isset($nonadminslong)) {
-                $this->smarty->assign("nonadmins",$nonadmins);
-                $this->smarty->assign("nonadminslong",$nonadminslong);
-                $this->smarty->assign("nonadminscn", $nonadminscn);
-                $this->smarty->assign("nonadminssn", $nonadminssn);
-            }
-            /* END */
-
         } else {
             $this->smarty->assign("mode","modify");
             $this->smarty->assign("domain",$this->ldap->getDomain($domain));
             
-            $admins = $this->ldap->listAdminUsers($domain);
-            $tmpusers = $this->ldap->listSystemusers("domain"); /* "domain ?" */
+            $tmpadmins = $this->ldap->listAdminUsers($domain);
+            $tmpusers = $this->ldap->listSystemUsers($domain);
             $mailusers = $this->ldap->listUsers($domain);
 
             $users = array();
+            $admins = array();
+
+            unset($tmpusers["count"]);
+            unset($mailusers["count"]);
 
             foreach ($tmpusers as $tmpuser) {
-                if ($tmpuser["dn"] != "") {
-                    $user["dn"] = $tmpuser["dn"];
-                    $user["uid"] = $tmpuser["uid"][0];
-                    $user["cn"] = $tmpuser["cn"][0];
-                    $user["sn"] = $tmpuser["sn"][0];
-                    array_push ($users, $user);
-                }
+                array_push($users, $tmpuser);
             }
 
             foreach ($mailusers as $mailuser) {
-                if ($mailuser["dn"] != "") {
-                    $user["dn"] = $mailuser["dn"];
-                    $user["uid"] = $mailuser["uid"][0];
-                    $user["cn"] = $mailuser["cn"][0];
-                    $user["sn"] = $mailuser["sn"][0];
-                    array_push ($users, $user);
-                }
+                array_push($users, $mailuser);
             }
 
-            my_print_r($users);
-            $count=0;
+            $tmpusers = $users;
+            $users = array();
 
-            /* BEGIN: keep it small and simple KISS!!!! */
-            if (isset($admins[0])) {
-                $admins[0]["cn"] = array();
-                $admins[0]["sn"] = array();
-                $admins[0]["users"] = array();
+            if (isset($tmpadmins[0])) {
+                foreach ($tmpusers as $user)
+                {
+                    $isset = 0;
+                    unset ($tmpadmins[0]["member"]["count"]);
 
-                foreach ($users as $user) {
-                    $isinarray = 0;
-                    for ($c=0; $c < $admins[0]["member"]["count"]; $c++) {
-                        if ($user["dn"] == $admins[0]["member"][$c])
-                        {
-                            $isinarray=1;
-                            array_push($admins[0]["users"], $admins[0]["member"][$c]);
-                            array_push($admins[0]["cn"], $user["cn"]);
-                            array_push($admins[0]["sn"], $user["sn"]);
+                    foreach ($tmpadmins[0]["member"] as $admin) {
+                        if ($user["dn"] == $admin) {
+                            $isset = 1;
+                            $tmp = $this->ldap->getEntry($admin);
+                            array_push($admins, $tmp[0]);
+                            break;
                         }
                     }
-                    
-                    if ($isinarray == 0) {
-                        $tmp = explode(",", $user["dn"]);
-                        $tmp = explode("=", $tmp[0]);
-                        $tmp = $tmp[1];
-                        $nonadmins[$count] = $tmp;
-                        $nonadminslong[$count] = $user["dn"];
-                        $nonadminscn[$count] = $user["cn"];
-                        $nonadminssn[$count] = $user["sn"];
-                        $count++;
+
+                    if ($isset == 0) {
+                        array_push($users, $user);
                     }
                 }
-
-                for ($i=0; $i < $admins[0]["member"]["count"]; $i++) {
-                    $tmp = explode(",", $admins[0]["users"][$i]);
-                    $tmp = explode("=", $tmp[0]);
-                    $tmp = $tmp[1];
-                    $tmpadmins[$i] = $tmp;
-                    $tmpadminslong[$i] = $admins[0]["users"][$i];
-                    $tmpadminscn[$i] = $admins[0]["cn"][$i];
-                    $tmpadminssn[$i] = $admins[0]["sn"][$i];
-                }
             }
 
-            if (isset($tmpadminslong)) {
-                $this->smarty->assign("admins", $tmpadmins);
-                $this->smarty->assign("adminslong", $tmpadminslong);
-                $this->smarty->assign("adminscn", $tmpadminscn);
-                $this->smarty->assign("adminssn", $tmpadminssn);
+            if (isset($admins)) {
+                $this->smarty->assign("admins", $admins);
             }
 
-            
-            if (isset($nonadminslong)) {
-                $this->smarty->assign("nonadmins",$nonadmins);
-                $this->smarty->assign("nonadminslong",$nonadminslong);
-                $this->smarty->assign("nonadminscn", $nonadminscn);
-                $this->smarty->assign("nonadminssn", $nonadminssn);
+            if (isset($users)) {
+                $this->smarty->assign("nonadmins", $users);
             }
-            /* END */
         }
     }
 

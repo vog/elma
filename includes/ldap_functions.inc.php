@@ -274,12 +274,12 @@ class ELMA {
 
     # SYSTEMUSER
     
-    function listSystemusers ($mode="system") {
-        $users = $this->getSystemuser("*", $mode);
+    function listSystemUsers ($mode="system") {
+        $users = $this->getSystemUser("*", $mode);
         return $users;
     }
 
-    function getSystemuser ($user_uid="*", $mode="system") {
+    function getSystemUser ($user_uid="*", $mode="system") {
         if ($mode!="system") {
             $result = ldap_list($this->cid, LDAP_USERS_ROOT_DN, "(&(objectclass=inetOrgPerson)(uid=$user_uid))");
         } else {
@@ -294,7 +294,7 @@ class ELMA {
         return $user;
     }
 
-    function addSystemuser ( $user ) {
+    function addSystemUser ( $user ) {
         $user["objectClass"][0] = "inetOrgPerson"; 
         $user["objectClass"][1] = "simpleSecurityObject";
 
@@ -307,7 +307,7 @@ class ELMA {
         return $result;
     }
     
-    function modifySystemuser ( $user ) {
+    function modSystemUser ( $user ) {
         ldap_modify($this->cid, "uid=".$user['uid'].",".LDAP_USERS_ROOT_DN, $user);
         if ( ldap_errno($this->cid) !== 0 ) {
             $result = ldap_error($this->cid);
@@ -317,7 +317,7 @@ class ELMA {
         return $result;
     }
 
-    function deleteSystemuser ( $user ) {
+    function delSystemUser ( $user ) {
         $result = 1;
 
         $searchresult = ldap_search($this->cid, LDAP_BASEDN, "(&(member=*)(cn=admingroup))");
@@ -487,6 +487,14 @@ class ELMA {
 
             return $tmpcount;
 
+    }
+
+    # Get Specific Entry
+    function getEntry($dn) {
+        $result = ldap_read($this->cid, $dn, "(objectClass=*)");
+        $result = ldap_get_entries($this->cid, $result);
+
+        return $result;
     }
 
 }
