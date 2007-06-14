@@ -17,7 +17,7 @@
 			                    <td>&nbsp;</td>
                                 <td>
                                     <input type="submit" name="submit" value="{t}Yes{/t}"/>
-                                    <input type="reset" name="reset" value="{t}No{/t}" onClick="javascript:history.back()"/>
+                                    <input type="reset" name="reset" value="{t}No{/t}" onclick="javascript:history.back()"/>
                                 </td>
 				            </tr>
  	                    </table>

@@ -106,7 +106,9 @@ class ELMA {
     function getDomain ($domain_dc = "*") {
         $result = ldap_list($this->cid, LDAP_DOMAINS_ROOT_DN, "dc=".$domain_dc);
         $domain = ldap_get_entries($this->cid, $result);
-        if ( $domain_dc !== "*" ) $domain = $domain[0];
+        if (isset($domain[0])) {
+            if ( $domain_dc !== "*" ) $domain = $domain[0];
+        }
         return $domain;
     }
  
@@ -119,7 +121,7 @@ class ELMA {
             $result = 0;
         }
 
-        array_push ($admins, LDAP_GROUP_DUMMY);
+        array_push ($admins, LDAP_ADMIN_DN);
 
         $group["cn"] = "admingroup";
         $group["objectclass"] = "groupOfNames";
@@ -374,15 +376,17 @@ class ELMA {
             $user = ldap_get_entries($this->cid, $result);
         }
 
-        $tmp = $user[0]["member"];
-        $user[0]["member"] = array();
-        $user[0]["member"]["count"] = $tmp["count"];
+        if (isset($user[0])) {
+            $tmp = $user[0]["member"];
+            $user[0]["member"] = array();
+            $user[0]["member"]["count"] = $tmp["count"];
 
-        for ($i=0; $i<$tmp["count"]; $i++) {
-            if (!($tmp[$i] == LDAP_GROUP_DUMMY)) {
-                array_push($user[0]["member"], $tmp[$i]);
-            } else {
-                $user[0]["member"]["count"]--;
+            for ($i=0; $i<$tmp["count"]; $i++) {
+                if (!($tmp[$i] == LDAP_ADMIN_DN)) {
+                    array_push($user[0]["member"], $tmp[$i]);
+                } else {
+                    $user[0]["member"]["count"]--;
+                }
             }
         }
         

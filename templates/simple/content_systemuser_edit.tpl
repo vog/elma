@@ -57,7 +57,7 @@
                                 <td>
                                     {t}Password{/t}
                                     {if $mode == "modify"}
-                                    <br>
+                                    <br />
                                     {t}(leave empty to keep password){/t}
                                     {/if}
                                 </td>

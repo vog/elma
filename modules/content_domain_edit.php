@@ -210,6 +210,7 @@ class content_domain_edit extends module_base
             if (isset($admins[0])) {
                 $admins[0]["cn"] = array();
                 $admins[0]["sn"] = array();
+                $admins[0]["users"] = array();
 
                 foreach ($users as $user) {
                     $isinarray = 0;
@@ -217,6 +218,7 @@ class content_domain_edit extends module_base
                         if ($user["dn"] == $admins[0]["member"][$c])
                         {
                             $isinarray=1;
+                            array_push($admins[0]["users"], $admins[0]["member"][$c]);
                             array_push($admins[0]["cn"], $user["cn"]);
                             array_push($admins[0]["sn"], $user["sn"]);
                         }
@@ -235,11 +237,11 @@ class content_domain_edit extends module_base
                 }
 
                 for ($i=0; $i < $admins[0]["member"]["count"]; $i++) {
-                    $tmp = explode(",", $admins[0]["member"][$i]);
+                    $tmp = explode(",", $admins[0]["users"][$i]);
                     $tmp = explode("=", $tmp[0]);
                     $tmp = $tmp[1];
                     $tmpadmins[$i] = $tmp;
-                    $tmpadminslong[$i] = $admins[0]["member"][$i];
+                    $tmpadminslong[$i] = $admins[0]["users"][$i];
                     $tmpadminscn[$i] = $admins[0]["cn"][$i];
                     $tmpadminssn[$i] = $admins[0]["sn"][$i];
                 }
@@ -251,6 +253,7 @@ class content_domain_edit extends module_base
                 $this->smarty->assign("adminscn", $tmpadminscn);
                 $this->smarty->assign("adminssn", $tmpadminssn);
             }
+
             
             if (isset($nonadminslong)) {
                 $this->smarty->assign("nonadmins",$nonadmins);
