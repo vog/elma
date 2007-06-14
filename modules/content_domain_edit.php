@@ -91,7 +91,7 @@ class content_domain_edit extends module_base
                     case "modify": 
                         $this->ldap->modifyDomain($my_domain);
 
-                        $ldapadmins = $this->ldap->listGroupusers($domain);
+                        $ldapadmins = $this->ldap->listAdminUsers($domain);
                         
                         $count = 0;
 
@@ -99,6 +99,7 @@ class content_domain_edit extends module_base
                             $admins = array();
                         }
 
+                        /* create array of new admins */
                         foreach ($admins as $admin) {
                             $isinarray = 0;
                             for ($c=0; $c < $ldapadmins[0]["member"]["count"]; $c++) {
@@ -116,6 +117,7 @@ class content_domain_edit extends module_base
 
                         $count = 0;
 
+                        /* create array of removed admins */
                         for ($i=0; $i < $ldapadmins[0]["member"]["count"]; $i++) {
                             $isinarray = 0;
                             foreach ($admins as $admin) {
@@ -132,10 +134,10 @@ class content_domain_edit extends module_base
                         }
 
                         if (isset($adminsadd)) {
-                            $this->ldap->addGroupusers($domain, $adminsadd);
+                            $this->ldap->addAdminUsers($domain, $adminsadd);
                         }
                         if (isset($adminsdel)) {
-                            $this->ldap->delGroupusers($domain, $adminsdel);
+                            $this->ldap->delAdminUsers($domain, $adminsdel);
                         }
                         break;
                 }
@@ -158,6 +160,7 @@ class content_domain_edit extends module_base
             $this->smarty->assign("mode","add");
             $users = $this->ldap->listSystemusers();
 
+            /* BEGIN: change this to one array and let smart do the output */
             $count=0;
 
             for ($i=0; $i < $users["count"]; $i++) {
@@ -177,12 +180,14 @@ class content_domain_edit extends module_base
                 $this->smarty->assign("nonadminscn", $nonadminscn);
                 $this->smarty->assign("nonadminssn", $nonadminssn);
             }
+            /* END */
+
         } else {
             $this->smarty->assign("mode","modify");
             $this->smarty->assign("domain",$this->ldap->getDomain($domain));
             
-            $admins = $this->ldap->listGroupusers($domain);
-            $tmpusers = $this->ldap->listSystemusers("domain");
+            $admins = $this->ldap->listAdminUsers($domain);
+            $tmpusers = $this->ldap->listSystemusers("domain"); /* "domain ?" */
             $mailusers = $this->ldap->listUsers($domain);
 
             $users = array();
@@ -190,6 +195,7 @@ class content_domain_edit extends module_base
             foreach ($tmpusers as $tmpuser) {
                 if ($tmpuser["dn"] != "") {
                     $user["dn"] = $tmpuser["dn"];
+                    $user["uid"] = $tmpuser["uid"][0];
                     $user["cn"] = $tmpuser["cn"][0];
                     $user["sn"] = $tmpuser["sn"][0];
                     array_push ($users, $user);
@@ -199,14 +205,17 @@ class content_domain_edit extends module_base
             foreach ($mailusers as $mailuser) {
                 if ($mailuser["dn"] != "") {
                     $user["dn"] = $mailuser["dn"];
+                    $user["uid"] = $mailuser["uid"][0];
                     $user["cn"] = $mailuser["cn"][0];
                     $user["sn"] = $mailuser["sn"][0];
                     array_push ($users, $user);
                 }
             }
 
+            my_print_r($users);
             $count=0;
 
+            /* BEGIN: keep it small and simple KISS!!!! */
             if (isset($admins[0])) {
                 $admins[0]["cn"] = array();
                 $admins[0]["sn"] = array();
@@ -261,6 +270,7 @@ class content_domain_edit extends module_base
                 $this->smarty->assign("nonadminscn", $nonadminscn);
                 $this->smarty->assign("nonadminssn", $nonadminssn);
             }
+            /* END */
         }
     }
 

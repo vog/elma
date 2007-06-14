@@ -68,12 +68,14 @@ class content_globaladmins_edit extends module_base
 
             unset($my_domain["submit"]);
             
-            $ldapadmins = $this->ldap->listGroupusers();
+            $ldapadmins = $this->ldap->listAdminUsers();
             
             $count = 0;
 
             if (isset($ldapadmins[0])) {
                 if (isset($admins)) {
+
+                    /* create array of new admins */
                     foreach ($admins as $admin) {
                         $isinarray = 0;
                         for ($c=0; $c < $ldapadmins[0]["member"]["count"]; $c++) {
@@ -91,6 +93,8 @@ class content_globaladmins_edit extends module_base
 
                     $count = 0;
 
+
+                    /* create array of removed admins */
                     for ($i=0; $i < $ldapadmins[0]["member"]["count"]; $i++) {
                         $isinarray = 0;
                         foreach ($admins as $admin) {
@@ -108,10 +112,10 @@ class content_globaladmins_edit extends module_base
                 }
 
                 if (isset($adminsadd)) {
-                    $this->ldap->addGroupusers(null, $adminsadd);
+                    $this->ldap->addAdminUsers(null, $adminsadd);
                 }
                 if (isset($adminsdel)) {
-                    $this->ldap->delGroupusers(null, $adminsdel);
+                    $this->ldap->delAdminUsers(null, $adminsdel);
                 }
             }
             
@@ -127,7 +131,7 @@ class content_globaladmins_edit extends module_base
 
         $this->smarty->assign("mode","modify");
         
-        $admins = $this->ldap->listGroupusers();
+        $admins = $this->ldap->listAdminUsers();
         $users = $this->ldap->listSystemusers();
 
         $count=0;

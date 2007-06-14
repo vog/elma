@@ -362,12 +362,12 @@ class ELMA {
 
     # ADMINGROUP
 
-    function listGroupusers ($domain="users") {
-        $users = $this->getGroupuser($domain);
+    function listAdminUsers ($domain="users") {
+        $users = $this->getAdminUser($domain);
         return $users;
     }
 
-    function getGroupuser ($domain="users") {
+    function getAdminUser ($domain="users") {
         if ($domain != "users") {
             $result = ldap_list($this->cid, "dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, "cn=admingroup");
             $user = ldap_get_entries($this->cid, $result);   
@@ -393,7 +393,7 @@ class ELMA {
         return $user;
     }
 
-    function addGroupusers ($domain=null, $users) {
+    function addAdminUsers ($domain=null, $users) {
 
         $tmpusers["member"] = $users;
 
@@ -411,7 +411,7 @@ class ELMA {
         return $result;
     }
     
-    function delGroupusers ($domain=null, $users) {
+    function delAdminUsers ($domain=null, $users) {
 
         $tmpusers["member"] = $users;
 
