@@ -360,6 +360,26 @@ class ELMA {
         return $result;
     }
 
+    function getSystemUsersDomains ( $user ) {
+
+        $userdn = "uid=".$user.",".LDAP_USERS_ROOT_DN;
+
+        $searchresult = ldap_search($this->cid, LDAP_DOMAINS_ROOT_DN, "(member=$userdn)");
+        $searchresult = ldap_get_entries($this->cid, $searchresult);
+
+        unset($searchresult["count"]);
+
+        $tmp = array();
+        $domains = array();
+
+        foreach($searchresult as $dn) {
+            $tmp = ldap_explode_dn($dn["dn"], 0);
+            array_push($domains, $tmp[1]);
+        }
+
+        return $domains;
+    }
+
     # ADMINGROUP
 
     function listAdminUsers ($domain="users") {
@@ -427,6 +447,19 @@ class ELMA {
             $result = 0;
         }
         return $result;
+    }
+
+    function isAdminUser ($user) {
+        $userdn = "uid=".$user.",".LDAP_USERS_ROOT_DN;
+
+        $result = ldap_list($this->cid, LDAP_USERS_ROOT_DN, "(&(member=$userdn)(cn=admingroup))");
+        $result = ldap_get_entries($this->cid, $result);
+
+        if ($result["count"] == 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     # Statistical functions
