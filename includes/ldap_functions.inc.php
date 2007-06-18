@@ -164,7 +164,7 @@ class ELMA {
         $user = ldap_get_entries($this->cid, $result);
         if ( $user_uid !== "*" ) $user = $user[0];
         return $user;
-    } 
+    }
 
     function addUser ( $domain, $user) {
         $user["objectclass"] = "mailUser";

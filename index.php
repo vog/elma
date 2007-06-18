@@ -52,10 +52,12 @@ if (!isset($_SESSION["login"])) {
 } else {
     require('modules/modules.class.php');
     $content_module = &modules::factory($module);
-    $content_module->smarty = $smarty;
-    $content_module->proceed();
 
     $smarty->assign('username',$_SESSION['username']);
+    $smarty->assign('userclass',$_SESSION['userclass']);
+
+    $content_module->smarty = $smarty;
+    $content_module->proceed();
 
     $content = $content_module->getContent();
 

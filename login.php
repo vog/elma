@@ -58,6 +58,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION["username"] = $_POST["username"];
             $_SESSION["language"] = $_POST["language"];
 
+            $systemuser = $ldap->listSystemUsers();
+            $adminuser = $ldap->isAdminUser($_SESSION["username"]);
+            $domaincount = $ldap->domainCount();
+
+            if ($adminuser == true) {
+                $userclass = "systemadmin";
+            } else {
+                if ($domaincount == 0) {
+                    $userclass = "user";
+                } else {
+                    $userclass = "domainadmin";
+                }
+            }
+            
+            $_SESSION["userclass"] = $userclass;
+
             $crypt = new mycrypt();
             $_SESSION["ldap_binddn"] = $crypt->encrypt($LDAP_BINDDN);
             $_SESSION["ldap_bindpass"] = $crypt->encrypt($LDAP_BINDPASS);
