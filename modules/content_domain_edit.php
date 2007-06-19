@@ -169,7 +169,7 @@ class content_domain_edit extends module_base
             $this->smarty->assign("domain",$this->ldap->getDomain($domain));
             
             $tmpadmins = $this->ldap->listAdminUsers($domain);
-            $tmpusers = $this->ldap->listSystemUsers($domain);
+            $tmpusers = $this->ldap->listSystemUsers();
             $mailusers = $this->ldap->listUsers($domain);
 
             $users = array();
@@ -215,7 +215,6 @@ class content_domain_edit extends module_base
                         } else {
                             $user["mailUser"] = 0;
                         }
-                        print_r($user);
                         array_push($users, $user);
                     }
                 }
