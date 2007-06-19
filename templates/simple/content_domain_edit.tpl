@@ -47,9 +47,20 @@
                                                 {t}Admins{/t}
                                                 <br />
                                                 <select name="admins[]" size="8" multiple="multiple">
-                                                {foreach from=$admins item=admin}
-                                                    <option value="{$admin.dn}">{$admin.uid[0]} ({$admin.cn[0]} {$admin.sn[0]})</option>
-                                                {/foreach}
+                                                    <optgroup label="systemUser">
+                                                    {foreach from=$admins item=admin}
+                                                        {if $admin.mailUser == 0}
+                                                        <option value="{$admin.dn}">{$admin.uid[0]} ({$admin.cn[0]} {$admin.sn[0]})</option>
+                                                        {/if}
+                                                    {/foreach}
+                                                    </optgroup>
+                                                    <optgroup label="mailUser">
+                                                    {foreach from=$admins item=admin}
+                                                        {if $admin.mailUser == 1}
+                                                        <option value="{$admin.dn}">{$admin.uid[0]} ({$admin.cn[0]} {$admin.sn[0]})</option>
+                                                        {/if}
+                                                    {/foreach}
+                                                    </optgroup>
                                                 </select>
                                             </td>
                                             <td>
@@ -66,9 +77,20 @@
                                                 {t}Non-Admins{/t}
                                                 <br />
                                                 <select name="nonadmins[]" size="8" multiple="multiple">
-                                                {foreach from=$nonadmins item=nonadmin}
-                                                    <option value="{$nonadmin.dn}">{$nonadmin.uid[0]} ({$nonadmin.cn[0]} {$nonadmin.sn[0]})</option>
-                                                {/foreach}
+                                                    <optgroup label="systemUser">
+                                                    {foreach from=$nonadmins item=nonadmin}
+                                                        {if $nonadmin.mailUser == 0}
+                                                        <option value="{$nonadmin.dn}">{$nonadmin.uid[0]} ({$nonadmin.cn[0]} {$nonadmin.sn[0]})</option>
+                                                        {/if}
+                                                    {/foreach}
+                                                    </optgroup>
+                                                    <optgroup label="mailUser">
+                                                    {foreach from=$nonadmins item=nonadmin}
+                                                        {if $nonadmin.mailUser == 1}
+                                                        <option value="{$nonadmin.dn}">{$nonadmin.uid[0]} ({$nonadmin.cn[0]} {$nonadmin.sn[0]})</option>
+                                                        {/if}
+                                                    {/foreach}
+                                                    </optgroup>
                                                 </select>
                                             </td>
                                         </tr>

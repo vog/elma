@@ -78,6 +78,7 @@ class content_systemuser_edit extends module_base
                         $this->ldap->addSystemUser($my_systemuser);
                     break;
                     case "modify": 
+                        unset ($my_systemuser["domains"]);
                         $domainsin = $this->ldap->getSystemUsersDomains($systemuser);
                         
                         /* filter the values out of the dc */
