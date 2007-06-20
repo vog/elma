@@ -1,5 +1,5 @@
             <div id="Content">
-                <h2>{t}Organize global admins{/t}</h2>
+                <h2>{t}Systemadminstrators{/t}</h2>
 		        {if $smarty.post.submit}
                     {include file="print_submit_status.tpl"}
                 {/if}
@@ -12,7 +12,7 @@
                                     <table>
                                         <tr>
                                             <td>
-                                                {t}Admins{/t}
+                                                {t}Administrators{/t}
                                                 <br />
                                                 <select name="admins[]" size="8" multiple="multiple">
                                                 {foreach from=$admins item=admin}
@@ -31,7 +31,7 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                {t}Non-Admins{/t}
+                                                {t}available users{/t}
                                                 <br />
                                                 <select name="nonadmins[]" size="8" multiple="multiple">
                                                 {foreach from=$nonadmins item=nonadmin}

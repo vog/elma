@@ -44,17 +44,17 @@
                                     <table>
                                         <tr>
                                             <td>
-                                                {t}Admins{/t}
+                                                {t}Administrators{/t}
                                                 <br />
                                                 <select name="admins[]" size="8" multiple="multiple">
-                                                    <optgroup label="systemUser">
+                                                    <optgroup label="{t}Systemusers{/t}">
                                                     {foreach from=$admins item=admin}
                                                         {if $admin.mailUser == 0}
                                                         <option value="{$admin.dn}">{$admin.uid[0]} ({$admin.cn[0]} {$admin.sn[0]})</option>
                                                         {/if}
                                                     {/foreach}
                                                     </optgroup>
-                                                    <optgroup label="mailUser">
+                                                    <optgroup label="{t}Domainsusers{/t}">
                                                     {foreach from=$admins item=admin}
                                                         {if $admin.mailUser == 1}
                                                         <option value="{$admin.dn}">{$admin.uid[0]} ({$admin.cn[0]} {$admin.sn[0]})</option>
@@ -74,17 +74,17 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                {t}Non-Admins{/t}
+                                                {t}available users{/t}
                                                 <br />
                                                 <select name="nonadmins[]" size="8" multiple="multiple">
-                                                    <optgroup label="systemUser">
+                                                    <optgroup label="{t}Systemusers{/t}">
                                                     {foreach from=$nonadmins item=nonadmin}
                                                         {if $nonadmin.mailUser == 0}
                                                         <option value="{$nonadmin.dn}">{$nonadmin.uid[0]} ({$nonadmin.cn[0]} {$nonadmin.sn[0]})</option>
                                                         {/if}
                                                     {/foreach}
                                                     </optgroup>
-                                                    <optgroup label="mailUser">
+                                                    <optgroup label="{t}Domainusers{/t}">
                                                     {foreach from=$nonadmins item=nonadmin}
                                                         {if $nonadmin.mailUser == 1}
                                                         <option value="{$nonadmin.dn}">{$nonadmin.uid[0]} ({$nonadmin.cn[0]} {$nonadmin.sn[0]})</option>

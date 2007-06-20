@@ -3,13 +3,21 @@
 		        <table>
 		            <tr>
                         <th>{t}Domain{/t}</th>
+                        <th class="status">{t}Users{/t}</th>
+                        <th class="status">{t}Aliases{/t}</th>
                         <th class="status">{t}Active{/t}</th>
                         <th class="command">{t}Command{/t}</th>
                     </tr>
 		            {section name=domains_sec loop=$domains}
 		            <tr>
                         <td>
-                            <a href="{$domains[domains_sec].userslink}">{$domains[domains_sec].dc}</a> ({t}Users{/t} {$domains[domains_sec].users}/{$domains[domains_sec].usersactive}) ({t}Aliases{/t} {$domains[domains_sec].aliases}/{$domains[domains_sec].aliasesactive})
+                            <a href="{$domains[domains_sec].userslink}">{$domains[domains_sec].dc}</a>
+                        </td>
+                        <td class="status">
+                            {$domains[domains_sec].users}/{$domains[domains_sec].usersactive}
+                        </td>
+                        <td class="status">
+                            {$domains[domains_sec].aliases}/{$domains[domains_sec].aliasesactive}
                         </td>
                         <td class="status">
                         {if $domains[domains_sec].mailstatus == "TRUE"}
@@ -26,6 +34,8 @@
 		            {/section}
                     <tr>
 		                <td class="last">&nbsp;</td>
+                        <td class="last">&nbsp;</td>
+                        <td class="last">&nbsp;</td>
                         <td class="last">&nbsp;</td>
                         <td class="last command">
                             <a href="{$link_newdomain}">{t}new domain{/t}</a>
