@@ -201,8 +201,10 @@ class content_domain_edit extends module_base
                             $tmp = $this->ldap->getEntry($admin);
                             if (strstr($tmp[0]["dn"], "ou=domains")) {
                                 $tmp[0]["mailUser"] = 1;
+                                $notnulladmins["mailUser"] = 1;
                             } else {
                                 $tmp[0]["mailUser"] = 0;
+                                $notnulladmins["sysUser"] = 1;
                             }
                             array_push($admins, $tmp[0]);
                             break;
@@ -212,8 +214,10 @@ class content_domain_edit extends module_base
                     if ($isset == 0) {
                         if (strstr($user["dn"], "ou=domains")) {
                             $user["mailUser"] = 1;
+                            $notnullusers["mailUser"] = 1;
                         } else {
                             $user["mailUser"] = 0;
+                            $notnullusers["sysUser"] = 1;
                         }
                         array_push($users, $user);
                     }
@@ -222,10 +226,16 @@ class content_domain_edit extends module_base
 
             if (isset($admins)) {
                 $this->smarty->assign("admins", $admins);
+                if (isset($notnulladmins)) {
+                    $this->smarty->assign("notnulladmins", $notnulladmins);
+                }
             }
 
             if (isset($users)) {
                 $this->smarty->assign("nonadmins", $users);
+                if (isset($notnulladmins)) {
+                    $this->smarty->assign("notnullnonadmins", $notnullusers);
+                }
             }
         }
     }

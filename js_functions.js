@@ -1,57 +1,29 @@
 function markall() {
-	for (i=0; i<document.forms[0].elements.length; i++) {
-		if (document.forms[0].elements[i].type == "select-multiple") {
-			for (c=0; c<document.forms[0].elements[i].options.length; c++) {
-				document.forms[0].elements[i].options[c].selected = true;
-			}
-			break;
-		}
+	var admins = document.getElementsByName("admins[]");
+
+	for (i=0; i < admins[0].options.length; i++) {
+		admins[0].options[i].selected = true;
 	}
 }
 
 function del() {
-	var text;
-	var value;
+	var admins = document.getElementsByName("admins[]");
+	var nonadmins = document.getElementsByName("nonadmins[]");
 
-	for (i=0; i<document.forms[0].elements.length; i++) {
-		if (document.forms[0].elements[i].type == "select-multiple") {
-			for (c=0; c<document.forms[0].elements[i].options.length; c++) {
-				if (document.forms[0].elements[i].options[c].selected == true) {
-					text = document.forms[0].elements[i].options[c].text;
-					value = document.forms[0].elements[i].options[c].value;
-
-					document.forms[0].elements[i].options[c] = null;
-
-					newOption = new Option(text, value, false, false);
-
-					document.forms[0].elements[i+3].options[document.forms[0].elements[i+3].options.length] = newOption;
-				}
-			}
-			break;
+	for (i=0; i < admins[0].options.length; i++) {
+		if (admins[0].options[i].selected == true) {
+			nonadmins[0].appendChild(admins[0].options[i]);
 		}
 	}
 }
 
 function add() {
-	var text;
-	var value;
+	var admins = document.getElementsByName("admins[]");
+	var nonadmins = document.getElementsByName("nonadmins[]");
 
-	for (i=0; i<document.forms[0].elements.length; i++) {
-		if (document.forms[0].elements[i].type == "select-multiple") {
-			for (c=0; c<document.forms[0].elements[i+3].options.length; c++) {
-				if (document.forms[0].elements[i+3].options[c].selected == true) {
-					text = document.forms[0].elements[i+3].options[c].text;
-					value = document.forms[0].elements[i+3].options[c].value;
-
-					document.forms[0].elements[i+3].options[c] = null;
-
-					newOption = new Option(text, value, false, false);
-
-					document.forms[0].elements[i].options[document.forms[0].elements[i].options.length] = newOption;
-				}
-			}
-			break;
+	for (i=0; i < nonadmins[0].options.length; i++) {
+		if (nonadmins[0].options[i].selected == true) {
+			admins[0].appendChild(nonadmins[0].options[i]);
 		}
 	}
-
 }

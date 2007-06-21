@@ -47,6 +47,7 @@
                                                 {t}Administrators{/t}
                                                 <br />
                                                 <select name="admins[]" size="8" multiple="multiple">
+                                                    {if $notnulladmins.sysUser == 1}
                                                     <optgroup label="{t}Systemusers{/t}">
                                                     {foreach from=$admins item=admin}
                                                         {if $admin.mailUser == 0}
@@ -54,6 +55,8 @@
                                                         {/if}
                                                     {/foreach}
                                                     </optgroup>
+                                                    {/if}
+                                                    {if $notnulladmins.mailUser == 1}
                                                     <optgroup label="{t}Domainsusers{/t}">
                                                     {foreach from=$admins item=admin}
                                                         {if $admin.mailUser == 1}
@@ -61,6 +64,7 @@
                                                         {/if}
                                                     {/foreach}
                                                     </optgroup>
+                                                    {/if}
                                                 </select>
                                             </td>
                                             <td>
@@ -77,6 +81,7 @@
                                                 {t}available users{/t}
                                                 <br />
                                                 <select name="nonadmins[]" size="8" multiple="multiple">
+                                                    {if $notnullnonadmins.sysUser == 1}
                                                     <optgroup label="{t}Systemusers{/t}">
                                                     {foreach from=$nonadmins item=nonadmin}
                                                         {if $nonadmin.mailUser == 0}
@@ -84,6 +89,8 @@
                                                         {/if}
                                                     {/foreach}
                                                     </optgroup>
+                                                    {/if}
+                                                    {if $notnullnonadmins.mailUser == 1}
                                                     <optgroup label="{t}Domainusers{/t}">
                                                     {foreach from=$nonadmins item=nonadmin}
                                                         {if $nonadmin.mailUser == 1}
@@ -91,6 +98,7 @@
                                                         {/if}
                                                     {/foreach}
                                                     </optgroup>
+                                                    {/if}
                                                 </select>
                                             </td>
                                         </tr>
