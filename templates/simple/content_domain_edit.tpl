@@ -40,7 +40,15 @@
                                 </td>
 			                </tr>
                             <tr>
-                                <td colspan="2" class="sendcenter">
+                                <td colspan="2"> 
+                                    <hr />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    ACL
+                                </td>
+                                <td>
                                     <table>
                                         <tr>
                                             <td>
@@ -106,7 +114,7 @@
                                 </td>
                             </tr>
 			                <tr>
-                                <td colspan="2" class="sendcenter"><input type="submit" name="submit" value="{t}Save{/t}" /></td>
+                                <td colspan="2" class="buttons"><input type="submit" name="submit" value="{t}Save{/t}" /></td>
 			                </tr>
 	                    </table>
                     </fieldset>

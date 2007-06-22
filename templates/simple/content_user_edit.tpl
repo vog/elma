@@ -70,9 +70,8 @@
                                 </td>
                             </tr>
 				            <tr>
-			                    <td>&nbsp;</td>
-                                <td>
-                                    <input type="submit" name="submit" value="{t}Save{/t}"/>
+                                <td colspan="2" class="buttons">
+                                    <input type="submit" name="submit" value="{t}Save{/t}" id="button"/>
                                 </td>
 				            </tr>
  	                    </table>

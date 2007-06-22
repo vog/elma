@@ -48,31 +48,34 @@
                                     <input type="text" name="sn" value="{$user.sn.0}" />
                                 </td>
                             </tr>
-				            <tr>
-				                <td colspan="2">
-                                    <hr/>
-                                </td>
-				            </tr>
-				            <tr>
+	                        <tr>
                                 <td>
                                     {t}Password{/t}
                                     {if $mode == "modify"}
                                     <br />
-                                    {t}(leave empty to keep password){/t}
                                     {/if}
                                 </td>
                                 <td>
                                     <input type="hidden" name="userpassword" value="{$user.userpassword.0}" />
                                     <input type="text" name="clearpassword" value="{$user.clearpassword.0}" />
+                                    {t}(leave empty to keep password){/t}
                                 </td>
                             </tr>
                             {if $isadmin == true}
+				            <tr>
+				                <td colspan="2">
+                                    <hr/>
+                                </td>
+				            </tr>
                             <tr>
-                                <td colspan="2" class="sendcenter">
+                                <td>
+                                    {t}ACL{/t}
+                                </td>
+                                <td class="center">
                                     <table>
                                         <tr>
                                             <td>
-                                                {t}Admins{/t}
+                                                {t}Administrator of{/t}
                                                 <br />
                                                 <select name="domainsin[]" size="8" multiple="multiple">
                                                 {foreach from=$domainsin item=domain}
@@ -91,7 +94,7 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                {t}Non-Admins{/t}
+                                                {t}Not administrator of{/t}
                                                 <br />
                                                 <select name="domains[]" size="8" multiple="multiple">
                                                 {foreach from=$domains item=domain}
@@ -105,7 +108,7 @@
                             </tr>
                             {/if}
 				            <tr>
-                                <td colspan="2" class="sendcenter">
+                                <td colspan="2" class="buttons">
                                     <input type="submit" name="submit" value="{t}Save{/t}"/>
                                 </td>
 				            </tr>

@@ -172,15 +172,21 @@ h2 {
   margin: 0 0 0.5em 0;
   padding: 0 0 0 0.5em;
   font-style: italic;
-  border-left: 20px #99CCFF solid;
-  border-bottom: 1px #99CCFF solid;
+  border-left: 20px #77AADD solid;
+  border-bottom: 1px #77AADD solid;
 }
 
-hr {
+hr.small {
   width: 400px;
   border: solid #99CCFF 1px;
   text-align: left;
 }
+
+hr {
+  border: solid #99CCFF 1px;
+  text-align: left;
+}
+
 
 img {
   border: 0;
@@ -212,17 +218,22 @@ legend {
   height: 25px;
 }
 
-td.sendcenter {
-  text-align: center;
+td.buttons {
+  border-top: 1px #99CCFF solid; 
+  background-color: #77AADD;
+  text-align: right;
+  vertical-align: middle;
 }
 
-.buttons {
+.center {
   text-align: center;
-  vertical-align: middle;
 }
 
 select {
   width: 15em;
 }
 
+input#button {
+  border: 1px gray solid ;
 
+}
