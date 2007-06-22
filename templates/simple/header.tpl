@@ -4,7 +4,7 @@
         <title>ELMA</title>
         <link rel="stylesheet" type="text/css" href="{$template_path}/style.css" />
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<script src="js_functions.js" type="text/javascript"></script>
+	<script src="{$template_path}/js_functions.js" type="text/javascript"></script>
     </head>
     <body>
         <div id="Page">
