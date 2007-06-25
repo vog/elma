@@ -273,12 +273,23 @@ class ELMA {
     }
 
     # SYSTEMUSER
-    
+
+    # listSystemUsers, links to the getSystemUser function
+    #
+    # requirements of $mode can be looked up in the getSystemUser comment
     function listSystemUsers ($mode="system") {
         $users = $this->getSystemUser("*", $mode);
         return $users;
     }
 
+    # getSystemUser, gets information about the systemUsers
+    #
+    # $user_uid requires the uid= value of a user to get the user's information,
+    # or null (not set) to get information about all users
+    # $mode requires "system" to filter users where the userPassword= value is readable,
+    # or any other value to just get all users
+    #
+    # returns an array of information about the user(s)
     function getSystemUser ($user_uid="*", $mode="system") {
         if ($mode!="system") {
             $result = ldap_list($this->cid, LDAP_USERS_ROOT_DN, "(&(objectclass=inetOrgPerson)(uid=$user_uid))");
@@ -294,6 +305,9 @@ class ELMA {
         return $user;
     }
 
+    # addSystemUser, adds a systemUser using the submitted info
+    #
+    # $user requires an array of information about the user that shall be added
     function addSystemUser ( $user ) {
         $user["objectClass"][0] = "inetOrgPerson"; 
         $user["objectClass"][1] = "simpleSecurityObject";
@@ -306,7 +320,10 @@ class ELMA {
         }
         return $result;
     }
-    
+
+    # modSystemUser, modifies a systemUser's info
+    #
+    # $user requires an array of information about the user
     function modSystemUser ( $user ) {
         ldap_modify($this->cid, "uid=".$user['uid'].",".LDAP_USERS_ROOT_DN, $user);
         if ( ldap_errno($this->cid) !== 0 ) {
@@ -317,6 +334,9 @@ class ELMA {
         return $result;
     }
 
+    # delSystemUser, removes a systemUser and removes him from all admingroups he's in
+    #
+    # $user requires the uid= value of the user
     function delSystemUser ( $user ) {
         $result = 1;
 
@@ -360,6 +380,11 @@ class ELMA {
         return $result;
     }
 
+    # getSystemUsersDomain, lists all domains the submitted user administrates
+    #
+    # $user requires the uid= value of the user
+    #
+    # returns an array of domains
     function getSystemUsersDomains ( $user ) {
 
         $userdn = "uid=".$user.",".LDAP_USERS_ROOT_DN;
@@ -382,11 +407,22 @@ class ELMA {
 
     # ADMINGROUP
 
+    # listAdminUsers, this is being used to link to the getAdminUser function
+    #
+    # requirements for $domain should be looked up in getAdminUser's comment
+    #
+    # returns the value returned from the linked function
     function listAdminUsers ($domain="users") {
         $users = $this->getAdminUser($domain);
         return $users;
     }
 
+    # getAdminUser, lists the users listed in the global or domain's admingroup
+    #
+    # $domain requires the dc= value of a domain to list the domain's admingroup's users,
+    # or null (not set) to list the global admingroup's users
+    # 
+    # returns an array of dns (excluding the main-admin's dn)
     function getAdminUser ($domain="users") {
         if ($domain != "users") {
             $result = ldap_list($this->cid, "dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, "cn=admingroup");
@@ -413,6 +449,11 @@ class ELMA {
         return $user;
     }
 
+    # addAdminUsers, adds the submitted users to the global or the submitted domain's admingroup
+    #
+    # $users requires one or more full dn(s) from the users
+    # $domain requires the dc= value of a domain to add the users to the domain's admingroup,
+    # or null (not set) to add the users to the global admingroup
     function addAdminUsers ($domain=null, $users) {
 
         $tmpusers["member"] = $users;
@@ -430,7 +471,12 @@ class ELMA {
         }
         return $result;
     }
-    
+
+    # delAdminUsers, removes the submitted users from the global admingroup or the submitted domain's admingroup
+    #
+    # $users requires one or more full dn(s) from the users
+    # $domain requires the dc=value of a domain to remove the users from the domain's admingroup,
+    # or null (not set) to remove the users from the global admingroup
     function delAdminUsers ($domain=null, $users) {
 
         $tmpusers["member"] = $users;
@@ -449,6 +495,11 @@ class ELMA {
         return $result;
     }
 
+    # isAdminUser, checks if the submitted user is in the global admingroup
+    #
+    # $user requires a uid= value
+    #
+    # returns false if the user is not in the global admingroup
     function isAdminUser ($user) {
         $userdn = "uid=".$user.",".LDAP_USERS_ROOT_DN;
 
@@ -463,6 +514,13 @@ class ELMA {
     }
 
     # Statistical functions
+
+    # userCount, counting Users
+    #
+    # counts all users when $domain is set to null, counts all users inside a domain when $domain is set to a dc= value
+    # counts only active users when $active is set to "TRUE"
+    #
+    # returns an integer representing the number of users
     function userCount ($domain=null, $active="*") {
         if ($domain != null) {
             $result = ldap_list($this->cid, "dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, "(&(mailStatus=$active)(&(objectclass=mailUser)(uid=*)))");
@@ -483,7 +541,12 @@ class ELMA {
         }
         return $tmpcount;
     }
-    
+
+    # aliasCount, counting Aliases
+    #
+    # behaviour is similar to userCount
+    #
+    # returns an integer representing the number of aliases
     function aliasCount ($domain=null, $active="*") {
         if ($domain != null) {
             $result = ldap_list($this->cid, "dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, "(&(mailStatus=$active)(&(objectclass=mailAlias)(uid=*)))");
@@ -505,6 +568,9 @@ class ELMA {
         return $tmpcount;
     }
 
+    # domainCount, counting Domains
+    #
+    # counts all domains when $active is not set, counts active domains only when $active is set to "TRUE"
     function domainCount ($active="*") {
             $result = ldap_list($this->cid, LDAP_DOMAINS_ROOT_DN, "(&(mailStatus=$active)(dc=*))");
             $result = ldap_get_entries($this->cid, $result);
@@ -513,6 +579,7 @@ class ELMA {
             return $tmpcount;
     }
 
+    # systemuserCount, counting systemUsers
     function systemuserCount () {
             $result = ldap_list($this->cid, LDAP_USERS_ROOT_DN, "(uid=*)");
             $result = ldap_get_entries($this->cid, $result);
@@ -523,6 +590,8 @@ class ELMA {
     }
 
     # Get Specific Entry
+    #
+    # requires a full dn set for $dn
     function getEntry($dn) {
         $result = ldap_read($this->cid, $dn, "(objectClass=*)");
         $result = ldap_get_entries($this->cid, $result);
