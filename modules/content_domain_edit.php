@@ -199,7 +199,7 @@ class content_domain_edit extends module_base
                         if ($user["dn"] == $admin) {
                             $isset = 1;
                             $tmp = $this->ldap->getEntry($admin);
-                            if (strstr($tmp[0]["dn"], "ou=domains")) {
+                            if (strstr($tmp[0]["dn"], LDAP_DOMAINS_ROOT_DN)) {
                                 $tmp[0]["mailUser"] = 1;
                                 $notnulladmins["mailUser"] = 1;
                             } else {
@@ -212,7 +212,7 @@ class content_domain_edit extends module_base
                     }
 
                     if ($isset == 0) {
-                        if (strstr($user["dn"], "ou=domains")) {
+                        if (strstr($user["dn"], LDAP_DOMAINS_ROOT_DN)) {
                             $user["mailUser"] = 1;
                             $notnullusers["mailUser"] = 1;
                         } else {
