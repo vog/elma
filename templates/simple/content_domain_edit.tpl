@@ -79,10 +79,10 @@
                                                 <div>
                                                     <br />
                                                     <br />
-                                                    <input type="button" name="delfromlist" value="&gt;" onclick="del()" />
+                                                    <input type="button" name="delfromlist" value="&gt;" onclick="delAdmin()" />
                                                     <br />
                                                     <br />
-                                                    <input type="button" name="addtolist" value="&lt;" onclick="add()" />
+                                                    <input type="button" name="addtolist" value="&lt;" onclick="addAdmin()" />
                                                 </div>
                                             </td>
                                             <td>
