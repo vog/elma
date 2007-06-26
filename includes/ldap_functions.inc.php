@@ -99,12 +99,12 @@ class ELMA {
     # DOMAIN
 
     function listDomains () {
-        $domains = $this->getDomain();
+        $domains = $this->getDomain("*");
         return $domains;
     }
 
-    function getDomain ($domain_dc = "*") {
-        $result = ldap_list($this->cid, LDAP_DOMAINS_ROOT_DN, "dc=".$domain_dc);
+    function getDomain ($domain_dc = "*", $active="*") {
+        $result = ldap_list($this->cid, LDAP_DOMAINS_ROOT_DN, "(&(mailStatus=$active)(dc=$domain_dc))");
         $domain = ldap_get_entries($this->cid, $result);
         if (isset($domain[0])) {
             if ( $domain_dc !== "*" ) $domain = $domain[0];
@@ -159,8 +159,12 @@ class ELMA {
         return $users;
     }
 
-    function getUser ( $domain, $user_uid = "*") {
-        $result = ldap_list($this->cid, "dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, "(&(objectclass=mailUser)(uid=$user_uid))");
+    function getUser ( $domain, $user_uid = "*", $active = "*") {
+        if ($active == "*") {
+            $result = ldap_list($this->cid, "dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, "(&(objectclass=mailUser)(uid=$user_uid))");
+        } else {
+            $result = ldap_list($this->cid, "dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, "(&(mailStatus=$active)(&(objectclass=mailUser)(uid=*)))");
+        }
         $user = ldap_get_entries($this->cid, $result);
         if ( $user_uid !== "*" ) $user = $user[0];
         return $user;
@@ -233,8 +237,12 @@ class ELMA {
         return $aliases;
     }
 
-    function getAlias ( $domain, $alias_uid = "*") {
-        $result = ldap_list($this->cid,"dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, "(&(objectclass=mailAlias)(uid=$alias_uid))");
+    function getAlias ( $domain, $alias_uid = "*", $active = "*") {
+        if ($active == "*") {
+            $result = ldap_list($this->cid, "dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, "(&(objectclass=mailAlias)(uid=$alias_uid))");
+        } else {
+            $result = ldap_list($this->cid, "dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, "(&(mailStatus=$active)(&(objectclass=mailAlias)(uid=*)))");
+        }
         $alias = ldap_get_entries($this->cid, $result);
         if ( $alias_uid !== "*" ) $alias = $alias[0];
         return $alias;
@@ -571,22 +579,21 @@ class ELMA {
      */
     function userCount ($domain=null, $active="*") {
         if ($domain != null) {
-            $result = ldap_list($this->cid, "dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, "(&(mailStatus=$active)(&(objectclass=mailUser)(uid=*)))");
-            $result = ldap_get_entries($this->cid, $result);
+            $result = $this->getUser($domain, "*", $active);
             $tmpcount = $result["count"];
         } else {
-            $result = ldap_list($this->cid, LDAP_DOMAINS_ROOT_DN, "dc=*");
+            $result = $this->listDomains();
 
-            $tmpresult = ldap_get_entries($this->cid, $result);
-            $count = $tmpresult["count"];
+            $count = $result["count"];
             $tmpcount = 0;
 
             for ($i=0; $i<$count; $i++) {
-                $tmpusersresult = ldap_list($this->cid, "dc=".$tmpresult[$i]["dc"][0].",".LDAP_DOMAINS_ROOT_DN, "(&(mailStatus=$active)(&(objectclass=mailUser)(uid=*)))"); 
-                $tmpusersresult = ldap_get_entries($this->cid, $tmpusersresult);
-                $tmpcount += $tmpusersresult["count"];
+                $tmpresult = $this->getUser($result[$i]["dc"][0], "*", $active);
+                
+                $tmpcount += $tmpresult["count"];
             }
         }
+
         return $tmpcount;
     }
 
@@ -603,22 +610,21 @@ class ELMA {
      */
     function aliasCount ($domain=null, $active="*") {
         if ($domain != null) {
-            $result = ldap_list($this->cid, "dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, "(&(mailStatus=$active)(&(objectclass=mailAlias)(uid=*)))");
-            $result = ldap_get_entries($this->cid, $result);
+            $result = $this->getAlias($domain, "*", $active);
             $tmpcount = $result["count"];
         } else {
-            $result = ldap_list($this->cid, LDAP_DOMAINS_ROOT_DN, "dc=*");
+            $result = $this->listDomains();
 
-            $tmpresult = ldap_get_entries($this->cid, $result);
-            $count = $tmpresult["count"];
+            $count = $result["count"];
             $tmpcount = 0;
 
             for ($i=0; $i<$count; $i++) {
-                $tmpusersresult = ldap_list($this->cid, "dc=".$tmpresult[$i]["dc"][0].",".LDAP_DOMAINS_ROOT_DN, "(&(mailStatus=$active)(&(objectclass=mailAlias)(uid=*)))"); 
-                $tmpusersresult = ldap_get_entries($this->cid, $tmpusersresult);
-                $tmpcount += $tmpusersresult["count"];
+                $tmpresult = $this->getAlias($result[$i]["dc"][0], "*", $active);
+                
+                $tmpcount += $tmpresult["count"];
             }
         }
+
         return $tmpcount;
     }
 
@@ -632,11 +638,10 @@ class ELMA {
      * @active      string  * for global search, "TRUE" for actives only
      */
     function domainCount ($active="*") {
-            $result = ldap_list($this->cid, LDAP_DOMAINS_ROOT_DN, "(&(mailStatus=$active)(dc=*))");
-            $result = ldap_get_entries($this->cid, $result);
-            $tmpcount = $result["count"];
+        $result = $this->getDomain("*", $active);
+        $tmpcount = $result["count"];
 
-            return $tmpcount;
+        return $tmpcount;
     }
 
     /**
@@ -645,9 +650,8 @@ class ELMA {
      * This function counts systemUsers
      */
     function systemuserCount () {
-            $result = ldap_list($this->cid, LDAP_USERS_ROOT_DN, "(uid=*)");
-            $result = ldap_get_entries($this->cid, $result);
-            $tmpcount = $result["count"];
+            $tmp = listAdminUsers();
+            $tmpcount = $tmp["count"];
 
             return $tmpcount;
 
