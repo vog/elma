@@ -162,7 +162,19 @@ class content_domain_edit extends module_base
 
             if (isset($users)) {
                 unset($users["count"]);
-                $this->smarty->assign("nonadmins",$users);
+
+                $tmpusers = $users;
+                $users = array();
+
+                foreach ($tmpusers as $user) {
+                    $user["mailUser"] = 0;
+                    array_push($users, $user);
+                }
+
+                $tmp["sysUser"] = 1;
+
+                $this->smarty->assign("nonadmins", $users);
+                $this->smarty->assign("notnullnonadmins", $tmp);
             }
         } else {
             $this->smarty->assign("mode","modify");
@@ -222,6 +234,7 @@ class content_domain_edit extends module_base
                         array_push($users, $user);
                     }
                 }
+            } else {
             }
 
             if (isset($admins)) {
@@ -233,7 +246,7 @@ class content_domain_edit extends module_base
 
             if (isset($users)) {
                 $this->smarty->assign("nonadmins", $users);
-                if (isset($notnulladmins)) {
+                if (isset($notnullusers)) {
                     $this->smarty->assign("notnullnonadmins", $notnullusers);
                 }
             }
