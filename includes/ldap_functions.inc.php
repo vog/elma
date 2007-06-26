@@ -98,11 +98,26 @@ class ELMA {
 
     # DOMAIN
 
+    /**
+     * listDomains - listing domains
+     *
+     * This function lists any domain
+     */
     function listDomains () {
         $domains = $this->getDomain("*");
         return $domains;
     }
 
+    /**
+     * getDomain - gets information about domain(s)
+     *
+     * This function get information about domain(s) inside the ldap-tree
+     *
+     * when active is "TRUE" only active domains will be listed
+     *
+     * @domain_dc       string  dc= value of a domain's DN
+     * @active          string  "*" for listing any, "TRUE" for listing active domains only
+     */
     function getDomain ($domain_dc = "*", $active="*") {
         $result = ldap_list($this->cid, LDAP_DOMAINS_ROOT_DN, "(&(mailStatus=$active)(dc=$domain_dc))");
         $domain = ldap_get_entries($this->cid, $result);
@@ -111,7 +126,16 @@ class ELMA {
         }
         return $domain;
     }
- 
+
+    /**
+     * addDomain - adds a domain
+     *
+     * This functions adds a domain and an admingroup
+     * the main-admin is included in this admingroup by default
+     *
+     * @domain      array   information about the domain
+     * @admins      array   admin dns
+     */
     function addDomain ( $domain , $admins ) {
         $domain["objectclass"] = "mailDomain";
         ldap_add($this->cid, "dc=".$domain['dc'].",".LDAP_DOMAINS_ROOT_DN, $domain);
@@ -131,6 +155,13 @@ class ELMA {
         return $result;
     } 
 
+    /**
+     * modifyDomain - modifying a domain's information
+     *
+     * This function modifies a domain's information
+     *
+     * @domain      array   information about the domain
+     */
     function modifyDomain ( $domain ) {
         ldap_modify($this->cid,"dc=".$domain["dc"].",".LDAP_DOMAINS_ROOT_DN, $domain);
         if ( ldap_errno($this->cid) !== 0 ) {
@@ -141,6 +172,13 @@ class ELMA {
         return $result;
     }
 
+    /**
+     * deleteDomain - deleting a Domain
+     *
+     * This function deletes a domain
+     *
+     * @domain      string  dc= value of a domain's DN
+     */
     function deleteDomain ( $domain ) {
         my_ldap_delete($this->cid,"dc=$domain,".LDAP_DOMAINS_ROOT_DN,true);
         if ( ldap_errno($this->cid) !== 0 ) {
@@ -154,11 +192,27 @@ class ELMA {
 
     # USER 
 
+    /**
+     * listUsers - listing any user in a domain
+     *
+     * This function lists any user in the specified domain
+     *
+     * @domain      string  dc= value of a domain's DN
+     */
     function listUsers( $domain ) {
         $users = $this->getUser( $domain );
         return $users;
     }
 
+    /**
+     * getUser - getting information about a user
+     *
+     * This function gets information about a specific user
+     *
+     * @domain      string  dc= value of a domain's DN where the user is in
+     * @user_uid    string  uid= value of the user's DN
+     * @active      string  "*" shows any user, "TRUE" shows active users only
+     */
     function getUser ( $domain, $user_uid = "*", $active = "*") {
         if ($active == "*") {
             $result = ldap_list($this->cid, "dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, "(&(objectclass=mailUser)(uid=$user_uid))");
@@ -170,6 +224,14 @@ class ELMA {
         return $user;
     }
 
+    /**
+     * addUser - adding a user
+     *
+     * This function adds a user to the ldap-tree
+     *
+     * @domain      string  dc= value of the domain the user should belong to
+     * @user        array   information about the user
+     */
     function addUser ( $domain, $user) {
         $user["objectclass"] = "mailUser";
         ldap_add($this->cid, "uid=".$user['uid'].",dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, $user);
@@ -181,6 +243,14 @@ class ELMA {
         return $result;
     }
 
+    /**
+     * modifyUser - modifying a user
+     *
+     * This function modifies the information of a user
+     *
+     * @domain      string  dc= value of the domain the user is in
+     * @user        array   information about the user
+     */
     function modifyUser ( $domain, $user) {
         ldap_modify($this->cid, "uid=".$user['uid'].",dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, $user);
         if ( ldap_errno($this->cid) !== 0 ) {
@@ -191,6 +261,15 @@ class ELMA {
         return $result;
     }
 
+    /**
+     * deleteUser - deleting a user
+     *
+     * This function removes a user from the ldap-tree
+     * (including his presence in any admingroup)
+     *
+     * @domain      string  dc= value of the domain the user is in
+     * @user        string  uid= value of the users DN
+     */
     function deleteUser ( $domain, $user) {
         $searchresult = ldap_search($this->cid, LDAP_BASEDN, "(&(member=*)(cn=admingroup))");
         $searchresult = ldap_get_entries($this->cid, $searchresult);
@@ -232,11 +311,27 @@ class ELMA {
 
     # ALIAS
 
+    /**
+     * listAliases - listing all aliases in a domain
+     *
+     * This function lists all aliases in a specific domain
+     *
+     * @domain      string  dc= value of a domain's DN
+     */
     function listAliases( $domain ) {
         $aliases = $this->getAlias( $domain );
         return $aliases;
     }
 
+    /**
+     * getAlias - gets information about an alias
+     *
+     * This function gets information about an alias
+     *
+     * @domain      string  dc= value of the domain the alias is in
+     * @alias_uid   string  uid= value of the alias
+     * @active      string  "*" lists any alias, "TRUE" lists active aliases only
+     */ 
     function getAlias ( $domain, $alias_uid = "*", $active = "*") {
         if ($active == "*") {
             $result = ldap_list($this->cid, "dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, "(&(objectclass=mailAlias)(uid=$alias_uid))");
@@ -248,6 +343,14 @@ class ELMA {
         return $alias;
     }
 
+    /**
+     * addAlias - adds an alias
+     *
+     * This function add an alias to the specified domain
+     *
+     * @domain      string  dc= value of a domain's DN
+     * @alias       array   information about an alias
+     */
     function addAlias ( $domain, $alias) {
         $alias["objectclass"] = "mailAlias";
         ldap_add($this->cid, "uid=".$alias['uid'].",dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, $alias);
@@ -259,6 +362,14 @@ class ELMA {
         return $result;
     }
 
+    /**
+     * modifyAlias - modifying an alias
+     *
+     * This function modifies an alias in a specific domain
+     *
+     * @domain      string  dc= value of a domain's DN
+     * @alias       array   information about the alias
+     */
     function modifyAlias ( $domain, $alias) {
         ldap_modify($this->cid, "uid=".$alias['uid'].",dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, $alias);
         if ( ldap_errno($this->cid) !== 0 ) {
@@ -269,6 +380,14 @@ class ELMA {
         return $result;
     }
 
+    /**
+     * deleteAlias - deletes an alias
+     *
+     * This function deletes an alias inside a specific domain
+     *
+     * @domain      string  dc= value of a domain's DN
+     * @alias       string  uid= value of the alias
+     */
     function deleteAlias ( $domain, $alias) {
         ldap_delete($this->cid, "uid=".$alias.",dc=".$domain.",".LDAP_DOMAINS_ROOT_DN);
         if ( ldap_errno($this->cid) !== 0 )
