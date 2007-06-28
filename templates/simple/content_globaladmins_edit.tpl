@@ -29,7 +29,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            {t}available users{/t}
+                                            {t}Users{/t}
                                             <br />
                                             <select name="nonadmins[]" size="8" multiple="multiple">
                                             {foreach from=$nonadmins item=nonadmin}
@@ -39,6 +39,11 @@
                                         </td>
                                     </tr>
                                 </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <hr/>
                             </td>
                         </tr>
                         <tr>

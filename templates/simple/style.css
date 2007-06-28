@@ -218,9 +218,7 @@ legend {
   height: 25px;
 }
 
-td.buttons {
-  border-top: 1px #99CCFF solid; 
-  background-color: #77AADD;
+div#Content td.buttons {
   text-align: right;
   vertical-align: middle;
 }

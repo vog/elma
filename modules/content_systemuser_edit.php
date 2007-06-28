@@ -169,12 +169,11 @@ class content_systemuser_edit extends module_base
         if ( $systemuser == "new" ) {
             $this->smarty->assign("mode","add");
         } else {
-            $isadmin = $this->ldap->isAdminUser($_SESSION["username"]);
             $domainsin = $this->ldap->getSystemUsersDomains($systemuser);
             $tmpdomains = $this->ldap->listDomains();
 
             /* check in which domains the selected user is */
-            if ($isadmin) {
+            if ($_SESSION["userclass"] == "admin" ) {
                 /* filter the dc part out of the dn */
                 unset($tmpdomains["count"]);
 
@@ -223,10 +222,8 @@ class content_systemuser_edit extends module_base
                         array_push($domains, $domain);
                     }
                 }
-            }
 
-            /* assign domain vars only if the logged in user is an admin */ 
-            if ($isadmin) {
+                /* assign domain vars only if the logged in user is an admin */ 
                 $this->smarty->assign("domains", $domains);
                 $this->smarty->assign("domainsin", $domainsin);
             }
