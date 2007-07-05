@@ -28,10 +28,10 @@
  */
 
 /**
- * content domain edit
+ * content globaladmins edit
  * 
- * This content module is used for creating the domain edit form and 
- * handling the submited data.
+ * This content module is used for adding systemusers to the global admingroup.
+ * 
  */
 
 class content_globaladmins_edit extends module_base
@@ -72,51 +72,53 @@ class content_globaladmins_edit extends module_base
             
             $count = 0;
 
-            if (isset($ldapadmins[0])) {
+            /* create array of new admins */
+            if (isset($admins)) {
+                foreach ($admins as $admin) {
+                    $isinarray = 0;
+                    for ($c=0; $c < $ldapadmins[0]["member"]["count"]; $c++) {
+                        if ($admin == $ldapadmins[0]["member"][$c]){
+                            $isinarray = 1;
+                            break;
+                        }
+                    }
+
+                    if ($isinarray == 0) {
+                        $adminsadd[$count] = $admin;
+                        $count++;
+                    }
+                }
+
+                $count = 0;
+            }
+
+            /* create array of removed admins */
+            for ($i=0; $i < $ldapadmins[0]["member"]["count"]; $i++) {
+                $isinarray = 0;
+                
                 if (isset($admins)) {
-
-                    /* create array of new admins */
                     foreach ($admins as $admin) {
-                        $isinarray = 0;
-                        for ($c=0; $c < $ldapadmins[0]["member"]["count"]; $c++) {
-                            if ($admin == $ldapadmins[0]["member"][$c]){
-                                $isinarray = 1;
-                                break;
-                            }
-                        }
-
-                        if ($isinarray == 0) {
-                            $adminsadd[$count] = $admin;
-                            $count++;
-                        }
-                    }
-
-                    $count = 0;
-
-
-                    /* create array of removed admins */
-                    for ($i=0; $i < $ldapadmins[0]["member"]["count"]; $i++) {
-                        $isinarray = 0;
-                        foreach ($admins as $admin) {
-                            if ($ldapadmins[0]["member"][$i] == $admin) {
-                                $isinarray = 1;
-                                break;
-                            }
-                        }
-
-                        if ($isinarray == 0) {
-                            $adminsdel[$count] = $ldapadmins[0]["member"][$i];
-                            $count++;
+                        if ($ldapadmins[0]["member"][$i] == $admin) {
+                            $isinarray = 1;
+                            break;
                         }
                     }
                 }
 
-                if (isset($adminsadd)) {
-                    $this->ldap->addAdminUsers(null, $adminsadd);
+                if ($isinarray == 0) {
+                    $adminsdel[$count] = $ldapadmins[0]["member"][$i];
+                    $count++;
                 }
-                if (isset($adminsdel)) {
-                    $this->ldap->delAdminUsers(null, $adminsdel);
-                }
+            }
+            
+            /* add admins to ldap if neccesary */
+            if (isset($adminsadd)) {
+                $this->ldap->addAdminUsers(null, $adminsadd);
+            }
+
+            /* delete admins from ldap if neccesary */
+            if (isset($adminsdel)) {
+                $this->ldap->delAdminUsers(null, $adminsdel);
             }
             
             $submit_status = ldap_errno($this->ldap->cid);

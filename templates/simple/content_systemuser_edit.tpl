@@ -61,7 +61,7 @@
                                     {t}(leave empty to keep password){/t}
                                 </td>
                             </tr>
-                            {if $isadmin == true}
+                            {if $userclass == "systemadmin"}
 				            <tr>
 				                <td colspan="2">
                                     <hr/>

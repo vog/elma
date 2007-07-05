@@ -31,7 +31,8 @@
 session_start();
 
 require("includes/config.inc.php");
-include("includes/smarty.inc.php");
+require("includes/acl.inc.php");
+require("includes/smarty.inc.php");
 require("includes/gettext.inc.php");
 require("includes/ldap_functions.inc.php");
 require("includes/my_functions.inc.php");
@@ -41,7 +42,7 @@ if (isset($_POST["module"]))
     $module = $_POST["module"];
 else if (isset($_GET["module"])) 
     $module = $_GET["module"];
-else $module = "";
+else $module = "main";
 
 if (!isset($_SESSION["login"])) {
     session_destroy();
@@ -50,16 +51,26 @@ if (!isset($_SESSION["login"])) {
     $smarty->display("login.tpl");
     $smarty->display("footer.tpl");
 } else {
-    require('modules/modules.class.php');
-    $content_module = &modules::factory($module);
 
-    $smarty->assign('username',$_SESSION['username']);
-    $smarty->assign('userclass',$_SESSION['userclass']);
+    $acl = unserialize(ACL);
 
-    $content_module->smarty = $smarty;
-    $content_module->proceed();
+    // check if the userclass has access to the module
+    if ( in_array($module,$acl[$_SESSION['userclass']]) ) {
+        require('modules/modules.class.php');
+        $content_module = &modules::factory($module);
+        $content_module->smarty = $smarty;
+        $content_module->proceed();
+ 
+        $smarty->assign('username',$_SESSION['username']);
+        $smarty->assign('userclass',$_SESSION['userclass']);
+        $smarty->assign('acl',$acl[$_SESSION['userclass']]);
 
-    $content = $content_module->getContent();
+        my_print_r($acl[$_SESSION['userclass']]);
+
+        $content = $content_module->getContent();
+    } else {
+        $content = "no access";
+    }
 
     $smarty->display("header.tpl");
     $smarty->display("banner.tpl");

@@ -173,7 +173,7 @@ class content_systemuser_edit extends module_base
             $tmpdomains = $this->ldap->listDomains();
 
             /* check in which domains the selected user is */
-            if ($_SESSION["userclass"] == "admin" ) {
+            if ($_SESSION["userclass"] == "systemadmin" ) {
                 /* filter the dc part out of the dn */
                 unset($tmpdomains["count"]);
 
@@ -230,7 +230,6 @@ class content_systemuser_edit extends module_base
 
             $this->smarty->assign("mode","modify");
             $this->smarty->assign("user",$this->ldap->getSystemUser($systemuser));
-            $this->smarty->assign("isadmin",$isadmin);
         }
     }
 
