@@ -65,8 +65,6 @@ if (!isset($_SESSION["login"])) {
         $smarty->assign('userclass',$_SESSION['userclass']);
         $smarty->assign('acl',$acl[$_SESSION['userclass']]);
 
-        my_print_r($acl[$_SESSION['userclass']]);
-
         $content = $content_module->getContent();
     } else {
         $content = "no access";

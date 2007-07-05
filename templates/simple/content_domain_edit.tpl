@@ -36,7 +36,7 @@
                                     {t}Is active?{/t}
                                 </td>
                                 <td>
-                                    <input type="checkbox" name="mailstatus" {if $domain.mailstatus.0 eq "FALSE"}{else}checked="checked"{/if} />
+                                    <input type="checkbox" name="mailstatus" {if $domain.mailstatus.0 eq "TRUE"}checked="checked"{/if} />
                                 </td>
 			                </tr>
                             <tr>

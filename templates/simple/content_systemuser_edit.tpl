@@ -61,7 +61,6 @@
                                     {t}(leave empty to keep password){/t}
                                 </td>
                             </tr>
-                            {if $userclass == "systemadmin"}
 				            <tr>
 				                <td colspan="2">
                                     <hr/>
@@ -78,7 +77,7 @@
                                                 {t}Administrator of{/t}
                                                 <br />
                                                 <select name="domainsin[]" size="8" multiple="multiple">
-                                                {foreach from=$domainsin item=domain}
+                                                {foreach from=$domains item=domain}
                                                     <option value="{$domain}">{$domain}</option>
                                                 {/foreach}
                                                 </select>
@@ -106,7 +105,6 @@
                                     </table>
                                 </td>
                             </tr>
-                            {/if}
                             <tr>
                                 <td colspan="2">
                                     <hr/>

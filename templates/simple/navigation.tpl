@@ -1,10 +1,10 @@
             <div id="Navigation">    
 	            <ul>
                     <li><a href="{$smarty.server.PHP_SELF}?module=main">{t}Home{/t}</a></li>
-                    {if $userclass != "user"}
+                    {if @in_array("domains_list",$acl) }
 	                <li><a href="{$smarty.server.PHP_SELF}?module=domains_list">{t}Domains{/t}</a></li>
                     {/if}
-                    {if $userclass == "systemadmin"}
+                    {if @in_array("settings",$acl) }
                     <li><a href="{$smarty.server.PHP_SELF}?module=settings">{t}Settings{/t}</a></li>
                     {/if}
                     <li><a href="logout.php">{t}Logout{/t}</a></li>

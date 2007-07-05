@@ -550,7 +550,7 @@ class ELMA {
         $domains = array();
 
         foreach($searchresult as $dn) {
-            $tmp = ldap_explode_dn($dn["dn"], 0);
+            $tmp = ldap_explode_dn($dn["dn"], 1);
             array_push($domains, $tmp[1]);
         }
 

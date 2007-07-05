@@ -158,6 +158,8 @@ class content_domain_edit extends module_base
 
         if ($domain == "new") {
             $this->smarty->assign("mode","add");
+            $this->smarty->assign("domain",array());
+
             $users = $this->ldap->listSystemUsers();
 
             if (isset($users)) {

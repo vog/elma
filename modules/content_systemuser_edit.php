@@ -80,7 +80,9 @@ class content_systemuser_edit extends module_base
                     case "modify": 
                         unset ($my_systemuser["domains"]);
                         $domainsin = $this->ldap->getSystemUsersDomains($systemuser);
-                        
+
+my_print_r($domainsin);
+
                         /* filter the values out of the dc */
                         $tmpdomainsin = $domainsin;
 
@@ -89,7 +91,7 @@ class content_systemuser_edit extends module_base
                         $tmp = null;
 
                         foreach($tmpdomainsin as $domainin) {
-                            $tmp = explode("=", $domainin);
+                            my_print_r(ldap_explode_dn($domainin,1));
                             array_push($domainsin, $tmp[1]);
                         }
 
@@ -166,68 +168,69 @@ class content_systemuser_edit extends module_base
             $this->smarty->assign("submit_status",-1);
         }
 
-        if ( $systemuser == "new" ) {
-            $this->smarty->assign("mode","add");
-        } else {
-            $domainsin = $this->ldap->getSystemUsersDomains($systemuser);
-            $tmpdomains = $this->ldap->listDomains();
+        $domainsin = $this->ldap->getSystemUsersDomains($systemuser);
+        $tmpdomains = $this->ldap->listDomains();
 
-            /* check in which domains the selected user is */
-            if ($_SESSION["userclass"] == "systemadmin" ) {
-                /* filter the dc part out of the dn */
-                unset($tmpdomains["count"]);
+        /* check in which domains the selected user is */
+        if ($_SESSION["userclass"] == "systemadmin" ) {
+            /* filter the dc part out of the dn */
+            unset($tmpdomains["count"]);
 
-                $tmp = array();
-                $domains = array();
+            $tmp = array();
+            $domains = array();
 
-                foreach($tmpdomains as $domain) {
-                    $tmp = ldap_explode_dn($domain["dn"], 0);
-                    array_push($domains, $tmp[0]);
-                }
-
-                /* filter the values out of the dc */
-                $tmpdomains = $domains;
-                $tmpdomainsin = $domainsin;
-
-                $domains = array();
-                $domainsin = array();
-
-                $tmp = null;
-
-                foreach($tmpdomains as $domain) {
-                    $tmp = explode("=", $domain);
-                    array_push($domains, $tmp[1]);
-                }
-
-                foreach($tmpdomainsin as $domain) {
-                    $tmp = explode("=", $domain);
-                    array_push($domainsin, $tmp[1]);
-                }
-
-                /* we want to have only the domains in $domains which aren't in $domainsin already */
-                $tmpdomains = $domains;
-                $domains = array();
-
-                foreach($tmpdomains as $domain) {
-                    $isin = 0;
-
-                    foreach($domainsin as $domainin) {
-                        if ($domainin == $domain) {
-                            $isin = 1;
-                            break;
-                        }
-                    }
-
-                    if ($isin == 0) {
-                        array_push($domains, $domain);
-                    }
-                }
-
-                /* assign domain vars only if the logged in user is an admin */ 
-                $this->smarty->assign("domains", $domains);
-                $this->smarty->assign("domainsin", $domainsin);
+            foreach($tmpdomains as $domain) {
+                $tmp = ldap_explode_dn($domain["dn"], 0);
+                array_push($domains, $tmp[0]);
             }
 
+            /* filter the values out of the dc */
+            $tmpdomains = $domains;
+            $tmpdomainsin = $domainsin;
+
+            $domains = array();
+            $domainsin = array();
+            
+            $tmp = null;
+
+            foreach($tmpdomains as $domain) {
+                $tmp = explode("=", $domain);
+                array_push($domains, $tmp[1]);
+            }
+
+            foreach($tmpdomainsin as $domain) {
+                $tmp = explode("=", $domain);
+                array_push($domainsin, $tmp[1]);
+            }
+
+            /* we want to have only the domains in $domains which aren't in $domainsin already */
+            $tmpdomains = $domains;
+            $domains = array();
+
+            foreach($tmpdomains as $domain) {
+                $isin = 0;
+
+                foreach($domainsin as $domainin) {
+                    if ($domainin == $domain) {
+                        $isin = 1;
+                        break;
+                    }
+                }
+
+                if ($isin == 0) {
+                    array_push($domains, $domain);
+                }
+            }
+
+            /* assign domain vars only if the logged in user is an admin */ 
+            $this->smarty->assign("domains", $domains);
+            $this->smarty->assign("domainsin", $domainsin);
+        }
+
+        if ( $systemuser == "new" ) {
+            $this->smarty->assign("mode","add");
+            
+        } else {
             $this->smarty->assign("mode","modify");
             $this->smarty->assign("user",$this->ldap->getSystemUser($systemuser));
         }
