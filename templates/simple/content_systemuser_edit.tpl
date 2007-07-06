@@ -76,8 +76,8 @@
                                             <td>
                                                 {t}Administrator of{/t}
                                                 <br />
-                                                <select name="domainsin[]" size="8" multiple="multiple">
-                                                {foreach from=$domains item=domain}
+                                                <select name="nlo_adminofdomains[]" size="8" multiple="multiple">
+                                                {foreach from=$adminofdomains item=domain}
                                                     <option value="{$domain}">{$domain}</option>
                                                 {/foreach}
                                                 </select>
@@ -95,8 +95,8 @@
                                             <td>
                                                 {t}Not administrator of{/t}
                                                 <br />
-                                                <select name="domains[]" size="8" multiple="multiple">
-                                                {foreach from=$domains item=domain}
+                                                <select name="nlo_availabledomains[]" size="8" multiple="multiple">
+                                                {foreach from=$availabledomains item=domain}
                                                     <option value="{$domain}">{$domain}</option>
                                                 {/foreach}
                                                 </select>

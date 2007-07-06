@@ -55,6 +55,9 @@ class content_systemuser_edit extends module_base
 
         // new systemuser created or existing systemuser modified
         if (isset($_POST["submit"])) {
+            // save all needed information which are no ldap objects themself
+            $new_adminofdomains = $_POST["nlo_adminofdomains"];
+
             // remove all non LDAP objects from submited form
             // an the submit and mode value
             $my_systemuser = remove_key_by_str($_POST,"nlo_");
@@ -65,11 +68,9 @@ class content_systemuser_edit extends module_base
                 $my_systemuser["userpassword"] =  "{MD5}".base64_encode(pack("H*",md5($my_systemuser["clearpassword"])));
             }
 
-            if (! defined(SAVECLEARPASS)) {
+            if (! defined(SAVECLEARPASS) || empty($my_systemuser["clearpassword"])) {
                 unset($my_systemuser["clearpassword"]);
             }
-
-            unset($my_systemuser["clearpassword"]);
 
             $validation_errors = validate_systemuser($my_systemuser);
             if (count($validation_errors) == 0) {
@@ -78,30 +79,9 @@ class content_systemuser_edit extends module_base
                         $this->ldap->addSystemUser($my_systemuser);
                     break;
                     case "modify": 
-                        unset ($my_systemuser["domains"]);
-                        $domainsin = $this->ldap->getSystemUsersDomains($systemuser);
-
-my_print_r($domainsin);
-
-                        /* filter the values out of the dc */
-                        $tmpdomainsin = $domainsin;
-
-                        $domainsin = array();
-
-                        $tmp = null;
-
-                        foreach($tmpdomainsin as $domainin) {
-                            my_print_r(ldap_explode_dn($domainin,1));
-                            array_push($domainsin, $tmp[1]);
-                        }
-
-                        if (isset($my_systemuser["domainsin"])) {
-                            $tmpdomainsin = $my_systemuser["domainsin"];
-                            unset($my_systemuser["domainsin"]);
-                        } else {
-                            $tmpdomainsin = array();
-                        }
-
+                        $old_adminofdomains = $this->ldap->getSystemUsersDomains($systemuser);
+                        unset ($my_systemuser["adminofdomains"]);
+                        
                         $this->ldap->modSystemUser($my_systemuser);
 
                         $addDomainAdmin = array();
@@ -110,34 +90,11 @@ my_print_r($domainsin);
 
                         /* check if the user is admin already */
                         /* and put him onto the add array if not */
-                        foreach($tmpdomainsin as $tmpdomainin) {
-                            $isinarray = 0;
-                            foreach($domainsin as $domainin) {
-                                if ($domainin == $tmpdomainin) {
-                                    $isinarray = 1;
-                                    break;
-                                }
-                            }   
-
-                            if ($isinarray == 0) {
-                                array_push($addDomainAdmin, $tmpdomainin);
-                            }                        
-                        }
+                        $addDomainAdmin = array_diff($new_adminofdomains,$old_adminofdomains);
+                        
                         /* check if the user used to be admin */
                         /* and put him onto the del array if he isn't any longer */
-                        foreach($domainsin as $domainin) {
-                            $isinarray = 0;
-                            foreach($tmpdomainsin as $tmpdomainin) {
-                                if ($tmpdomainin == $domainin) {
-                                    $isinarray = 1;
-                                    break;
-                                }
-                            }
-
-                            if ($isinarray == 0) {
-                                array_push($delDomainAdmin, $domainin);
-                            }
-                        }
+                        $delDomainAdmin = array_diff($old_adminofdomains,$new_adminofdomains);
 
                         if (isset($addDomainAdmin)) {
                             foreach($addDomainAdmin as $domain) {
@@ -168,63 +125,29 @@ my_print_r($domainsin);
             $this->smarty->assign("submit_status",-1);
         }
 
-        $domainsin = $this->ldap->getSystemUsersDomains($systemuser);
-        $tmpdomains = $this->ldap->listDomains();
+        $adminofdomains = $this->ldap->getSystemUsersDomains($systemuser);
+        $domains_dn = $this->ldap->listDomains();
 
         /* check in which domains the selected user is */
         if ($_SESSION["userclass"] == "systemadmin" ) {
             /* filter the dc part out of the dn */
-            unset($tmpdomains["count"]);
+            unset($domains_dn["count"]);
 
-            $tmp = array();
+            $domain = array();
             $domains = array();
 
-            foreach($tmpdomains as $domain) {
-                $tmp = ldap_explode_dn($domain["dn"], 0);
-                array_push($domains, $tmp[0]);
-            }
-
-            /* filter the values out of the dc */
-            $tmpdomains = $domains;
-            $tmpdomainsin = $domainsin;
-
-            $domains = array();
-            $domainsin = array();
-            
-            $tmp = null;
-
-            foreach($tmpdomains as $domain) {
-                $tmp = explode("=", $domain);
-                array_push($domains, $tmp[1]);
-            }
-
-            foreach($tmpdomainsin as $domain) {
-                $tmp = explode("=", $domain);
-                array_push($domainsin, $tmp[1]);
+            foreach($domains_dn as $domain_dn) {
+                $domain = ldap_explode_dn($domain_dn["dn"], 1);
+                array_push($domains, $domain[0]);
             }
 
             /* we want to have only the domains in $domains which aren't in $domainsin already */
-            $tmpdomains = $domains;
-            $domains = array();
-
-            foreach($tmpdomains as $domain) {
-                $isin = 0;
-
-                foreach($domainsin as $domainin) {
-                    if ($domainin == $domain) {
-                        $isin = 1;
-                        break;
-                    }
-                }
-
-                if ($isin == 0) {
-                    array_push($domains, $domain);
-                }
-            }
+            $available_domains = array();
+            $available_domains = array_diff($domains,$adminofdomains);
 
             /* assign domain vars only if the logged in user is an admin */ 
-            $this->smarty->assign("domains", $domains);
-            $this->smarty->assign("domainsin", $domainsin);
+            $this->smarty->assign("availabledomains", $available_domains);
+            $this->smarty->assign("adminofdomains", $adminofdomains);
         }
 
         if ( $systemuser == "new" ) {

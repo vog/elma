@@ -540,18 +540,15 @@ class ELMA {
     function getSystemUsersDomains ( $user ) {
 
         $userdn = "uid=".$user.",".LDAP_USERS_ROOT_DN;
+        $search_result = ldap_search($this->cid, LDAP_DOMAINS_ROOT_DN, "(member=$userdn)");
+        $domains_dn = ldap_get_entries($this->cid, $search_result);
+        unset($domains_dn["count"]);
 
-        $searchresult = ldap_search($this->cid, LDAP_DOMAINS_ROOT_DN, "(member=$userdn)");
-        $searchresult = ldap_get_entries($this->cid, $searchresult);
-
-        unset($searchresult["count"]);
-
-        $tmp = array();
+        // extract the domain name from each dn found
         $domains = array();
-
-        foreach($searchresult as $dn) {
-            $tmp = ldap_explode_dn($dn["dn"], 1);
-            array_push($domains, $tmp[1]);
+        foreach($domains_dn as $domain_dn) {
+            $domain = ldap_explode_dn($domain_dn["dn"], 1);
+            array_push($domains, $domain[1]);
         }
 
         return $domains;

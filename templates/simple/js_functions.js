@@ -33,39 +33,39 @@ function addAdmin() {
 	}
 }
 
-// marks all list entries in element "domainsin[]"
+// marks all list entries in element "adminofdomains[]"
 function markAllDomains() {
-	var domainsin = document.getElementsByName("domainsin[]");
+	var nlo_adminofdomains = document.getElementsByName("nlo_adminofdomains[]");
 
-	for (i=0; i < domainsin[0].options.length; i++) {
-		domainsin[0].options[i].selected = true;
+	for (i=0; i < nlo_adminofdomains[0].options.length; i++) {
+		nlo_adminofdomains[0].options[i].selected = true;
 	}
 }
 
-// moves a domain from the "domainsin[]" element to the "domains[]" element
+// moves a domain from the "adminofdomains[]" element to the "domains[]" element
 // this means that the domain is removed from the user's list of administrated
 // domains
 function delDomain() {
-	var domainsin = document.getElementsByName("domainsin[]");
-	var domains = document.getElementsByName("domains[]");
+	var nlo_adminofdomains = document.getElementsByName("nlo_adminofdomains[]");
+	var nlo_availabledomains = document.getElementsByName("nlo_availabledomains[]");
 
-	for (i=0; i < domainsin[0].options.length; i++) {
-		if (domainsin[0].options[i].selected == true) {
-			domains[0].appendChild(domainsin[0].options[i]);
+	for (i=0; i < nlo_adminofdomains[0].options.length; i++) {
+		if (nlo_adminofdomains[0].options[i].selected == true) {
+			nlo_availabledomains[0].appendChild(nlo_adminofdomains[0].options[i]);
 		}
 	}
 }
 
-// moves a domain from the "domains[]" element to the "domainsin[]" element
+// moves a domain from the "domains[]" element to the "adminofdomains[]" element
 // this means that the domain is added to the user's list of administrated
 // domains
 function addDomain() {
-	var domainsin = document.getElementsByName("domainsin[]");
-	var domains = document.getElementsByName("domains[]");
+	var nlo_adminofdomains = document.getElementsByName("nlo_adminofdomains[]");
+	var nlo_availabledomains = document.getElementsByName("nlo_availabledomains[]");
 
-	for (i=0; i < domains[0].options.length; i++) {
-		if (domains[0].options[i].selected == true) {
-			domainsin[0].appendChild(domains[0].options[i]);
+	for (i=0; i < nlo_availabledomains[0].options.length; i++) {
+		if (nlo_availabledomains[0].options[i].selected == true) {
+			nlo_adminofdomains[0].appendChild(nlo_availabledomains[0].options[i]);
 		}
 	}
 }
