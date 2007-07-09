@@ -61,66 +61,30 @@ class content_globaladmins_edit extends module_base
                 unset($my_domain["admins"]);
             }
 
-            if (isset($_POST["nonadmins"])) {
-                $nonadmins = $my_domain["nonadmins"];
-                unset($my_domain["nonadmins"]);
-            }
-
             unset($my_domain["submit"]);
             
-            $ldapadmins = $this->ldap->listAdminUsers();
+            $admins_cur = $this->ldap->listAdminUsers(null,"TRUE");
             
-            $count = 0;
+            if (!isset($admins)) {
+                $admins = array();
+            }
 
             /* create array of new admins */
-            if (isset($admins)) {
-                foreach ($admins as $admin) {
-                    $isinarray = 0;
-                    for ($c=0; $c < $ldapadmins[0]["member"]["count"]; $c++) {
-                        if ($admin == $ldapadmins[0]["member"][$c]){
-                            $isinarray = 1;
-                            break;
-                        }
-                    }
-
-                    if ($isinarray == 0) {
-                        $adminsadd[$count] = $admin;
-                        $count++;
-                    }
-                }
-
-                $count = 0;
-            }
+            $adminsadd = array_values(array_diff($admins,$admins_cur));
 
             /* create array of removed admins */
-            for ($i=0; $i < $ldapadmins[0]["member"]["count"]; $i++) {
-                $isinarray = 0;
-                
-                if (isset($admins)) {
-                    foreach ($admins as $admin) {
-                        if ($ldapadmins[0]["member"][$i] == $admin) {
-                            $isinarray = 1;
-                            break;
-                        }
-                    }
-                }
+            $adminsdel = array_values(array_diff($admins_cur,$admins));
 
-                if ($isinarray == 0) {
-                    $adminsdel[$count] = $ldapadmins[0]["member"][$i];
-                    $count++;
-                }
-            }
-            
             /* add admins to ldap if neccesary */
-            if (isset($adminsadd)) {
+            if ( count($adminsadd) > 0 ) {
                 $this->ldap->addAdminUsers(null, $adminsadd);
             }
-
-            /* delete admins from ldap if neccesary */
-            if (isset($adminsdel)) {
-                $this->ldap->delAdminUsers(null, $adminsdel);
-            }
             
+            /* delete admins from ldap if neccesary */
+            if ( count($adminsdel) > 0 ) {
+                $this->ldap->deleteAdminUsers(null, $adminsdel);
+            }
+
             $submit_status = ldap_errno($this->ldap->cid);
             if ($submit_status == "0") {
                 $this->smarty->assign("submit_status",$submit_status);
@@ -132,47 +96,30 @@ class content_globaladmins_edit extends module_base
         }
 
         $this->smarty->assign("mode","modify");
-        
+
+
+        $systemusers = $this->ldap->listSystemUsers();
+        if ( count($systemusers) == 0 ) $systemusers = array();
+        unset($systemusers["count"]);
+
         $admins = $this->ldap->listAdminUsers();
-        $users = $this->ldap->listSystemUsers();
+        if ( count($admins) == 0 ) $admins = array();
+        unset($admins["count"]);
 
-        $tmpadmins = $this->ldap->listAdminUsers();
-        $users = $this->ldap->listSystemUsers();
+        array_walk($systemusers,'my_serialize');
+        array_walk($admins,'my_serialize');
 
-        $admins = array();
+        $nonadmins = array_values(array_diff($systemusers,$admins));
 
-        unset($users["count"]);
-
-        $tmpusers = $users;
-        $users = array();
-
-        if (isset($tmpadmins[0])) {
-            foreach ($tmpusers as $user)
-            {
-                $isset = 0;
-                unset ($tmpadmins[0]["member"]["count"]);
-
-                foreach ($tmpadmins[0]["member"] as $admin) {
-                    if ($user["dn"] == $admin) {
-                        $isset = 1;
-                        $tmp = $this->ldap->getEntry($admin);
-                        array_push($admins, $tmp[0]);
-                        break;
-                    }
-                }
-
-                if ($isset == 0) {
-                    array_push($users, $user);
-                }
-            }
-        }
+        array_walk($admins,'my_unserialize');
+        array_walk($nonadmins,'my_unserialize');
 
         if (isset($admins)) {
             $this->smarty->assign("admins", $admins);
         }
 
-        if (isset($users)) {
-            $this->smarty->assign("nonadmins", $users);
+        if (isset($nonadmins)) {
+            $this->smarty->assign("nonadmins", $nonadmins);
         }
     }
 

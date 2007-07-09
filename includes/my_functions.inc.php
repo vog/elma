@@ -30,10 +30,13 @@
 /**
  * wrapper around print_r function
  */
-function my_print_r ( $data ) {
+function my_print_r ( $data , $header="") {
+    echo "<div align='left' style='border: 2px red solid; background-color: lightgray; padding: 10px; margin: 10px; font-size: 10'>";
     echo "<pre>";
+    if ( strlen($header) > 0 ) echo "<h1>$header</h1>";
     print_r($data);
     echo "</pre>";
+    echo "</div>";
 }
 
 /**
@@ -143,5 +146,15 @@ function validate_data($string,$object) {
     }
 return $valid_data;
 }
+
+function my_serialize(&$array,$position) { 
+    $array = serialize($array); 
+} 
+  
+function my_unserialize(&$array,$position) { 
+    $array = unserialize($array); 
+} 
+ 
+
 
 // vim:tabstop=4:expandtab:shiftwidth=4:filetype=php:syntax:ruler:

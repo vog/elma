@@ -51,7 +51,7 @@ class content_systemuser_delete extends module_base
     {
         if ( isset($_POST["submit"]) ) {
             $uid = $_POST["uid"];
-            $this->ldap->delSystemUser($uid);
+            $this->ldap->deleteSystemUser($uid);
             
             $submit_status = ldap_errno($this->ldap->cid);
             if ($submit_status == "0") {

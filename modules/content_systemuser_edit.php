@@ -68,9 +68,9 @@ class content_systemuser_edit extends module_base
                 $my_systemuser["userpassword"] =  "{MD5}".base64_encode(pack("H*",md5($my_systemuser["clearpassword"])));
             }
 
-            if (! defined(SAVECLEARPASS) || empty($my_systemuser["clearpassword"])) {
+            //if (! defined(SAVECLEARPASS) || empty($my_systemuser["clearpassword"])) {
                 unset($my_systemuser["clearpassword"]);
-            }
+           // }
 
             $validation_errors = validate_systemuser($my_systemuser);
             if (count($validation_errors) == 0) {
@@ -79,14 +79,15 @@ class content_systemuser_edit extends module_base
                         $this->ldap->addSystemUser($my_systemuser);
                     break;
                     case "modify": 
+                        if ( count($new_adminofdomains) == 0) $new_adminofdomains = array();
                         $old_adminofdomains = $this->ldap->getSystemUsersDomains($systemuser);
                         unset ($my_systemuser["adminofdomains"]);
                         
-                        $this->ldap->modSystemUser($my_systemuser);
+                        $this->ldap->modifySystemUser($my_systemuser);
 
                         $addDomainAdmin = array();
                         $delDomainAdmin = array();
-
+                        
 
                         /* check if the user is admin already */
                         /* and put him onto the add array if not */
@@ -96,15 +97,15 @@ class content_systemuser_edit extends module_base
                         /* and put him onto the del array if he isn't any longer */
                         $delDomainAdmin = array_diff($old_adminofdomains,$new_adminofdomains);
 
-                        if (isset($addDomainAdmin)) {
+                        if ( count($addDomainAdmin) > 0 ) {
                             foreach($addDomainAdmin as $domain) {
                                 $this->ldap->addAdminUsers($domain, "uid=".$systemuser.",".LDAP_USERS_ROOT_DN);
                             }
                         }
                         
-                        if (isset($delDomainAdmin)) {
+                        if ( count($delDomainAdmin) > 0) {
                             foreach($delDomainAdmin as $domain) {
-                                $this->ldap->delAdminUsers($domain, "uid=".$systemuser.",".LDAP_USERS_ROOT_DN);
+                                $this->ldap->deleteAdminUsers($domain, "uid=".$systemuser.",".LDAP_USERS_ROOT_DN);
                             }
                         }
                     break;

@@ -55,24 +55,20 @@
                                                 {t}Administrators{/t}
                                                 <br />
                                                 <select name="admins[]" size="8" multiple="multiple">
-                                                    {if $notnulladmins.sysUser == 1}
                                                     <optgroup label="{t}Systemusers{/t}">
                                                     {foreach from=$admins item=admin}
-                                                        {if $admin.mailUser == 0}
+                                                        {if ! @in_array("mailUser",$admin.objectclass) }
                                                         <option value="{$admin.dn}">{$admin.uid[0]} ({$admin.cn[0]} {$admin.sn[0]})</option>
                                                         {/if}
                                                     {/foreach}
                                                     </optgroup>
-                                                    {/if}
-                                                    {if $notnulladmins.mailUser == 1}
                                                     <optgroup label="{t}Domainsusers{/t}">
                                                     {foreach from=$admins item=admin}
-                                                        {if $admin.mailUser == 1}
+                                                        {if @in_array("mailUser",$admin.objectclass) }
                                                         <option value="{$admin.dn}">{$admin.uid[0]} ({$admin.cn[0]} {$admin.sn[0]})</option>
                                                         {/if}
                                                     {/foreach}
                                                     </optgroup>
-                                                    {/if}
                                                 </select>
                                             </td>
                                             <td>
@@ -89,24 +85,20 @@
                                                 {t}available users{/t}
                                                 <br />
                                                 <select name="nonadmins[]" size="8" multiple="multiple">
-                                                    {if $notnullnonadmins.sysUser == 1}
                                                     <optgroup label="{t}Systemusers{/t}">
                                                     {foreach from=$nonadmins item=nonadmin}
-                                                        {if $nonadmin.mailUser == 0}
+                                                        {if ! @in_array("mailUser",$nonadmin.objectclass) }
                                                         <option value="{$nonadmin.dn}">{$nonadmin.uid[0]} ({$nonadmin.cn[0]} {$nonadmin.sn[0]})</option>
                                                         {/if}
                                                     {/foreach}
                                                     </optgroup>
-                                                    {/if}
-                                                    {if $notnullnonadmins.mailUser == 1}
                                                     <optgroup label="{t}Domainusers{/t}">
                                                     {foreach from=$nonadmins item=nonadmin}
-                                                        {if $nonadmin.mailUser == 1}
+                                                        {if @in_array("mailUser",$nonadmin.objectclass) }
                                                         <option value="{$nonadmin.dn}">{$nonadmin.uid[0]} ({$nonadmin.cn[0]} {$nonadmin.sn[0]})</option>
                                                         {/if}
                                                     {/foreach}
                                                     </optgroup>
-                                                    {/if}
                                                 </select>
                                             </td>
                                         </tr>

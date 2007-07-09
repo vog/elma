@@ -91,53 +91,24 @@ class content_domain_edit extends module_base
                     case "modify": 
                         $this->ldap->modifyDomain($my_domain);
 
-                        $ldapadmins = $this->ldap->listAdminUsers($domain);
-                        
-                        $count = 0;
+                        $admins_cur = $this->ldap->listAdminUsers($domain, TRUE);
 
                         if (!isset($admins)) {
                             $admins = array();
+                            //array_push ($admins, LDAP_ADMIN_DN);
                         }
 
                         /* create array of new admins */
-                        foreach ($admins as $admin) {
-                            $isinarray = 0;
-                            for ($c=0; $c < $ldapadmins[0]["member"]["count"]; $c++) {
-                                if ($admin == $ldapadmins[0]["member"][$c]){
-                                    $isinarray = 1;
-                                    break;
-                                }
-                            }
-
-                            if ($isinarray == 0) {
-                                $adminsadd[$count] = $admin;
-                                $count++;
-                            }
-                        }
-
-                        $count = 0;
-
+                        $adminsadd = array_values(array_diff($admins,$admins_cur));
+                        
                         /* create array of removed admins */
-                        for ($i=0; $i < $ldapadmins[0]["member"]["count"]; $i++) {
-                            $isinarray = 0;
-                            foreach ($admins as $admin) {
-                                if ($ldapadmins[0]["member"][$i] == $admin) {
-                                    $isinarray = 1;
-                                    break;
-                                }
-                            }
+                        $adminsdel = array_values(array_diff($admins_cur,$admins));
 
-                            if ($isinarray == 0) {
-                                $adminsdel[$count] = $ldapadmins[0]["member"][$i];
-                                $count++;
-                            }
-                        }
-
-                        if (isset($adminsadd)) {
+                        if ( count($adminsadd) > 0 ) {
                             $this->ldap->addAdminUsers($domain, $adminsadd);
                         }
-                        if (isset($adminsdel)) {
-                            $this->ldap->delAdminUsers($domain, $adminsdel);
+                        if ( count($adminsdel) > 0 ) {
+                            $this->ldap->deleteAdminUsers($domain, $adminsdel);
                         }
                         break;
                 }
@@ -160,97 +131,51 @@ class content_domain_edit extends module_base
             $this->smarty->assign("mode","add");
             $this->smarty->assign("domain",array());
 
-            $users = $this->ldap->listSystemUsers();
+            $systemusers = $this->ldap->listSystemUsers();
+            unset($systemusers["count"]);
 
-            if (isset($users)) {
-                unset($users["count"]);
-
-                $tmpusers = $users;
-                $users = array();
-
-                foreach ($tmpusers as $user) {
-                    $user["mailUser"] = 0;
-                    array_push($users, $user);
-                }
-
-                $tmp["sysUser"] = 1;
-
-                $this->smarty->assign("nonadmins", $users);
-                $this->smarty->assign("notnullnonadmins", $tmp);
-            }
+            $this->smarty->assign("nonadmins", $systemusers);
         } else {
             $this->smarty->assign("mode","modify");
             $this->smarty->assign("domain",$this->ldap->getDomain($domain));
             
-            $tmpadmins = $this->ldap->listAdminUsers($domain);
-            $tmpusers = $this->ldap->listSystemUsers();
+            /* create a users/admin array from system- and mailusers 
+             * and unset the count key from users/admins array
+             * to have useful arrays for the smarty output.
+             * serializing is neccessary to diff the multidimensional
+             * arrays.
+             */
+
+            $systemusers = $this->ldap->listSystemUsers();
+            if ( count($systemusers) == 0 ) $systemusers = array();
+            unset($systemusers["count"]);
+
             $mailusers = $this->ldap->listUsers($domain);
-
-            $users = array();
-            $admins = array();
-
-            unset($tmpusers["count"]);
+            if ( count($mailusers) == 0 ) $mailusers = array();
             unset($mailusers["count"]);
+            
+            $nonadmins = array_merge($systemusers,$mailusers);
+            if ( count($nonadmins) == 0 ) $nonadmins = array();
+            unset($nonadmins["count"]);
 
-            foreach ($tmpusers as $tmpuser) {
-                array_push($users, $tmpuser);
-            }
+            $admins = $this->ldap->listAdminUsers($domain);
+            if ( count($admins) == 0 ) $admins = array();
+            unset($admins["count"]);
 
-            foreach ($mailusers as $mailuser) {
-                array_push($users, $mailuser);
-            }
+            array_walk($nonadmins,'my_serialize');
+            array_walk($admins,'my_serialize');
+            
+            $nonadmins = array_values(array_diff($nonadmins,$admins));
 
-            $tmpusers = $users;
-            $users = array();
-
-            if (isset($tmpadmins[0])) {
-                foreach ($tmpusers as $user)
-                {
-                    $isset = 0;
-                    unset ($tmpadmins[0]["member"]["count"]);
-
-                    foreach ($tmpadmins[0]["member"] as $admin) {
-                        if ($user["dn"] == $admin) {
-                            $isset = 1;
-                            $tmp = $this->ldap->getEntry($admin);
-                            if (strstr($tmp[0]["dn"], LDAP_DOMAINS_ROOT_DN)) {
-                                $tmp[0]["mailUser"] = 1;
-                                $notnulladmins["mailUser"] = 1;
-                            } else {
-                                $tmp[0]["mailUser"] = 0;
-                                $notnulladmins["sysUser"] = 1;
-                            }
-                            array_push($admins, $tmp[0]);
-                            break;
-                        }
-                    }
-
-                    if ($isset == 0) {
-                        if (strstr($user["dn"], LDAP_DOMAINS_ROOT_DN)) {
-                            $user["mailUser"] = 1;
-                            $notnullusers["mailUser"] = 1;
-                        } else {
-                            $user["mailUser"] = 0;
-                            $notnullusers["sysUser"] = 1;
-                        }
-                        array_push($users, $user);
-                    }
-                }
-            } else {
-            }
+            array_walk($admins,'my_unserialize');
+            array_walk($nonadmins,'my_unserialize');
 
             if (isset($admins)) {
                 $this->smarty->assign("admins", $admins);
-                if (isset($notnulladmins)) {
-                    $this->smarty->assign("notnulladmins", $notnulladmins);
-                }
             }
 
-            if (isset($users)) {
-                $this->smarty->assign("nonadmins", $users);
-                if (isset($notnullusers)) {
-                    $this->smarty->assign("notnullnonadmins", $notnullusers);
-                }
+            if (isset($nonadmins)) {
+                $this->smarty->assign("nonadmins", $nonadmins);
             }
         }
     }
