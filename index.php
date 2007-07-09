@@ -64,6 +64,7 @@ if (!isset($_SESSION["login"])) {
         $smarty->assign('username',$_SESSION['username']);
         $smarty->assign('userclass',$_SESSION['userclass']);
         $smarty->assign('acl',$acl[$_SESSION['userclass']]);
+        $smarty->assign('get',$_GET);
 
         $content = $content_module->getContent();
     } else {

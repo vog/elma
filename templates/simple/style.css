@@ -23,6 +23,15 @@ div#Banner {
   padding: 0;
 }
 
+/* Pathfinder */
+div#Pathfinder {
+  margin: 0em 0em 0em 7.5em;
+  padding: 0 0 0 0.5em;
+  color: blue;
+  border-bottom: 1px black solid;
+  border-left: 1px black solid;
+}
+
 /* Navigation elements */
 
 div#Navigation {
