@@ -106,8 +106,8 @@ class ELMA {
      * @active          string  "*" for listing all, "TRUE" for listing active only, "FALSE" for listing inactive only
      * @attribute       array   array of ldap attributes to return, empty array returns everything
      */
-    function listDomains ($active="*", $attribute=array() ) {
-        $domains = $this->getDomain("*", $active="*", $attribute=array());
+    function listDomains ($active="*", $attributes=array() ) {
+        $domains = $this->getDomain("*", $active="*", $attributes=array());
         return $domains;
     }
 
@@ -120,8 +120,8 @@ class ELMA {
      * @active          string  "*" for listing all, "TRUE" for listing active only, "FALSE" for listing inactive only
      * @attribute       array   ldap attributes to return, empty array returns everything
      */
-    function getDomain ( $domain_dc="*", $active="*", $attribute=array() ) {
-        $result = ldap_list($this->cid, LDAP_DOMAINS_ROOT_DN, "(&(objectClass=mailDomain)(dc=$domain_dc)(mailStatus=$active))", $attribute);
+    function getDomain ( $domain_dc="*", $active="*", $attributes=array() ) {
+        $result = ldap_list($this->cid, LDAP_DOMAINS_ROOT_DN, "(&(objectClass=mailDomain)(dc=$domain_dc)(mailStatus=$active))", $attributes);
         $domain = ldap_get_entries($this->cid, $result);
 
         if (isset($domain[0])) {
@@ -350,8 +350,8 @@ class ELMA {
      * @active          string  "*" for listing all, "TRUE" for listing active only, "FALSE" for listing inactive only
      * @attribute       array   ldap attributes to return, empty array returns everything
      */
-    function listAliases( $domain_dc, $active="*", $attribute=array() ) {
-        $aliases = $this->getAlias( $domain_dc, "*", $active="*", $attribute=array());
+    function listAliases( $domain_dc, $active="*", $attributes=array() ) {
+        $aliases = $this->getAlias( $domain_dc, "*", $active="*", $attributes=array());
         return $aliases;
     }
 
@@ -363,10 +363,10 @@ class ELMA {
      * @domain_dc       string  dc= value of the domain the alias is in
      * @alias_uid       string  uid= value if the alias, "*" returns all aliases for the given domain
      * @active          string  "*" for listing all, "TRUE" for listing active only, "FALSE" for listing inactive only
-     * @attribute       array   ldap attributes to return, empty array returns everything
+     * @attributes      array   ldap attributes to return, empty array returns everything
      */ 
-    function getAlias ( $domain_dc, $alias_uid = "*", $active="*", $attribute=array() ) {
-        $result = ldap_list($this->cid, "dc=".$domain_dc.",".LDAP_DOMAINS_ROOT_DN, "(&(objectclass=mailAlias)(uid=$alias_uid)(mailStatus=$active))", $attribute);
+    function getAlias ( $domain_dc, $alias_uid="*", $active="*", $attributes=array() ) {
+        $result = ldap_list($this->cid, "dc=".$domain_dc.",".LDAP_DOMAINS_ROOT_DN, "(&(objectclass=mailAlias)(uid=$alias_uid)(mailStatus=$active))", $attributes);
         $alias = ldap_get_entries($this->cid, $result);
         if ( $alias_uid !== "*" ) $alias = $alias[0];
         return $alias;
@@ -382,7 +382,7 @@ class ELMA {
      */
     function addAlias ( $domain_dc, $alias) {
         $alias["objectclass"] = "mailAlias";
-        ldap_add($this->cid, "uid=".$alias['uid'].",dc=".$domain_dc.",".LDAP_DOMAINS_ROOT_DN, $alias);a
+        ldap_add($this->cid, "uid=".$alias['uid'].",dc=".$domain_dc.",".LDAP_DOMAINS_ROOT_DN, $alias);
 
         if ( ldap_errno($this->cid) !== 0 ) {
             $result = ldap_error($this->cid);
@@ -563,16 +563,16 @@ class ELMA {
     # ADMINGROUP
 
     /**
-     * listAdminUsers - lists users from the given domain's admin group
+     * listAdminUsers - lists users from the give admingroup
      *
-     * This function lists all users listed in a domain's admingroup.
+     * This function lists all users from the global or a domain's admingroup.
      *
-     * @domain      string  dc= value of a domain
-     * @dn_only     boolean should only the dn be returned
+     * @domain_dc       string  dc= value of a domain
+     * @dn_only         boolean should only the dn be returned
      */
-    function listAdminUsers ($domain=null, $dn_only = "FALSE") {
-        if ( $domain != null ) {
-            $result = ldap_read($this->cid, "cn=admingroup,dc=".$domain.",".LDAP_DOMAINS_ROOT_DN,"member=*");
+    function listAdminUsers ($domain_dc=null, $dn_only = "FALSE") {
+        if ( $domain_dc != null ) {
+            $result = ldap_read($this->cid, "cn=admingroup,dc=".$domain_dc.",".LDAP_DOMAINS_ROOT_DN,"member=*");
         } else {
             $result = ldap_read($this->cid, LDAP_ADMIN_GROUP.",".LDAP_USERS_ROOT_DN,"member=*");
         }
@@ -607,14 +607,14 @@ class ELMA {
      *
      * when domain is not set the global admingroup will be used instead
      *
-     * @domain      string  dc= value of a domain's dn
-     * @users       array   dn's of one or more users
+     * @domain_dc       string  dc= value of a domain's dn
+     * @newadmins       array   dn's of one or more users
      */
-    function addAdminUsers ($domain=null, $newadmins=array()) {
+    function addAdminUsers ($domain_dc=null, $newadmins=array()) {
         $admingroup["member"] = $newadmins;
 
-        if ($domain != null) {
-            ldap_mod_add($this->cid, "cn=admingroup,dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, $admingroup);
+        if ($domain_dc != null) {
+            ldap_mod_add($this->cid, "cn=admingroup,dc=".$domain_dc.",".LDAP_DOMAINS_ROOT_DN, $admingroup);
         } else {
             ldap_mod_add($this->cid, LDAP_ADMIN_GROUP.",".LDAP_USERS_ROOT_DN, $admingroup);
         }
@@ -634,15 +634,14 @@ class ELMA {
      *
      * when domain is not set the global admingroup will be used instead
      *
-     * @domain      string  dc= value of a domain's dn
-     * @users       array   dn's of one or more users
+     * @domain_dc       string  dc= value of a domain's dn
+     * @users           array   dn's of one or more users
      */
-    function deleteAdminUsers ($domain=null, $users) {
-
+    function deleteAdminUsers ($domain_dc=null, $users) {
         if ( count($users) > 0 ) {
             $admins["member"] = $users;
-            if ($domain != null) {
-                ldap_mod_del($this->cid, "cn=admingroup,dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, $admins);
+            if ($domain_dc != null) {
+                ldap_mod_del($this->cid, "cn=admingroup,dc=".$domain_dc.",".LDAP_DOMAINS_ROOT_DN, $admins);
             } else {
                 ldap_mod_del($this->cid, LDAP_ADMIN_GROUP.",".LDAP_USERS_ROOT_DN, $admins);
             }
@@ -666,27 +665,22 @@ class ELMA {
      * when domain is set to null users will be counted globally
      * when active is set to "TRUE" only active users will be listed
      *
-     * @domain      string  dc= value of a domain's dn
-     * @active      string  * for global search, "TRUE" for actives only
+     * @domain_dc       string  dc= value of a domain's dn
+     * @active          string  * for global search, "TRUE" for actives only
      */
-    function userCount ($domain=null, $active="*") {
-        if ($domain != null) {
-            $result = $this->getUser($domain, "*", $active);
-            $tmpcount = $result["count"];
+    function userCount ($domain_dc=null, $active="*") {
+        $nrofusers = 0;
+        if ($domain_dc != null) {
+            $users = $this->getUser($domain_dc, "*", $active);
+            $nrofusers = $users["count"];
         } else {
-            $result = $this->listDomains();
-
-            $count = $result["count"];
-            $tmpcount = 0;
-
-            for ($i=0; $i<$count; $i++) {
-                $tmpresult = $this->getUser($result[$i]["dc"][0], "*", $active);
-                
-                $tmpcount += $tmpresult["count"];
+            $domains = $this->listDomains();
+            for ($i=0; $i<$domains["count"]; $i++) {
+                $users = $this->getUser($domains[$i]["dc"][0], "*", $active);
+                $nrofusers += $users["count"];
             }
         }
-
-        return $tmpcount;
+        return $nrofusers;
     }
 
     /**
@@ -697,27 +691,23 @@ class ELMA {
      * when domain is set to null users will be counted globally
      * when active is set to "TRUE" only active users will be listed
      *
-     * @domain      string  dc= value of a domain's dn
-     * @active      string  * for global search, "TRUE" for actives only
+     * @domain_dc       string  dc= value of a domain's dn
+     * @active          string  * for global search, "TRUE" for actives only
      */
-    function aliasCount ($domain=null, $active="*") {
-        if ($domain != null) {
-            $result = $this->getAlias($domain, "*", $active);
-            $tmpcount = $result["count"];
+    function aliasCount ($domain_dc=null, $active="*") {
+        $nrofaliases = 0;
+        if ($domain_dc != null) {
+            $aliases= $this->getAlias($domain_dc, "*", $active);
+            $nrofaliases = $aliases["count"];
         } else {
-            $result = $this->listDomains();
-
-            $count = $result["count"];
-            $tmpcount = 0;
-
-            for ($i=0; $i<$count; $i++) {
-                $tmpresult = $this->getAlias($result[$i]["dc"][0], "*", $active);
-                
-                $tmpcount += $tmpresult["count"];
+            $domains = $this->listDomains();
+            for ($i=0; $i<$domains["count"]; $i++) {
+                $aliases = $this->getAlias($domains[$i]["dc"][0], "*", $active);
+                $nrofaliases += $aliases["count"];
             }
         }
 
-        return $tmpcount;
+        return $nrofaliases;
     }
 
     /**
@@ -730,10 +720,10 @@ class ELMA {
      * @active      string  * for global search, "TRUE" for actives only
      */
     function domainCount ($active="*") {
-        $result = $this->getDomain("*", $active);
-        $tmpcount = $result["count"];
+        $domains = $this->getDomain("*", $active);
+        $nrofdomains = $domains["count"];
 
-        return $tmpcount;
+        return $nrofdomains;
     }
 
     /**
@@ -742,11 +732,10 @@ class ELMA {
      * This function counts systemUsers
      */
     function systemuserCount () {
-            $tmp = listAdminUsers();
-            $tmpcount = $tmp["count"];
+        $systemusers = listAdminUsers();
+        $nrofsystemusers = $systemusers["count"];
 
-            return $tmpcount;
-
+        return $nrofsystemusers;
     }
 
     /**
@@ -754,19 +743,19 @@ class ELMA {
      *
      * This function checks if the submitted user is in the global admingroup
      *
-     * @user        string  uid= value of a user's dn
+     * @user_uid         string  uid= value of a user's dn
      */
-    function isAdminUser ($user) {
-        $userdn = "uid=".$user.",".LDAP_USERS_ROOT_DN;
+    function isAdminUser ($user_uid) {
+        $is_admin = FALSE;
+        $user_dn = "uid=".$user_uid.",".LDAP_USERS_ROOT_DN;
 
-        $result = ldap_list($this->cid, LDAP_USERS_ROOT_DN, "(&(member=$userdn)(cn=admingroup))");
-        $result = ldap_get_entries($this->cid, $result);
+        $result = ldap_list($this->cid, LDAP_USERS_ROOT_DN, "(&(member=$user_dn)(cn=admingroup))");
+        $entries = ldap_get_entries($this->cid, $result);
 
-        if ($result["count"] == 0) {
-            return false;
-        } else {
-            return true;
+        if ($entries["count"] > 0) {
+            $is_admin = TRUE;
         }
+        return $is_admin;
     }
 
     /**
@@ -778,9 +767,9 @@ class ELMA {
      */
     function getEntry($dn, $filter="(objectClass=*)", $attributes = array()) {
         $result = ldap_read($this->cid, $dn, $filter, $attributes);
-        $result = ldap_get_entries($this->cid, $result);
+        $entries = ldap_get_entries($this->cid, $result);
 
-        return $result;
+        return $entries;
     }
 }
 // vim:tabstop=4:expandtab:shiftwidth=4:filetype=php:syntax:ruler: 
