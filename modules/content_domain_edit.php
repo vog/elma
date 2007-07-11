@@ -52,7 +52,8 @@ class content_domain_edit extends module_base
     {
         $domain = $_GET["domain"]; 
         $this->smarty->assign("domain",$domain);
-        
+        $this->smarty->assign("mailstorageservers",unserialize(MAILSTORAGESERVERS));
+
         // new domain created or existing domain altert 
         if (isset($_POST["submit"])) {
             // remove all non LDAP objects from submited form
@@ -130,7 +131,7 @@ class content_domain_edit extends module_base
         if ($domain == "new") {
             $this->smarty->assign("mode","add");
             $this->smarty->assign("domain",array());
-
+            
             $systemusers = $this->ldap->listSystemUsers();
             unset($systemusers["count"]);
 

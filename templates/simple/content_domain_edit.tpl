@@ -39,6 +39,20 @@
                                     <input type="checkbox" name="mailstatus" {if $domain.mailstatus.0 eq "TRUE"}checked="checked"{/if} />
                                 </td>
 			                </tr>
+                            {if @in_array("domain_edit.mailstorageserver",$acl) }
+                            <tr>
+                                <td>
+                                    {t}Mailstorageserver{/t}
+                                </td>
+                                <td>
+                                    <select name="mailstorageserver">
+                                    {foreach from=$mailstorageservers item=server}
+                                        <option {if $domain.mailstorageserver.0 eq $server}selected{/if}>{$server}</option>
+                                    {/foreach}       
+                                    </select>
+                                </td>
+                            </tr>
+                            {/if}
                             <tr>
                                 <td colspan="2"> 
                                     <hr />

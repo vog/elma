@@ -101,7 +101,10 @@ class ELMA {
     /**
      * listDomains - listing domains
      *
-     * This function lists any domain
+     * This function lists any domain, to which access is granted through LDAP ACLs.
+     *
+     * @active          string  "*" for listing all, "TRUE" for listing active only, "FALSE" for listing inactive only
+     * @attribute       array   array of ldap attributes to return, empty array returns everything
      */
     function listDomains ($active="*", $attribute=array() ) {
         $domains = $this->getDomain("*", $active="*", $attribute=array());
@@ -111,18 +114,23 @@ class ELMA {
     /**
      * getDomain - gets information about domain(s)
      *
-     * This function get information about domain(s) inside the ldap-tree
-     *
-     * when active is "TRUE" only active domains will be listed
+     * This function gets information about domain(s) from LDAP
      *
      * @domain_dc       string  dc= value of a domain's DN
-     * @active          string  "*" for listing any, "TRUE" for listing active domains only
+     * @active          string  "*" for listing all, "TRUE" for listing active only, "FALSE" for listing inactive only
+     * @attribute       array   ldap attributes to return, empty array returns everything
      */
     function getDomain ( $domain_dc="*", $active="*", $attribute=array() ) {
         $result = ldap_list($this->cid, LDAP_DOMAINS_ROOT_DN, "(&(objectClass=mailDomain)(dc=$domain_dc)(mailStatus=$active))", $attribute);
         $domain = ldap_get_entries($this->cid, $result);
+
         if (isset($domain[0])) {
-            if ( $domain_dc !== "*" ) $domain = $domain[0];
+            if ( $domain_dc !== "*" ) {
+                $domain = $domain[0];
+                if ( count($attribute) == 1 ) {
+                    $domain = $domain[$attribute[0]];
+                }
+            }
         }
         return $domain;
     }
@@ -130,21 +138,23 @@ class ELMA {
     /**
      * addDomain - adds a domain
      *
-     * This functions adds a domain and an admingroup
+     * This functions adds a domain and an admingroup 
      * the main-admin is included in this admingroup by default
      *
-     * @domain      array   information about the domain
-     * @admins      array   admin dns
+     * @domain          array   information about the domain
+     * @admins          array   admin dn's
      */
     function addDomain ( $domain , $admins ) {
         $domain["objectclass"] = "mailDomain";
         ldap_add($this->cid, "dc=".$domain['dc'].",".LDAP_DOMAINS_ROOT_DN, $domain);
+
         if ( ldap_errno($this->cid) !== 0 ) {
             $result = ldap_error($this->cid);
         } else {
             $result = 0;
         }
 
+        /* create the admingroup object */
         array_push ($admins, LDAP_ADMIN_DN);
 
         $group["cn"] = "admingroup";
@@ -163,7 +173,19 @@ class ELMA {
      * @domain      array   information about the domain
      */
     function modifyDomain ( $domain ) {
+
+        /* set the mailstorage server for all domain users changed */
+        if ( isset($domain["mailstorageserver"]) ) {
+            $domain_users = $this->listUsers($domain["dc"]);
+            for ($i=0; $i<$domain_users["count"]; $i++) {
+                $domain_user["uid"] = $domain_users[$i]["uid"][0];               
+                $domain_user["mailstorageserver"] = $domain["mailstorageserver"];
+                $this->modifyUser($domain["dc"],$domain_user);
+            }
+        }
+
         ldap_modify($this->cid,"dc=".$domain["dc"].",".LDAP_DOMAINS_ROOT_DN, $domain);
+
         if ( ldap_errno($this->cid) !== 0 ) {
             $result = ldap_error($this->cid);
         } else {
@@ -181,6 +203,7 @@ class ELMA {
      */
     function deleteDomain ( $domain ) {
         my_ldap_delete($this->cid,"dc=$domain,".LDAP_DOMAINS_ROOT_DN,true);
+
         if ( ldap_errno($this->cid) !== 0 ) {
             $result = ldap_error($this->cid);
         } else {
@@ -197,10 +220,12 @@ class ELMA {
      *
      * This function lists any user in the specified domain
      *
-     * @domain      string  dc= value of a domain's DN
+     * @domain_dc       string  dc= value of a domain's DN
+     * @active          string  "*" for listing all, "TRUE" for listing active only, "FALSE" for listing inactive only
+     * @attribute       array   ldap attributes to return, empty array returns everything
      */
-    function listUsers( $domain, $active="*", $attribute = array() ) {
-        $users = $this->getUser( $domain, "*", $active="*", $attribute );
+    function listUsers( $domain_dc, $active="*", $attribute = array() ) {
+        $users = $this->getUser( $domain_dc, "*", $active="*", $attribute );
         return $users;
     }
 
@@ -209,12 +234,13 @@ class ELMA {
      *
      * This function gets information about a specific user
      *
-     * @domain      string  dc= value of a domain's DN where the user is in
-     * @user_uid    string  uid= value of the user's DN
-     * @active      string  "*" shows any user, "TRUE" shows active users only
+     * @domain_dc       string  dc= value of a domain's DN where the user is in
+     * @user_uid        string  uid= value of the user's DN
+     * @active          string  "*" for listing all, "TRUE" for listing active only, "FALSE" for listing inactive only
+     * @attribute       array   ldap attributes to return, empty array returns everything
      */
-    function getUser ( $domain, $user_uid = "*", $active="*", $attribute = array() ) {
-        $result = ldap_list($this->cid, "dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, "(&(objectclass=mailUser)(uid=$user_uid))", $attribute);
+    function getUser ( $domain_dc, $user_uid = "*", $active="*", $attribute = array() ) {
+        $result = ldap_list($this->cid, "dc=".$domain_dc.",".LDAP_DOMAINS_ROOT_DN, "(&(objectclass=mailUser)(uid=$user_uid))", $attribute);
         $user = ldap_get_entries($this->cid, $result);
         if ( $user_uid !== "*" ) $user = $user[0];
         return $user;
@@ -225,12 +251,17 @@ class ELMA {
      *
      * This function adds a user to the ldap-tree
      *
-     * @domain      string  dc= value of the domain the user should belong to
-     * @user        array   information about the user
+     * @domain_dc       string  dc= value of the domain the user should belong to
+     * @user            array   information about the user
      */
-    function addUser ( $domain, $user) {
+    function addUser ( $domain_dc, $user ) {
+        $user["mailStorageserver"] = $this->getDomain($domain_dc,"*",array("mailstorageserver"));
+        $user["mailStorageserver"] = $user["mailStorageserver"][0]; 
+        $user["homeDirectory"] = DEFAULT_HOMEDIR_ROOT."/$domain_dc/".$user['uid'];
         $user["objectclass"] = "mailUser";
-        ldap_add($this->cid, "uid=".$user['uid'].",dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, $user);
+
+        ldap_add($this->cid, "uid=".$user['uid'].",dc=".$domain_dc.",".LDAP_DOMAINS_ROOT_DN, $user);
+
         if ( ldap_errno($this->cid) !== 0 ) {
             $result = ldap_error($this->cid);
         } else {
@@ -244,11 +275,12 @@ class ELMA {
      *
      * This function modifies the information of a user
      *
-     * @domain      string  dc= value of the domain the user is in
-     * @user        array   information about the user
+     * @domain_dc       string  dc= value of the domain the user is in
+     * @user            array   information about the user
      */
-    function modifyUser ( $domain, $user) {
-        ldap_modify($this->cid, "uid=".$user['uid'].",dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, $user);
+    function modifyUser ( $domain_dc, $user ) {
+        ldap_modify($this->cid, "uid=".$user['uid'].",dc=".$domain_dc.",".LDAP_DOMAINS_ROOT_DN, $user);
+
         if ( ldap_errno($this->cid) !== 0 ) {
             $result = ldap_error($this->cid);
         } else {
@@ -260,13 +292,13 @@ class ELMA {
     /**
      * deleteUser - deleting a user
      *
-     * This function removes a user from the ldap-tree
+     * This function removes a user from the LDAP
      * (including his presence in any admingroup)
      *
-     * @domain      string  dc= value of the domain the user is in
-     * @user        string  uid= value of the users DN
+     * @domain_dc       string  dc= value of the domain the user is in
+     * @user_uid        string  uid= value of the users DN
      */
-    function deleteUser ( $domain, $user) {
+    function deleteUser ( $domain_dc, $user_uid) {
         $searchresult = ldap_search($this->cid, LDAP_BASEDN, "(&(member=*)(cn=admingroup))");
         $searchresult = ldap_get_entries($this->cid, $searchresult);
         
@@ -276,6 +308,7 @@ class ELMA {
             $result = 0;
         }
 
+        /* find out where user is admin. guess this can be done easier. */
         for ($i=0; $i<$searchresult["count"]; $i++) {
             for ($c=0; $c<$searchresult[$i]["member"]["count"]; $c++) {
                 $member = explode(",", $searchresult[$i]["member"][$c]);
@@ -296,7 +329,8 @@ class ELMA {
             }
         }
 
-        ldap_delete($this->cid, "uid=".$user.",dc=".$domain.",".LDAP_DOMAINS_ROOT_DN);
+        ldap_delete($this->cid, "uid=".$user.",dc=".$domain_dc.",".LDAP_DOMAINS_ROOT_DN);
+
         if ( ldap_errno($this->cid) !== 0 ) {
             $result = ldap_error($this->cid);
         } else {
@@ -312,10 +346,12 @@ class ELMA {
      *
      * This function lists all aliases in a specific domain
      *
-     * @domain      string  dc= value of a domain's DN
+     * @domain          string  dc= value of a domain's DN
+     * @active          string  "*" for listing all, "TRUE" for listing active only, "FALSE" for listing inactive only
+     * @attribute       array   ldap attributes to return, empty array returns everything
      */
-    function listAliases( $domain, $active="*", $attribute=array() ) {
-        $aliases = $this->getAlias( $domain, "*", $active="*", $attribute=array());
+    function listAliases( $domain_dc, $active="*", $attribute=array() ) {
+        $aliases = $this->getAlias( $domain_dc, "*", $active="*", $attribute=array());
         return $aliases;
     }
 
@@ -324,12 +360,13 @@ class ELMA {
      *
      * This function gets information about an alias
      *
-     * @domain      string  dc= value of the domain the alias is in
-     * @alias_uid   string  uid= value of the alias
-     * @active      string  "*" lists any alias, "TRUE" lists active aliases only
+     * @domain_dc       string  dc= value of the domain the alias is in
+     * @alias_uid       string  uid= value if the alias, "*" returns all aliases for the given domain
+     * @active          string  "*" for listing all, "TRUE" for listing active only, "FALSE" for listing inactive only
+     * @attribute       array   ldap attributes to return, empty array returns everything
      */ 
-    function getAlias ( $domain, $alias_uid = "*", $active="*", $attribute=array() ) {
-        $result = ldap_list($this->cid, "dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, "(&(objectclass=mailAlias)(uid=$alias_uid)(mailStatus=$active))", $attribute);
+    function getAlias ( $domain_dc, $alias_uid = "*", $active="*", $attribute=array() ) {
+        $result = ldap_list($this->cid, "dc=".$domain_dc.",".LDAP_DOMAINS_ROOT_DN, "(&(objectclass=mailAlias)(uid=$alias_uid)(mailStatus=$active))", $attribute);
         $alias = ldap_get_entries($this->cid, $result);
         if ( $alias_uid !== "*" ) $alias = $alias[0];
         return $alias;
@@ -340,12 +377,13 @@ class ELMA {
      *
      * This function add an alias to the specified domain
      *
-     * @domain      string  dc= value of a domain's DN
-     * @alias       array   information about an alias
+     * @domain_dc       string  dc= value of a domain's DN
+     * @alias           array   information about an alias
      */
-    function addAlias ( $domain, $alias) {
+    function addAlias ( $domain_dc, $alias) {
         $alias["objectclass"] = "mailAlias";
-        ldap_add($this->cid, "uid=".$alias['uid'].",dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, $alias);
+        ldap_add($this->cid, "uid=".$alias['uid'].",dc=".$domain_dc.",".LDAP_DOMAINS_ROOT_DN, $alias);a
+
         if ( ldap_errno($this->cid) !== 0 ) {
             $result = ldap_error($this->cid);
         } else {
@@ -359,11 +397,12 @@ class ELMA {
      *
      * This function modifies an alias in a specific domain
      *
-     * @domain      string  dc= value of a domain's DN
-     * @alias       array   information about the alias
+     * @domain_dc       string  dc= value of a domain's DN
+     * @alias           array   information about the alias
      */
-    function modifyAlias ( $domain, $alias ) {
-        ldap_modify($this->cid, "uid=".$alias['uid'].",dc=".$domain.",".LDAP_DOMAINS_ROOT_DN, $alias);
+    function modifyAlias ( $domain_dc, $alias ) {
+        ldap_modify($this->cid, "uid=".$alias['uid'].",dc=".$domain_dc.",".LDAP_DOMAINS_ROOT_DN, $alias);
+
         if ( ldap_errno($this->cid) !== 0 ) {
             $result = ldap_error($this->cid);
         } else {
@@ -377,11 +416,12 @@ class ELMA {
      *
      * This function deletes an alias inside a specific domain
      *
-     * @domain      string  dc= value of a domain's DN
-     * @alias       string  uid= value of the alias
+     * @domain_dc       string  dc= value of a domain's DN
+     * @alias_uid       string  uid= value of the alias's DN
      */
-    function deleteAlias ( $domain, $alias ) {
-        ldap_delete($this->cid, "uid=".$alias.",dc=".$domain.",".LDAP_DOMAINS_ROOT_DN);
+    function deleteAlias ( $domain, $alias_uid ) {
+        ldap_delete($this->cid, "uid=".$alias_uid.",dc=".$domain_dc.",".LDAP_DOMAINS_ROOT_DN);
+
         if ( ldap_errno($this->cid) !== 0 )
         {
             $result = ldap_error($this->cid);
@@ -399,10 +439,11 @@ class ELMA {
      *
      * This function is used to link to the getSystemUser function only
      *
+     * @attributes      array   ldap attributes to return, empty array returns everything
      */
-    function listSystemUsers ($attributes = array()) {
-        $users = $this->getSystemUser("*", $attributes);
-        return $users;
+    function listSystemUsers ( $attributes = array() ) {
+        $systemusers = $this->getSystemUser("*", $attributes);
+        return $systemusers;
     }
 
     /**
@@ -410,21 +451,18 @@ class ELMA {
      *
      * This function returns information about systemusers
      * 
-     * when user_uid is set information about this user will be returned only
-     * when user_uid has no value or "*" it will return information about all systemusers
-     *
-     * @user_uid    string  a uid= value
-     *
+     * @user_uid        string  uid= value of systemuser, "*" returns all systemusers
+     * @attributes      array   ldap attributes to return, empty array returns everything
      */
-    function getSystemUser ( $user_uid = "*", $attributes = array() ) {
-        $result = ldap_list($this->cid, LDAP_USERS_ROOT_DN, "(&(objectclass=inetOrgPerson)(uid=$user_uid))", $attributes);
-        $user = ldap_get_entries($this->cid, $result);
+    function getSystemUser ( $systemuser_uid = "*", $attributes = array() ) {
+        $result = ldap_list($this->cid, LDAP_USERS_ROOT_DN, "(&(objectclass=inetOrgPerson)(uid=$systemuser_uid))", $attributes);
+        $systemuser = ldap_get_entries($this->cid, $result);
 
-        if ($user_uid != "*") {
-            $user = $user[0];
+        if ($systemuser_uid != "*") {
+            $systemuser = $systemuser[0];
         }
 
-        return $user;
+        return $systemuser;
     }
 
     /**
@@ -432,13 +470,13 @@ class ELMA {
      *
      * This function will add a systemuser using the submitted information
      *
-     * @user        array   an array of information about the user
+     * @systemuser      array   information about the systemuser
      */
-    function addSystemUser ( $user ) {
-        $user["objectClass"][0] = "inetOrgPerson"; 
-        $user["objectClass"][1] = "simpleSecurityObject";
+    function addSystemUser ( $systemuser ) {
+        $systemuser["objectClass"][0] = "inetOrgPerson"; 
+        $systemuser["objectClass"][1] = "simpleSecurityObject";
 
-        ldap_add($this->cid, "uid=".$user['uid'].",".LDAP_USERS_ROOT_DN, $user);
+        ldap_add($this->cid, "uid=".$systemuser['uid'].",".LDAP_USERS_ROOT_DN, $systemuser);
 
         if ( ldap_errno($this->cid) !== 0 ) {
             $result = ldap_error($this->cid);
@@ -454,10 +492,10 @@ class ELMA {
      * This function will modify the information of a systemuser using
      * the submitted information
      *
-     * @user        array   an array of information about the user
+     * @systemuser      array   information about the systemuser
      */
-    function modifySystemUser ( $user ) {
-        ldap_modify($this->cid, "uid=".$user['uid'].",".LDAP_USERS_ROOT_DN, $user);
+    function modifySystemUser ( $systemuser ) {
+        ldap_modify($this->cid, "uid=".$systemuser['uid'].",".LDAP_USERS_ROOT_DN, $systemuser);
 
         if ( ldap_errno($this->cid) !== 0 ) {
             $result = ldap_error($this->cid);
@@ -472,18 +510,18 @@ class ELMA {
      *
      * This function will remove a systemUser and his entries in all adminsgroups he's in
      *
-     * @user        string  the uid= value of the user's dn
+     * @systemuser      string  uid= value of the systemuser's DN
      */
-    function deleteSystemUser ( $user ) {
+    function deleteSystemUser ( $systemuser ) {
         /* delete admin from admingroups where neccessary */
-        $adminofdomains = $this->getSystemUsersDomains($user);
+        $adminofdomains = $this->getSystemUsersDomains($systemuser);
         foreach ($adminofdomains as $adminofdomain) {
-            $this->delAdminUsers($adminofdomain, "uid=$user,".LDAP_USERS_ROOT_DN);
+            $this->delAdminUsers($adminofdomain, "uid=$systemuser,".LDAP_USERS_ROOT_DN);
         }
 
         /* if the above was successfull delete the user object */
         if ($result == 0) {
-            ldap_delete($this->cid, "uid=".$user.",".LDAP_USERS_ROOT_DN);
+            ldap_delete($this->cid, "uid=".$systemuser.",".LDAP_USERS_ROOT_DN);
             
             if ( ldap_errno($this->cid) !== 0 ) {
                 $result = ldap_error($this->cid);
@@ -503,16 +541,16 @@ class ELMA {
      * This function returns all domain names for which the given
      * system user has administraive rights.
      *
-     * @user        string  the uid= value of the user's dn
+     * @systemuser_uid        string  uid= value of systemuser's DN
      */
-    function getSystemUsersDomains ( $user ) {
+    function getSystemUsersDomains ( $systemuser_uid ) {
 
-        $userdn = "uid=".$user.",".LDAP_USERS_ROOT_DN;
-        $search_result = ldap_search($this->cid, LDAP_DOMAINS_ROOT_DN, "(member=$userdn)");
+        $systemuserdn = "uid=".$systemuser_uid.",".LDAP_USERS_ROOT_DN;
+        $search_result = ldap_search($this->cid, LDAP_DOMAINS_ROOT_DN, "(member=$systemuserdn)");
         $domains_dn = ldap_get_entries($this->cid, $search_result);
         unset($domains_dn["count"]);
 
-        // extract the domain name from each dn found
+        /* extract the domain name from each dn found */
         $domains = array();
         foreach($domains_dn as $domain_dn) {
             $domain = ldap_explode_dn($domain_dn["dn"], 1);
@@ -709,6 +747,26 @@ class ELMA {
 
             return $tmpcount;
 
+    }
+
+    /**
+     * isAdminUser - checks if user is global admin
+     *
+     * This function checks if the submitted user is in the global admingroup
+     *
+     * @user        string  uid= value of a user's dn
+     */
+    function isAdminUser ($user) {
+        $userdn = "uid=".$user.",".LDAP_USERS_ROOT_DN;
+
+        $result = ldap_list($this->cid, LDAP_USERS_ROOT_DN, "(&(member=$userdn)(cn=admingroup))");
+        $result = ldap_get_entries($this->cid, $result);
+
+        if ($result["count"] == 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**
