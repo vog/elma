@@ -1,4 +1,4 @@
-########## ELMA 0.1 Quick Installation Guide ##########
+########## ELMA 0.2 Quick Installation Guide ##########
 
 Content of this document
 
@@ -19,7 +19,7 @@ run it on any other distributions plaese send a short mail and this list will be
 1.1.1 Debian Etch
 
         * Apache 2.2.3
-        * 5.2.0, PHP 4.4.4 should also work
+        * PHP 5.2.0, PHP 4.4.4 should also work
         * OpenLDAP 2.3.30
         * Smarty 2.6.14
         * Smarty-Gettext 1.0b1 
@@ -33,6 +33,10 @@ ELMA has been testet only to work with OpenLDAP Server.
 
 Install and set up your ldap server as described in your distriubution's manual. 
 There is an example openldap slapd.conf in the ldap subdirectory of the doc folder.
+First copy the elma-0.2.schema file into you LDAP server schema folder
+
+   # cp examples/ldap/elma-0.2.schema /etc/ldap/schema/
+
 To start with an empty LDAP tree, clear your LDAP tree (refer to distriubution's manual) and run
 
    # slapadd -l examples/ldap/example.ldif
