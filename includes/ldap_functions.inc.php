@@ -239,8 +239,8 @@ class ELMA {
      * @active          string  "*" for listing all, "TRUE" for listing active only, "FALSE" for listing inactive only
      * @attribute       array   ldap attributes to return, empty array returns everything
      */
-    function getUser ( $domain_dc, $user_uid = "*", $active="*", $attribute = array() ) {
-        $result = ldap_list($this->cid, "dc=".$domain_dc.",".LDAP_DOMAINS_ROOT_DN, "(&(objectclass=mailUser)(uid=$user_uid))", $attribute);
+    function getUser ( $domain_dc, $user_uid="*", $active="*", $attribute = array() ) {
+        $result = ldap_list($this->cid, "dc=".$domain_dc.",".LDAP_DOMAINS_ROOT_DN, "(&(objectclass=mailUser)(mailStatus=$active)(uid=$user_uid))", $attribute);
         $user = ldap_get_entries($this->cid, $result);
         if ( $user_uid !== "*" ) $user = $user[0];
         return $user;
