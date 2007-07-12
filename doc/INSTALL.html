@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE></TITLE>
+<META NAME="generator" CONTENT="HTML::TextToHTML v2.44">
+</HEAD>
+<BODY>
+<P>########## ELMA 0.1 Quick Installation Guide ##########
+
+<P>Content of this document
+
+<P><STRONG>1.1 REQUIREMENTS</STRONG>
+<P>    1.1.1 Debian Etch<BR>
+<STRONG>1.2 PREPARATIONS</STRONG>
+<P>    1.2.1 LDAP Server<BR>
+<STRONG>1.3 INSTALLATION</STRONG>
+
+<P><STRONG>-----------------------------------------------------</STRONG>
+
+<P><STRONG>1.1 REQUIREMENTS</STRONG>
+
+<P>The requirements are based on the current Debian GNU/Linux stable branch also known as "Etch". 
+ELMA has been developed and test on that distribution. If you have successfully installed and 
+run it on any other distributions plaese send a short mail and this list will be completed.
+
+<P>1.1.1 Debian Etch
+
+<UL>
+  <LI>Apache 2.2.3
+  <LI>5.2.0, PHP 4.4.4 should also work
+  <LI>OpenLDAP 2.3.30
+  <LI>Smarty 2.6.14
+  <LI>Smarty-Gettext 1.0b1 
+</UL>
+<P><STRONG>1.2 PREPARATIONS</STRONG>
+
+<P>1.2.1 LDAP Server
+
+<P>ELMA has been testet only to work with OpenLDAP Server.
+
+<P>Install and set up your ldap server as described in your distriubution's manual. 
+There is an example openldap slapd.conf in the ldap subdirectory of the doc folder.
+To start with an empty LDAP tree, clear your LDAP tree (refer to distriubution's manual) and run
+
+<P>   # slapadd -l examples/ldap/example.ldif
+
+<P>from within the directory where this INSTALL file is located. This will create an admin user 
+with the dn "uid=admin,ou=users,o=mybasedn" and the password "adminpass". Also an exim user 
+("uid=exim4,ou=users,o=mybasedn") with read only access to the LDAP will be created. The password 
+is "exim4pass". I think it is obvious to tell you that you should change the passwords for your
+installation. <BR>
+IMPORTANT NOTE: The above step creates the database files who's owner is "root". If you run 
+your LDAP server under an other uid/gid, as you should if you care about security concerns, you 
+will have to change the ownership of the LDAP database files corrosponding to the LDAP servers uid/gid.
+
+<P><STRONG>1.3 INSTALLATION</STRONG>
+
+<P>Copy the downloaded tarball to your webserver's document root directory (e.g. /var/www). 
+ 
+<P>   # cp elma-0.2.tar.gz /var/www
+
+<P>Extract the tarball in your webserver's document root directory.
+
+<P>   # tar -xzvf elma-0.2.tar.gz
+
+<P>Create the smart's template cache directory called "template_c" and make it writable for you 
+webserver's user (e.g www-data)
+
+<P>   # mkdir /var/www/templates_c/<BR>
+   # chown www-data:www-data /var/www/templates_c/
+   # chmod 775 /var/www/templates_c/
+
+<P>Now you should be able to log in to ELAM via a webbrowser using the user "admin" with password 
+"adminpass". To change the admin's user password you have to use the ldap tools of you distribution 
+or use something similar to "phpLdapAdmin" or "gq".
+
+</BODY>
+</HTML>
