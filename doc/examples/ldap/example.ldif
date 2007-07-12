@@ -1,33 +1,28 @@
 dn: o=mybasedn
-objectClass: top
 objectClass: organization
 o: mybasedn
-structuralObjectClass: organization
-
-dn: ou=users,o=mybasedn
-objectClass: top
-objectClass: organizationalUnit
-ou: users
-structuralObjectClass: organizationalUnit
-
-dn: uid=admin,ou=users,o=mybasedn
-uid: admin
-userPassword:: e01ENX1KZVR1VHBJcE9YdHJGM2RyL09yNDV3PT0=
-objectClass: account
-objectClass: simpleSecurityObject
-objectClass: top
-structuralObjectClass: account
-
-dn: uid=exim4,ou=users,o=mybasedn
-uid: exim4
-userPassword:: e01ENX1iNFJMbXJZL3NxUGpURmN3V2g3c1FnPT0=
-objectClass: account
-objectClass: simpleSecurityObject
-objectClass: top
-structuralObjectClass: account
 
 dn: ou=domains,o=mybasedn
 ou: domains
-objectClass: top
 objectClass: organizationalUnit
-structuralObjectClass: organizationalUnit
+
+dn: ou=users,o=mybasedn
+objectClass: organizationalUnit
+ou: users
+
+dn: cn=admingroup,ou=users,o=mybasedn
+cn: admingroup
+objectClass: groupOfNames
+member: uid=admin,ou=users,o=mybasedn
+
+dn: uid=admin,ou=users,o=mybasedn
+uid: admin
+userPassword: {MD5}JeTuTpIpOXtrF3dr/Or45w==
+objectClass: account
+objectClass: simpleSecurityObject
+
+dn: uid=exim4,ou=users,o=mybasedn
+uid: exim4
+objectClass: account
+objectClass: simpleSecurityObject
+userPassword: {MD5}b4RLmrY/sqPjTFcwWh7sQg==

@@ -6,25 +6,31 @@ attributetype ( 1.3.6.1.4.1.25287.1.1.2.1
   SYNTAX 1.3.6.1.4.1.1466.115.121.1.7 
   SINGLE-VALUE )
 
+attributetype ( 1.3.6.1.4.1.25287.1.1.2.2
+  NAME ( 'mailStorageserver' )
+  DESC 'fqhn of mailstorage host'
+  EQUALITY caseIgnoreIA5Match
+  SUBSTR caseIgnoreIA5SubstringsMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.26 SINGLE-VALUE )
+
 # mailDomain
 objectclass ( 1.3.6.1.4.1.25287.1.1.2.100 
   NAME 'mailDomain' SUP domain
   DESC 'Mail Domain' STRUCTURAL 
-  MUST ( dc ) 
-  MAY ( mailStatus ) )
+  MUST ( dc $ mailStatus $ mailStorageserver) )
  
 # mailUser
 attributetype ( 1.3.6.1.4.1.25287.1.1.2.201
   NAME 'clearpassword'
-  DESC 'Clear CRAM-MD5 Password' SUP name 
+  DESC 'cleartext password, e.g. for CRAM-MD5' SUP name 
   EQUALITY caseExactMatch
-  SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE)
 
 objectclass ( 1.3.6.1.4.1.25287.1.1.1.200 
   NAME 'mailUser'
   DESC 'Mail router user' SUP person STRUCTURAL
-  MUST ( uid $ userPassword )
-  MAY ( mailStatus $ clearpassword) )
+  MUST ( uid $ userPassword $ homeDirectory $ mailStatus $ mailStorageserver)
+  MAY ( clearpassword) )
 
 # mailAlias
 attributetype ( 1.3.6.1.4.1.25287.1.1.2.301 NAME 'mailAliasedName'

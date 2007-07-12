@@ -10,4 +10,4 @@ navigation.tpl   : global navigation menu
 footer.tpl       : </body> and </html> tag should only be used here, maybe 
                    some generic page footer too.
 
-vim:textwidth=78:
+vim:tabstop=4:expandtab:shiftwidth=4:filetype=php:syntax:ruler:
