@@ -67,7 +67,7 @@ webserver's user (e.g www-data)
    # chown www-data:www-data /var/www/templates_c/
    # chmod 775 /var/www/templates_c/
 
-Now you should be able to log in to ELAM via a webbrowser using the user "admin" with password 
+Now you should be able to log in to ELMA via a webbrowser using the user "admin" with password 
 "adminpass". To change the admin's user password you have to use the ldap tools of you distribution 
 or use something similar to "phpLdapAdmin" or "gq".
 
