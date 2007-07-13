@@ -28,19 +28,19 @@
  */
 
 /**
- * content domain edit
+ * content domain new
  * 
- * This content module is used for creating the domain edit form and 
+ * This content module is used for creatinga a new domain and 
  * handling the submited data.
  */
 
-class content_domain_edit extends module_base
+class content_domain_new extends module_base
 {
 
     /**
      * Constructor of this class
      */
-    function content_domain_edit() 
+    function content_domain_new() 
     {
         parent::module_base();
     }
@@ -54,10 +54,10 @@ class content_domain_edit extends module_base
         $this->smarty->assign("domain",$domain);
         $this->smarty->assign("mailstorageservers",unserialize(MAILSTORAGESERVERS));
 
-        // existing domain altert 
+        // new domain created or existing domain altert 
         if (isset($_POST["submit"])) {
             // remove all non LDAP objects from submited form
-            // an the submit and mode value
+            // an the submit value
             $my_domain = remove_key_by_str($_POST,"nlo_");
 
             if (isset($_POST["admins"])) {
@@ -80,28 +80,12 @@ class content_domain_edit extends module_base
          
             $validation_errors = validate_domain($my_domain);
             if (count($validation_errors) == 0) {
-                $this->ldap->modifyDomain($my_domain);
-
-                $admins_cur = $this->ldap->listAdminUsers($domain, TRUE);
-
                 if (!isset($admins)) {
                     $admins = array();
-                    //array_push ($admins, LDAP_ADMIN_DN);
                 }
 
-                /* create array of new admins */
-                $adminsadd = array_values(array_diff($admins,$admins_cur));
-                
-                /* create array of removed admins */
-                $adminsdel = array_values(array_diff($admins_cur,$admins));
-
-                if ( count($adminsadd) > 0 ) {
-                    $this->ldap->addAdminUsers($domain, $adminsadd);
-                }
-                if ( count($adminsdel) > 0 ) {
-                    $this->ldap->deleteAdminUsers($domain, $adminsdel);
-                }
-
+                $this->ldap->addDomain($my_domain, $admins);
+                        
                 $submit_status = ldap_errno($this->ldap->cid);
                 if ($submit_status == "0") {
                     $this->smarty->assign("submit_status",$submit_status);
@@ -117,46 +101,12 @@ class content_domain_edit extends module_base
             $this->smarty->assign("submit_status",-1);
         }
 
-        $this->smarty->assign("domain",$this->ldap->getDomain($domain));
-        
-        /* create a users/admin array from system- and mailusers 
-         * and unset the count key from users/admins array
-         * to have useful arrays for the smarty output.
-         * serializing is neccessary to diff the multidimensional
-         * arrays.
-         */
-
+        $this->smarty->assign("domain",array());
+            
         $systemusers = $this->ldap->listSystemUsers();
-        if ( count($systemusers) == 0 ) $systemusers = array();
         unset($systemusers["count"]);
 
-        $mailusers = $this->ldap->listUsers($domain);
-        if ( count($mailusers) == 0 ) $mailusers = array();
-        unset($mailusers["count"]);
-        
-        $nonadmins = array_merge($systemusers,$mailusers);
-        if ( count($nonadmins) == 0 ) $nonadmins = array();
-        unset($nonadmins["count"]);
-
-        $admins = $this->ldap->listAdminUsers($domain);
-        if ( count($admins) == 0 ) $admins = array();
-        unset($admins["count"]);
-
-        array_walk($nonadmins,'my_serialize');
-        array_walk($admins,'my_serialize');
-        
-        $nonadmins = array_values(array_diff($nonadmins,$admins));
-
-        array_walk($admins,'my_unserialize');
-        array_walk($nonadmins,'my_unserialize');
-
-        if (isset($admins)) {
-            $this->smarty->assign("admins", $admins);
-        }
-
-        if (isset($nonadmins)) {
-            $this->smarty->assign("nonadmins", $nonadmins);
-        }
+        $this->smarty->assign("nonadmins", $systemusers);
     }
 
     /**
@@ -167,7 +117,7 @@ class content_domain_edit extends module_base
      */
     function getContent() 
     {
-        $_content = $this->smarty->fetch('content_domain_edit.tpl');
+        $_content = $this->smarty->fetch('content_domain_new.tpl');
         return $_content;
     }
 }

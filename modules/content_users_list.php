@@ -62,7 +62,7 @@ class content_users_list extends module_base {
             $user['editlink'] = $_SERVER['PHP_SELF']."?module=user_edit&amp;domain=".$domain."&amp;user=".$user['uid']; 
             array_push($my_users,$user);
         }
-        $this->smarty->assign("link_newuser",$_SERVER['PHP_SELF']."?module=user_edit&amp;domain=".$domain."&amp;user=new");
+        $this->smarty->assign("link_newuser",$_SERVER['PHP_SELF']."?module=user_new&amp;domain=".$domain);
         $this->smarty->assign('users',$my_users);
 
         // prepare aliases array for smarty output
@@ -76,7 +76,7 @@ class content_users_list extends module_base {
             $alias['editlink'] = $_SERVER['PHP_SELF']."?module=alias_edit&amp;domain=".$domain."&amp;alias=".$alias['uid']; 
             array_push($my_aliases,$alias);
         }
-        $this->smarty->assign("link_newalias",$_SERVER['PHP_SELF']."?module=alias_edit&amp;domain=".$domain."&amp;alias=new");
+        $this->smarty->assign("link_newalias",$_SERVER['PHP_SELF']."?module=alias_new&amp;domain=".$domain);
         $this->smarty->assign('aliases',$my_aliases);
     }
 

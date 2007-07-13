@@ -19,11 +19,12 @@
                         {/if}
                         </td>
                         <td class="command">
-                            <a href="{$users[users_sec].editlink}">{t}edit{/t}</a> 
-                            <a href="{$users[users_sec].deletelink}">{t}delete{/t}</a>
+                            {if @in_array("user_edit",$acl)} <a href="{$users[users_sec].editlink}">{t}edit{/t}</a> {/if}
+                            {if @in_array("user_delete",$acl)} <a href="{$users[users_sec].deletelink}">{t}delete{/t}</a>{/if}
                         </td>
                     </tr>
 		            {/section}
+                    {if @in_array("user_new",$acl)}
                     <tr>
                         <td class="last">&nbsp;</td>
                         <td class="last">&nbsp;</td>
@@ -31,6 +32,7 @@
                             <a href="{$link_newuser}">{t}new user{/t}</a>
                         </td>
                     </tr>
+                    {/if}
 		        </table>
                 <div class="space25"></div>
                 <table>
@@ -60,11 +62,12 @@
                         {/if}
                         </td>
                         <td class="command">
-                            <a href="{$aliases[aliases_sec].editlink}">{t}edit{/t}</a> 
-                            <a href="{$aliases[aliases_sec].deletelink}">{t}delete{/t}</a>
+                            {if @in_array("alias_edit",$acl)} <a href="{$aliases[aliases_sec].editlink}">{t}edit{/t}</a> {/if}
+                            {if @in_array("alias_delete",$acl)} <a href="{$aliases[aliases_sec].deletelink}">{t}delete{/t}</a> {/if}
                         </td>
                     </tr>
 		            {/section}
+                    {if @in_array("alias_new",$acl) }
                     <tr>
                         <td class="last">&nbsp;</td>
                         <td class="last">&nbsp;</td>
@@ -73,6 +76,7 @@
                             <a href="{$link_newalias}">{t}new alias{/t}</a>
                         </td>
                     </tr>
+                    {/if}
 		        </table>
             </div>
 

@@ -1,15 +1,18 @@
             <div id="Content">
-                <h2>{t}Edit alias{/t} {$alias.uid.0}@{$domain}</h2>
+                <h2>{t}New alias{/t}</h2>
 		        {if $smarty.post.submit}
                     {include file="print_submit_status.tpl"}
                 {/if}
 		        <form action="{$smarty.server.php_self}" method="post">
 			        <fieldset>
-			            <legend>{$alias.uid.0}@{$domain}</legend>
+			            <legend>{t}new alias{/t}</legend>
 			            <table>
 			                <tr>
+				                <td>
+                                    {t}Alias{/t}
+                                </td>
                                 <td>
-                                    <input type="hidden" name="uid" value="{$alias.uid.0}" />
+                                    <input type="text" name="uid" value="{$alias.uid.0}" />@{$domain}
                                 </td>
 				            </tr>
                             <tr>

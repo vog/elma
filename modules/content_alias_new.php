@@ -28,19 +28,19 @@
  */
 
 /**
- * content alias edit
+ * content alias new
  * 
- * This content module is used for creating the alias edit form and handling
+ * This content module is used for creating the alias new form and handling
  * the submited data.
  */
 
-class content_alias_edit extends module_base
+class content_alias_new extends module_base
 {
 
     /**
      * Constructor of this class
      */
-    function content_alias_edit() 
+    function content_alias_new() 
     {
         parent::module_base();
     }
@@ -71,8 +71,8 @@ class content_alias_edit extends module_base
             
             $validation_errors = validate_alias($my_alias);
             if (count($validation_errors) == 0) {
-                $this->ldap->modifyAlias($domain,$my_alias);
-                
+                $this->ldap->addAlias($domain,$my_alias);
+
                 $submit_status = ldap_errno($this->ldap->cid);
                 if ($submit_status == "0") {
                     $this->smarty->assign("submit_status",$submit_status);
@@ -87,7 +87,6 @@ class content_alias_edit extends module_base
         } else {
             $this->smarty->assign("submit_status",-1);
         }
-        $this->smarty->assign("alias",$this->ldap->getAlias($domain,$alias));
     }
 
     /**
@@ -98,7 +97,7 @@ class content_alias_edit extends module_base
      */
     function getContent() 
     {
-        $_content = $this->smarty->fetch('content_alias_edit.tpl');
+        $_content = $this->smarty->fetch('content_alias_new.tpl');
         return $_content;
     }
 }

@@ -64,7 +64,7 @@ class content_domains_list extends module_base {
             $domain['aliasesactive'] = $this->ldap->aliasCount($domain['dc'], "TRUE");
             array_push($my_domains,$domain);
         }
-        $this->smarty->assign("link_newdomain",$_SERVER['PHP_SELF']."?module=domain_edit&amp;domain=new");
+        $this->smarty->assign("link_newdomain",$_SERVER['PHP_SELF']."?module=domain_new");
         $this->smarty->assign('domains',$my_domains);   
 	}
 

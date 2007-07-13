@@ -27,11 +27,12 @@
                         {/if}
                         </td>
                         <td class="command">
-                            <a href="{$domains[domains_sec].editlink}">{t}edit{/t}</a> 
-                            <a href="{$domains[domains_sec].deletelink}">{t}delete{/t}</a>
+                            {if @in_array("domain_edit",$acl) }<a href="{$domains[domains_sec].editlink}">{t}edit{/t}</a>{/if}
+                            {if @in_array("domain_delete",$acl) }<a href="{$domains[domains_sec].deletelink}">{t}delete{/t}</a>{/if}
                         </td>
                     </tr>
 		            {/section}
+                    {if @in_array("domain_new",$acl) }
                     <tr>
 		                <td class="last">&nbsp;</td>
                         <td class="last">&nbsp;</td>
@@ -41,6 +42,7 @@
                             <a href="{$link_newdomain}">{t}new domain{/t}</a>
                         </td>
                     </tr>
+                    {/if}
 		        </table>
             </div>
 

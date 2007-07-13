@@ -28,19 +28,19 @@
  */
 
 /**
- * content alias edit
+ * content user new
  * 
- * This content module is used for creating the alias edit form and handling
- * the submited data.
+ * This content module is used for creating the user add form and
+ * handling the submited data.
  */
 
-class content_alias_edit extends module_base
+class content_user_new extends module_base
 {
 
     /**
      * Constructor of this class
      */
-    function content_alias_edit() 
+    function content_user_new() 
     {
         parent::module_base();
     }
@@ -50,44 +50,43 @@ class content_alias_edit extends module_base
      */
     function proceed() 
     {
-        $alias = $_GET["alias"]; 
+        $user = $_GET["user"]; 
         $domain =  $_GET["domain"];
         $this->smarty->assign("domain",$domain);
 
-        // new alias created or existing alias altert 
+        // new user created or existing user modified
         if (isset($_POST["submit"])) {
             // remove all non LDAP objects from submited form
-            // an the submit and mode value
-            $my_alias = remove_key_by_str($_POST,"nlo_");
-            unset($my_alias["submit"]);
+            // an the submit value
+            $my_user = remove_key_by_str($_POST,"nlo_");
+            unset($my_user["submit"]);
 
             if (isset($_POST["mailstatus"])) {
-                $my_alias["mailstatus"] = "TRUE";
-            } else {
-                $my_alias["mailstatus"] = "FALSE";
+                $my_user["mailstatus"] = "TRUE";
+            } else {    
+                $my_user["mailstatus"] = "FALSE";
             }
 
-            $my_alias["mailaliasedname"] = explode("\n", $_POST['nlo_mailaliasedname']);
-            
-            $validation_errors = validate_alias($my_alias);
+            $my_user["userpassword"] =  "{MD5}".base64_encode(pack("H*",md5($my_user["clearpassword"])));
+
+            $validation_errors = validate_user($my_user);
             if (count($validation_errors) == 0) {
-                $this->ldap->modifyAlias($domain,$my_alias);
-                
+                $this->ldap->addUser($domain,$my_user);
+
                 $submit_status = ldap_errno($this->ldap->cid);
                 if ($submit_status == "0") {
                     $this->smarty->assign("submit_status",$submit_status);
-                    $alias = $my_alias["uid"];
+                    $user = $my_user["uid"];
                 } else {
-                     $this->smarty->assign("submit_status",ldap_err2str($submit_status));
+                    $this->smarty->assign("submit_status",ldap_err2str($submit_status));
                 }
             } else {
-                $this->smarty->assign("submit_status","Invalid Data");
-                $this->smarty->assign("validation_errors",$validation_errors);
-            } 
+               $this->smarty->assign("submit_status","Invalid Data");
+               $this->smarty->assign("validation_errors",$validation_errors);
+            }
         } else {
             $this->smarty->assign("submit_status",-1);
         }
-        $this->smarty->assign("alias",$this->ldap->getAlias($domain,$alias));
     }
 
     /**
@@ -98,7 +97,7 @@ class content_alias_edit extends module_base
      */
     function getContent() 
     {
-        $_content = $this->smarty->fetch('content_alias_edit.tpl');
+        $_content = $this->smarty->fetch('content_user_new.tpl');
         return $_content;
     }
 }
