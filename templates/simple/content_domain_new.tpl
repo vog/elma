@@ -1,15 +1,20 @@
             <div id="Content">
-                <h2>{t }Edit domain{/t} {$domain.dc.0}</h2>
+                <h2>{t}New domain{/t}</h2>
 		        {if $smarty.post.submit}
                     {include file="print_submit_status.tpl"}
                 {/if}
                 <form action="{$smarty.server.php_self}" method="post" onsubmit="markAllAdmins()">
-    	            <div>
-                        <input type="hidden" name="dc" value="{$domain.dc.0}" />
-                    </div>
-		            <fieldset>
-			            <legend>{$domain.dc.0}</legend>
+            	    <fieldset>
+			            <legend>{t}new domain{/t}</legend>
 			            <table>
+			                <tr>
+			                    <td>
+                                    {t}Domain{/t}
+                                </td>
+                                <td>
+                                    <input type="text" name="dc" />
+                                </td>
+			                </tr>
 			                <tr>
 			                    <td>
                                     {t}Is active?{/t}
@@ -18,7 +23,7 @@
                                     <input type="checkbox" name="mailstatus" {if $domain.mailstatus.0 eq "TRUE"}checked="checked"{/if} />
                                 </td>
 			                </tr>
-                            {if @in_array("domain_edit.mailstorageserver",$acl) }
+                            {if @in_array("domain_new.mailstorageserver",$acl) }
                             <tr>
                                 <td>
                                     {t}Mailstorageserver{/t}
