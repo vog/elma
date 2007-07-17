@@ -13,6 +13,19 @@ attributetype ( 1.3.6.1.4.1.25287.1.1.2.2
   SUBSTR caseIgnoreIA5SubstringsMatch
   SYNTAX 1.3.6.1.4.1.1466.115.121.1.26 SINGLE-VALUE )
 
+attributetype ( 1.3.6.1.4.1.25287.1.1.2.3
+  NAME 'vacationStatus'
+  DESC 'Enable/Disable vacation for user or alias.'
+  EQUALITY booleanMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+  SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.25287.1.1.2.4
+  NAME 'vacationMessage'
+  DESC 'UTF-8-Message, sent as response when vacationStatus is TRUE'
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+  SINGLE-VALUE )
+
 # mailDomain
 objectclass ( 1.3.6.1.4.1.25287.1.1.2.100 
   NAME 'mailDomain' SUP domain
@@ -30,7 +43,7 @@ objectclass ( 1.3.6.1.4.1.25287.1.1.1.200
   NAME 'mailUser'
   DESC 'Mail router user' SUP person STRUCTURAL
   MUST ( uid $ userPassword $ homeDirectory $ mailStatus $ mailStorageserver)
-  MAY ( clearpassword) )
+  MAY ( clearpassword $ vacationStatus $ vacationMessage ) )
 
 # mailAlias
 attributetype ( 1.3.6.1.4.1.25287.1.1.2.301 NAME 'mailAliasedName'
