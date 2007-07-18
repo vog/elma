@@ -73,6 +73,10 @@ class content_user_edit extends module_base
                 $my_user["vacationstatus"] = "FALSE";
             }
 
+            if ($my_user["vacationmessage"] == "") {
+                unset ($my_user["vacationmessage"]);
+            }
+
             $my_user["userpassword"] =  "{MD5}".base64_encode(pack("H*",md5($my_user["clearpassword"])));
 
             $validation_errors = validate_user($my_user);
