@@ -41,6 +41,27 @@
                                     <hr/>
                                 </td>
 				            </tr>
+			                <tr>
+				                <td>
+                                    {t}Vacant?{/t}
+                                </td>
+                                <td>
+                                    <input type="checkbox" name="vacationstatus" {if $user.vacationstatus.0 eq "FALSE"}{else}checked="checked"{/if} />
+                                </td>
+				            </tr>
+			                <tr>
+				                <td>
+                                    {t}Message:{/t}
+                                </td>
+                                <td>
+                                    <textarea name="vacationmessage">{$user.vacationmessage.0}</textarea>
+                                </td>
+				            </tr>
+				            <tr>
+				                <td colspan="2">
+                                    <hr/>
+                                </td>
+				            </tr>
 				            <tr>
                                 <td>
                                     {t}Password{/t}

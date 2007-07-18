@@ -60,7 +60,6 @@ class content_user_edit extends module_base
             // an the submit and mode value
             $my_user = remove_key_by_str($_POST,"nlo_");
             unset($my_user["submit"]);
-            unset($my_user["mode"]);
 
             if (isset($_POST["mailstatus"])) {
                 $my_user["mailstatus"] = "TRUE";
@@ -68,19 +67,17 @@ class content_user_edit extends module_base
                 $my_user["mailstatus"] = "FALSE";
             }
 
+            if (isset($_POST["vacationstatus"])) {
+                $my_user["vacationstatus"] = "TRUE";
+            } else {    
+                $my_user["vacationstatus"] = "FALSE";
+            }
+
             $my_user["userpassword"] =  "{MD5}".base64_encode(pack("H*",md5($my_user["clearpassword"])));
 
             $validation_errors = validate_user($my_user);
             if (count($validation_errors) == 0) {
-                switch ($_POST["mode"]) {
-                    case "add":
-                        $this->ldap->addUser($domain,$my_user);
-                    break;
-                    case "modify": 
-                        $this->ldap->modifyUser($domain,$my_user);
-                    break;
-                }
-
+                $this->ldap->modifyUser($domain,$my_user);
                 $submit_status = ldap_errno($this->ldap->cid);
                 if ($submit_status == "0") {
                     $this->smarty->assign("submit_status",$submit_status);

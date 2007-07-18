@@ -146,6 +146,7 @@ class ELMA {
      */
     function addDomain ( $domain , $admins ) {
         $domain["objectclass"] = "mailDomain";
+
         ldap_add($this->cid, "dc=".$domain['dc'].",".LDAP_DOMAINS_ROOT_DN, $domain);
 
         if ( ldap_errno($this->cid) !== 0 ) {
@@ -160,7 +161,7 @@ class ELMA {
         $group["cn"] = "admingroup";
         $group["objectclass"] = "groupOfNames";
         $group["member"] = $admins;
-
+        
         ldap_add($this->cid, "cn=".$group["cn"].",dc=".$domain['dc'].",".LDAP_DOMAINS_ROOT_DN, $group);
         return $result;
     } 
@@ -329,7 +330,7 @@ class ELMA {
             }
         }
 
-        ldap_delete($this->cid, "uid=".$user.",dc=".$domain_dc.",".LDAP_DOMAINS_ROOT_DN);
+        ldap_delete($this->cid, "uid=".$user_uid.",dc=".$domain_dc.",".LDAP_DOMAINS_ROOT_DN);
 
         if ( ldap_errno($this->cid) !== 0 ) {
             $result = ldap_error($this->cid);
@@ -419,7 +420,7 @@ class ELMA {
      * @domain_dc       string  dc= value of a domain's DN
      * @alias_uid       string  uid= value of the alias's DN
      */
-    function deleteAlias ( $domain, $alias_uid ) {
+    function deleteAlias ( $domain_dc, $alias_uid ) {
         ldap_delete($this->cid, "uid=".$alias_uid.",dc=".$domain_dc.",".LDAP_DOMAINS_ROOT_DN);
 
         if ( ldap_errno($this->cid) !== 0 )
