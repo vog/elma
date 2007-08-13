@@ -37,6 +37,7 @@ require("includes/gettext.inc.php");
 require("includes/ldap_functions.inc.php");
 require("includes/my_functions.inc.php");
 require("includes/crypt.inc.php");
+require("includes/sieve.inc.php");
 
 if (isset($_POST["module"])) 
     $module = $_POST["module"];

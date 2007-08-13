@@ -56,6 +56,18 @@ class content_user_edit extends module_base
 
         // new user created or existing user modified
         if (isset($_POST["submit"])) {
+            if (isset($_POST["nlo_vacationstatus"])) {
+                $sieveFilter = loadSieveTemplates();
+                $sieveValues = array( STATUS => "",
+                                      RECIPIENT => $_POST["uid"]."@".$domain,
+                                      MESSAGE => $_POST["nlo_vacationmessage"]);
+            } else {
+                $sieveFilter = loadSieveTemplates();
+                $sieveValues = array( STATUS => "#",
+                                      RECIPIENT => $_POST["uid"]."@".$domain,
+                                      MESSAGE => $_POST["nlo_vacationmessage"]);
+            }
+
             // remove all non LDAP objects from submited form
             // an the submit and mode value
             $my_user = remove_key_by_str($_POST,"nlo_");
@@ -67,18 +79,10 @@ class content_user_edit extends module_base
                 $my_user["mailstatus"] = "FALSE";
             }
 
-            if (isset($_POST["vacationstatus"])) {
-                $my_user["vacationstatus"] = "TRUE";
-            } else {    
-                $my_user["vacationstatus"] = "FALSE";
-            }
-
-            if ($my_user["vacationmessage"] == "") {
-                unset ($my_user["vacationmessage"]);
-            }
+            $my_user["mailSieveFilter"] =  createSieveFilter( $sieveFilter, $sieveValues );
 
             $my_user["userpassword"] =  "{MD5}".base64_encode(pack("H*",md5($my_user["clearpassword"])));
-
+ my_print_r($my_user);
             $validation_errors = validate_user($my_user);
             if (count($validation_errors) == 0) {
                 $this->ldap->modifyUser($domain,$my_user);
@@ -100,8 +104,11 @@ class content_user_edit extends module_base
         if ( $user == "new" ) {
             $this->smarty->assign("mode","add");
         } else {
+            $my_user = $this->ldap->getUser($domain,$user);
+            $sieveValues = parseSieveFilter($my_user["mailsievefilter"][0]);    
             $this->smarty->assign("mode","modify");
-            $this->smarty->assign("user",$this->ldap->getUser($domain,$user));
+            $this->smarty->assign("user",$my_user);
+            $this->smarty->assign("vacationsettings",$sieveValues);
         }
     }
 

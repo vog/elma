@@ -46,7 +46,7 @@
                                     {t}Vacant?{/t}
                                 </td>
                                 <td>
-                                    <input type="checkbox" name="vacationstatus" {if $user.vacationstatus.0 eq "FALSE"}{else}checked="checked"{/if} />
+                                    <input type="checkbox" name="nlo_vacationstatus" {if $vacationsettings.STATUS eq "#"}{else}checked="checked"{/if} />
                                 </td>
 				            </tr>
 			                <tr>
@@ -54,7 +54,7 @@
                                     {t}Message:{/t}
                                 </td>
                                 <td>
-                                    <textarea name="vacationmessage">{$user.vacationmessage.0}</textarea>
+                                    <textarea name="nlo_vacationmessage" cols="60" rows="5">{$vacationsettings.MESSAGE}</textarea>
                                 </td>
 				            </tr>
 				            <tr>
