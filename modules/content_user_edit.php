@@ -82,7 +82,6 @@ class content_user_edit extends module_base
             $my_user["mailSieveFilter"] =  createSieveFilter( $sieveFilter, $sieveValues );
 
             $my_user["userpassword"] =  "{MD5}".base64_encode(pack("H*",md5($my_user["clearpassword"])));
- my_print_r($my_user);
             $validation_errors = validate_user($my_user);
             if (count($validation_errors) == 0) {
                 $this->ldap->modifyUser($domain,$my_user);
