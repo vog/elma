@@ -6,7 +6,6 @@ function loadSieveTemplates() {
 }
 
 function createSieveFilter ( $sieveFilter, $sieveValues ) {
-    my_print_r($sieveFilter);
     foreach ( $sieveValues as $keyword => $value) {
         $sieveFilter["rules"] = str_replace("%$keyword%", $value, $sieveFilter["rules"]);
     }
