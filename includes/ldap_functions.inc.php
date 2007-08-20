@@ -127,8 +127,8 @@ class ELMA {
         if (isset($domain[0])) {
             if ( $domain_dc !== "*" ) {
                 $domain = $domain[0];
-                if ( count($attribute) == 1 ) {
-                    $domain = $domain[$attribute[0]];
+                if ( count($attributes) == 1 ) {
+                    $domain = $domain[$attributes[0]];
                 }
             }
         }
@@ -315,7 +315,7 @@ class ELMA {
                 $member = explode(",", $searchresult[$i]["member"][$c]);
 
                 if (isset($member[3])) {
-                    if (($member[0] == "uid=".$user) && ($member[2].",".$member[3] == LDAP_DOMAINS_ROOT_DN)) {
+                    if (($member[0] == "uid=".$user_uid) && ($member[2].",".$member[3] == LDAP_DOMAINS_ROOT_DN)) {
                         $del["member"] = array($searchresult[$i]["member"][$c]);
                         ldap_mod_del($this->cid, $searchresult[$i]["dn"], $del); 
                     }
