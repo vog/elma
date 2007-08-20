@@ -6,8 +6,14 @@ function loadSieveTemplates() {
 }
 
 function createSieveFilter ( $sieveFilter, $sieveValues ) {
-    foreach ( $sieveValues as $keyword => $value) {
-        $sieveFilter["rules"] = str_replace("%$keyword%", $value, $sieveFilter["rules"]);
+    $index = 0;
+    foreach ( $sieveValues as $catergorie ) {
+        $catergories = array_keys($sieveValues);
+        $catergorie_name = strtoupper($catergories[$i]);
+        foreach ( $catergorie as $keyword => $value) {
+            $sieveFilter["rules"] = str_replace("%$catergorie_name.$keyword%", $value, $sieveFilter["rules"]);
+        }
+        $index++;
     }
 
     $requireValues .= implode(",",$sieveFilter["require"]);
@@ -21,10 +27,15 @@ function parseSieveFilter ( $sieveFilter ) {
     $lines = preg_split("/\n/",$sieveFilter);
     $line = array_shift($lines);
     while ( isset($line) ) {
-        if ( preg_match('/^(.*)vacation :days 7 :addresses "(.*)" "(.*)";/i',$line,$values) ) {
-            $sieveValues = array( STATUS => sieveUnescapeChars($values[1]), 
-                                RECIPIENT => sieveUnescapeChars($values[2]),
-                                MESSAGE => sieveUnescapeChars($values[3]));
+        unset ($values);
+        if ( preg_match('/^(.*)vacation :days 7 :addresses "(.*)" "(.*)"; # VACATION$/i',$line,$values) ) {
+            $sieveValues["vacation"] = array( STATUS => sieveUnescapeChars($values[1]), 
+                                           RECIPIENT => sieveUnescapeChars($values[2]),
+                                             MESSAGE => sieveUnescapeChars($values[3]));
+        }
+        if ( preg_match('/^(.*)redirect "(.*)"; keep; # REDIRECT$/i',$line,$values) ) {
+            $sieveValues["redirect"] = array( STATUS => sieveUnescapeChars($values[1]),
+                                           RECIPIENT => sieveUnescapeChars($values[2]));
         }
     $line = array_shift($lines);
     }

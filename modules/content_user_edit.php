@@ -56,17 +56,24 @@ class content_user_edit extends module_base
 
         // new user created or existing user modified
         if (isset($_POST["submit"])) {
-            if (isset($_POST["nlo_vacationstatus"])) {
-                $sieveFilter = loadSieveTemplates();
-                $sieveValues = array( STATUS => "",
-                                      RECIPIENT => $_POST["uid"]."@".$domain,
-                                      MESSAGE => $_POST["nlo_vacationmessage"]);
-            } else {
-                $sieveFilter = loadSieveTemplates();
-                $sieveValues = array( STATUS => "#",
-                                      RECIPIENT => $_POST["uid"]."@".$domain,
-                                      MESSAGE => $_POST["nlo_vacationmessage"]);
+            
+            // load Sieve Templates
+            $sieveFilter = loadSieveTemplates();
+
+            // create array of submitted values
+            $sieveValues["vacation"] = array( STATUS => "",
+                                           RECIPIENT => $_POST["uid"]."@".$domain,
+                                             MESSAGE => $_POST["nlo_vacationmessage"]);
+            if (! isset($_POST["nlo_vacationstatus"])) {
+                $sieveValues["vacation"]["STATUS"] = "#";
             }
+
+            $sieveValues["redirect"] = array( STATUS => "",
+                                           RECIPIENT => $_POST["nlo_redirectrecipient"]);
+            if (! isset($_POST["nlo_redirectstatus"])) {
+                $sieveValues["redirect"]["STATUS"] = "#";
+            }
+
 
             // remove all non LDAP objects from submited form
             // an the submit and mode value
@@ -107,7 +114,8 @@ class content_user_edit extends module_base
             $sieveValues = parseSieveFilter($my_user["mailsievefilter"][0]);    
             $this->smarty->assign("mode","modify");
             $this->smarty->assign("user",$my_user);
-            $this->smarty->assign("vacationsettings",$sieveValues);
+            $this->smarty->assign("vacationsettings",$sieveValues["vacation"]);
+            $this->smarty->assign("redirectsettings",$sieveValues["redirect"]);
         }
     }
 

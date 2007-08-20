@@ -43,7 +43,29 @@
 				            </tr>
 			                <tr>
 				                <td>
-                                    {t}Vacant?{/t}
+                                    {t}Redirect{/t}
+                                </td>
+                                <td>
+                                    <input type="checkbox" name="nlo_redirectstatus" {if $redirectsettings.STATUS eq "#"}{else}checked="checked"{/if} />
+                                </td>
+				            </tr>
+			                <tr>
+				                <td>
+                                    {t}Recipient:{/t}
+                                </td>
+                                <td>
+                                    <input type="text" name="nlo_redirectrecipient" cols="60" value="{$redirectsettings.RECIPIENT}"/>
+                                </td>
+				            </tr>
+
+				            <tr>
+				                <td colspan="2">
+                                    <hr/>
+                                </td>
+				            </tr>
+			                <tr>
+				                <td>
+                                    {t}on vacation?{/t}
                                 </td>
                                 <td>
                                     <input type="checkbox" name="nlo_vacationstatus" {if $vacationsettings.STATUS eq "#"}{else}checked="checked"{/if} />
