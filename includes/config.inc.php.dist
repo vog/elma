@@ -62,7 +62,6 @@ define ("DEFAULT_LANGUAGE","en_US");
 // Set all languages which should be available at login
 define ("AVAILABLE_LANGUAGES",serialize(array("deutsch" => "de_DE",
                                               "english" => "en_US"
-                                             )));
 
 /* ######## Template Settings #### */
 
@@ -80,4 +79,19 @@ define('MYCRYPT_KEY',"my mcrypt encryption key");
 // Should ELMA save the cleartext password in the LDAP database (needed for cram-md5 authentification)
 // a value with anything else than an empty string will enable cleatext password saving!!
 define('SAVECLEARPASS',"TRUE");
+
+/* ######## Spamfilter Settings #### */
+
+define ("SPAMFILTER_AVAILABLE_ACTIONS",serialize(array("none" => "none",
+                                                       "discard" => "discard;",
+                                                       "redirect" => "redirect %REDIRECT%",
+                                                       "folder" => "fileinfo \"Spam\"")));
+
+/* ######## Mailserver Settings #### */
+
+// Array of available mailstore servers. Each item should be a FQHN.
+define("MAILSTORAGESERVERS",serialize(array("mailstore01.megabit.net","mailstore02.megabit.net")));
+
+// The default root directory for homeDirectory attribute of each mailuser.
+define("DEFAULT_HOMEDIR_ROOT","/var/mailhome");
 ?>
