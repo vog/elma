@@ -76,7 +76,7 @@
                                     {t}Message:{/t}
                                 </td>
                                 <td>
-                                    <textarea name="nlo_vacationmessage" cols="60" rows="5">{$vacationsettings.MESSAGE}</textarea>
+                                    <textarea name="nlo_vacationmessage" cols="55" rows="5">{$vacationsettings.MESSAGE}</textarea>
                                 </td>
 				            </tr>
 				            <tr>

@@ -67,8 +67,6 @@ class content_user_new extends module_base
                 $my_user["mailstatus"] = "FALSE";
             }
 
-            $my_user["vacationstatus"] = "FALSE";
-
             $my_user["userpassword"] =  "{MD5}".base64_encode(pack("H*",md5($my_user["clearpassword"])));
 
             $validation_errors = validate_user($my_user);

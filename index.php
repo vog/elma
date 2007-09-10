@@ -48,6 +48,12 @@ else $module = "main";
 if (!isset($_SESSION["login"])) {
     session_destroy();
     if (isset($_GET["loginerror"])) $smarty->assign("loginerror",$_GET["loginerror"]);
+
+    $languages = unserialize(AVAILABLE_LANGUAGES);
+    $smarty->assign('language_ids', array_values($languages));
+    $smarty->assign('language_names', array_keys($languages));
+    $smarty->assign('default_language',DEFAULT_LANGUAGE);
+
     $smarty->display("header.tpl");
     $smarty->display("login.tpl");
     $smarty->display("footer.tpl");

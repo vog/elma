@@ -1,5 +1,5 @@
             <div id="Banner">
-                <h1>ELMA - Exim LDAP Mail Administrator - v0.2</h1>
+                <h1>ELMA - Exim LDAP Mail Administrator - v0.3</h1>
             </div>
             <!-- WILL BE IMPLEMENTET IN THE NEXT RELEASE
             <div id="Pathfinder">

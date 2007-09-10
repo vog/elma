@@ -43,8 +43,7 @@
                             </td>
                             <td>
                                 <select name="language">
-                                    <option value="de_DE">deutsch</option>
-                                    <option value="en_US">english</option>
+                                    {html_options values=$language_ids output=$language_names selected=$default_language}
                                 </select>
                             </td>
                         </tr>

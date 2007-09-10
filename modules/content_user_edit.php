@@ -74,7 +74,6 @@ class content_user_edit extends module_base
                 $sieveValues["redirect"]["STATUS"] = "#";
             }
 
-
             // remove all non LDAP objects from submited form
             // an the submit and mode value
             $my_user = remove_key_by_str($_POST,"nlo_");

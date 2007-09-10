@@ -56,6 +56,19 @@ class content_domain_edit extends module_base
 
         // existing domain altert 
         if (isset($_POST["submit"])) {
+
+            // load Sieve Templates
+            $sieveFilter = loadSieveTemplates();
+            $spamfilter_available_actions = unserialize(SPAMFILTER_AVAILABLE_ACTIONS);
+            
+            // create array of submitted values
+            $sieveValues["spamfilter"] = array( STATUS => "",
+                                                ACTION => $spamfilter_available_actions[$_POST["nlo_spamfilteraction"]]);
+
+            if ( ! isset($_POST["nlo_spamfilterstatus"]) ) {
+                $sieveValues["spamfilter"]["STATUS"] = "#";
+            }
+
             // remove all non LDAP objects from submited form
             // an the submit and mode value
             $my_domain = remove_key_by_str($_POST,"nlo_");
@@ -77,7 +90,7 @@ class content_domain_edit extends module_base
             } else {
                 $my_domain["mailstatus"] = "FALSE";
             }
-         
+            $my_domain["mailSieveFilter"] =  createSieveFilter( $sieveFilter, $sieveValues );
             $validation_errors = validate_domain($my_domain);
             if (count($validation_errors) == 0) {
                 $this->ldap->modifyDomain($my_domain);
@@ -157,6 +170,10 @@ class content_domain_edit extends module_base
         if (isset($nonadmins)) {
             $this->smarty->assign("nonadmins", $nonadmins);
         }
+
+        $sieveValues = parseSieveFilter($my_user["mailsievefilter"][0]);
+        $this->smarty->assign("spamfiltersettings",$sieveValues["spamfilter"]);
+        my_print_r($sieveValues);
     }
 
     /**

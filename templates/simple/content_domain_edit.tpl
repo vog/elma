@@ -33,6 +33,34 @@
                             </tr>
                             {/if}
                             <tr>
+                                <td colspan="2">
+                                    <hr />
+                                </td>
+                            </tr>
+                            {if @in_array("domain_edit.spamfilter",$acl) }
+                            <tr>
+                                <td>
+                                    {t}Spamfilter enabled{/t}
+                                </td>
+                                <td>
+                                    <input type="checkbox" name="nlo_spamfilterstatus" {if $spamfiltersettings.STATUS eq "#"}{else}checked="checked"{/if} />
+                                </td>
+                            </tr>
+                            <tr>
+
+                                <td>
+                                    {t}Rule{/t}
+                                </td>
+                                <td>
+                                    <select name="nlo_spamfilteraction">
+                                        <option {if $spamfiltersettings.ACTION eq "discard"}selected{/if}>discard</option>
+                                        <option {if $spamfiltersettings.ACTION eq "redirect"}selected{/if}>redirect</option>
+                                        <option {if $spamfiltersettings.ACTION eq "folder"}selected{/if}>folder</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            {/if}
+                            <tr>
                                 <td colspan="2"> 
                                     <hr />
                                 </td>
