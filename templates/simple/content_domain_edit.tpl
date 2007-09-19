@@ -53,9 +53,10 @@
                                 </td>
                                 <td>
                                     <select name="nlo_spamfilteraction">
-                                        <option {if $spamfiltersettings.ACTION eq "discard"}selected{/if}>discard</option>
-                                        <option {if $spamfiltersettings.ACTION eq "redirect"}selected{/if}>redirect</option>
-                                        <option {if $spamfiltersettings.ACTION eq "folder"}selected{/if}>folder</option>
+                                        <option {if $spamfiltersettings.ACTION eq "DISCARD"}selected{/if} value="DISCARD">discard</option>
+                                        <option {if $spamfiltersettings.ACTION eq "REDIRECT"}selected{/if} value="REDIRECT">redirect</option>
+                                        <option {if $spamfiltersettings.ACTION eq "FOLDER"}selected{/if} value="FOLDER">folder</option>
+                                        <option {if $spamfiltersettings.ACTION eq "MARK"}selected{/if} value="MARK">mark</option>
                                     </select>
                                 </td>
                             </tr>

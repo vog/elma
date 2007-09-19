@@ -57,21 +57,18 @@ class content_user_edit extends module_base
         // new user created or existing user modified
         if (isset($_POST["submit"])) {
             
-            // load Sieve Templates
-            $sieveFilter = loadSieveTemplates();
-
             // create array of submitted values
-            $sieveValues["vacation"] = array( STATUS => "",
-                                           RECIPIENT => $_POST["uid"]."@".$domain,
-                                             MESSAGE => $_POST["nlo_vacationmessage"]);
+            $sieveValues["vacation"]["values"] = array( STATUS => "",
+                                                     RECIPIENT => $_POST["uid"]."@".$domain,
+                                                       MESSAGE => $_POST["nlo_vacationmessage"]);
             if (! isset($_POST["nlo_vacationstatus"])) {
-                $sieveValues["vacation"]["STATUS"] = "#";
+                $sieveValues["vacation"]["values"]["STATUS"] = "#";
             }
 
-            $sieveValues["redirect"] = array( STATUS => "",
-                                           RECIPIENT => $_POST["nlo_redirectrecipient"]);
+            $sieveValues["redirect"]["values"] = array( STATUS => "",
+                                                     RECIPIENT => $_POST["nlo_redirectrecipient"]);
             if (! isset($_POST["nlo_redirectstatus"])) {
-                $sieveValues["redirect"]["STATUS"] = "#";
+                $sieveValues["redirect"]["values"]["STATUS"] = "#";
             }
 
             // remove all non LDAP objects from submited form
@@ -85,7 +82,7 @@ class content_user_edit extends module_base
                 $my_user["mailstatus"] = "FALSE";
             }
 
-            $my_user["mailSieveFilter"] =  createSieveFilter( $sieveFilter, $sieveValues );
+            $my_user["mailSieveFilter"] =  createSieveFilter( $sieveValues );
 
             $my_user["userpassword"] =  "{MD5}".base64_encode(pack("H*",md5($my_user["clearpassword"])));
             $validation_errors = validate_user($my_user);

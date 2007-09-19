@@ -2,7 +2,7 @@
 
 function loadSieveTemplates() {
     $fields = array("require","template","regex","values");
-    $rulesets = array("redirect","spamfilter_discard","vacation");
+    $rulesets = array("redirect","spamfilter","vacation");
 
     foreach ( $rulesets as $ruleset ) {
         $sieveFilter[$ruleset] = array();
@@ -18,9 +18,11 @@ function loadSieveTemplates() {
                                                "RECIPIENT" => "");
 
     // Spamfilter Template
-    $sieveFilter["spamfilter_discard"]["template"] = '%STATUS%if header :matches "X-Spam-Flag" "yes" { discard; }; # SPAMFILTER_DISCARD';
-    $sieveFilter["spamfilter_discard"]["regex"] = '/^(.*)if header :matches \"X-Spam-Flag\" \"yes\" \{(.*)\}; # SPAMFILTER_DISCARD$/i';
-    $sieveFilter["spamfilter_discard"]["values"] = array("STATUS" => "");
+    $sieveFilter["spamfilter"]["template"] = '%STATUS%if header :matches "X-Spam-Flag" "yes" { %SIEVEACTION% }; # SPAMFILTER %ACTION%';
+    $sieveFilter["spamfilter"]["regex"] = '/^(.*)if header :matches \"X-Spam-Flag\" \"yes\" \{ (.*) \}; # SPAMFILTER (.*)$/i';
+    $sieveFilter["spamfilter"]["values"] = array("STATUS" => "",
+                                                 "SIEVEACTION" => "",
+                                                 "ACTION" => "");
 
     // Vacation Template
     $sieveFilter["vacation"]["require"] = "\"vacation\"";
@@ -33,17 +35,17 @@ function loadSieveTemplates() {
     return $sieveFilter;
 }
 
-function createSieveFilter ( $sieveFilter, $sieveValues ) {
+function createSieveFilter ( $sieveValues ) {
     $sieveFilter = loadSieveTemplates();
 
     foreach ( array_keys($sieveValues) as $categorie ) {
         $sieveFilterStr[$categorie] = $sieveFilter[$categorie]["template"];
-        foreach ( $sieveValues[$categorie] as $keyword => $value) {
+        foreach ( $sieveValues[$categorie]["values"] as $keyword => $value ) {
            $sieveFilterStr[$categorie] = str_replace("%$keyword%", $value, $sieveFilterStr[$categorie]);
         }
     }
     $sieveFilterScript = implode("\n",$sieveFilterStr)."\n";  
-
+   
     return (sieveEscapeChars($sieveFilterScript));
 }
 
@@ -53,7 +55,6 @@ function parseSieveFilter ( $sieveFilterString ) {
     $lines = array();
     $lines = preg_split("/\n/",$sieveFilterString);
     $line = array_shift($lines);
-
 
     while ( isset($line) ) {
         foreach ( array_keys($sieveFilter) as $ruleset ) {
@@ -68,7 +69,6 @@ function parseSieveFilter ( $sieveFilterString ) {
         }
     $line = array_shift($lines);
     }
-    my_print_r($sieveFilter);
     return $sieveFilter;
 }
 
