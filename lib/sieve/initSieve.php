@@ -1,31 +1,29 @@
 <?php
 
+$fields = array("require","template","regex","values");
+$rulesets = array("redirect","spamfilter_discard","vacation");
 
-$sieveFilter["require"] = array();
-$sieveFilter["rules"] = array();
-
-foreach ( $field as array("templates","regex","values") ) {
-    $sieveFilter[$field] = array();
-    foreach ( $ruleset as array("redirect","spamfilter_discard","vacation") ) { 
-        $sieveFilter[$field][$ruleset] = array();
+foreach ( $rulesets as $ruleset ) { 
+    $sieveFilter[$ruleset] = array();
+    foreach ( $fields as $field ) {
+        $sieveFilter[$ruleset][$field] = array();
     }
 }
 
 // Redirect Template
-array_push($sieveFilter["templates"]["redirect"], '%STATUS%redirect "%RECIPIENT%"; keep; # REDIRECT');
-array_push($sieveFilter["regex"]["redirect"], '/^(.*)redirect "(.*)"; keep; # REDIRECT$/i');
-array_push($sieveFilter["values"]["redirect"], array("STATUS","REDIRECT"));
+array_push($sieveFilter["redirect"]["template"], '%STATUS%redirect "%RECIPIENT%"; keep; # REDIRECT');
+array_push($sieveFilter["redirect"]["regex"], '/^(.*)redirect "(.*)"; keep; # REDIRECT$/i');
+array_push($sieveFilter["redirect"]["values"], array("STATUS","REDIRECT"));
 
 // Spamfilter Template
-array_push($sieveFilter["templates"]["spamfilter_discard"], '%STATUS%if header :matches "X-Spam-Flag" "yes" { discard; }; # SPAMFILTER');
-array_push($sieveFilter["regex"]["spamfilter_discard"], '/^(.*)if header :matches \"X-Spam-Flag\" \"yes\" \{(.*)\}; # SPAMFILTER$/i');
-array_push($sieveFilter["values"]["spamfilter_discard"], array("STATUS"));
+array_push($sieveFilter["spamfilter_discard"]["template"], '%STATUS%if header :matches "X-Spam-Flag" "yes" { discard; }; # SPAMFILTER_DISCARD');
+array_push($sieveFilter["spamfilter_discard"]["regex"], '/^(.*)if header :matches \"X-Spam-Flag\" \"yes\" \{(.*)\}; # SPAMFILTER_DISCARD$/i');
+array_push($sieveFilter["spamfilter_discard"]["values"], array("STATUS"));
 
 // Vacation Template
-array_push($sieveFilter["require"],"\"vacation\"");
-array_push($sieveFilter["templates"]["vacation"], '%STATUS%vacation :days 7 :addresses "%RECIPIENT%" "%MESSAGE%"; # VACATION');
-array_push($sieveFilter["regex"]["vacation"], '/^(.*)vacation :days 7 :addresses "(.*)" "(.*)"; # VACATION$/i'
-array_push($sieveFilter["values"]["vacation"], array("STATUS","RECIPIENT","MESSAGE"));
-
+array_push($sieveFilter["vacation"]["require"],"\"vacation\"");
+array_push($sieveFilter["vacation"]["template"], '%STATUS%vacation :days 7 :addresses "%RECIPIENT%" "%MESSAGE%"; # VACATION');
+array_push($sieveFilter["vacation"]["regex"], '/^(.*)vacation :days 7 :addresses "(.*)" "(.*)"; # VACATION$/i');
+array_push($sieveFilter["vacation"]["values"], array("STATUS","RECIPIENT","MESSAGE"));
 
 ?>

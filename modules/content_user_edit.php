@@ -113,8 +113,8 @@ class content_user_edit extends module_base
             $sieveValues = parseSieveFilter($my_user["mailsievefilter"][0]);    
             $this->smarty->assign("mode","modify");
             $this->smarty->assign("user",$my_user);
-            $this->smarty->assign("vacationsettings",$sieveValues["vacation"]);
-            $this->smarty->assign("redirectsettings",$sieveValues["redirect"]);
+            $this->smarty->assign("vacationsettings",$sieveValues["vacation"]["values"]);
+            $this->smarty->assign("redirectsettings",$sieveValues["redirect"]["values"]);
         }
     }
 

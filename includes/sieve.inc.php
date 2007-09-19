@@ -1,54 +1,75 @@
 <?php
 
 function loadSieveTemplates() {
-    include("lib/sieve/initSieve.php");
+    $fields = array("require","template","regex","values");
+    $rulesets = array("redirect","spamfilter_discard","vacation");
+
+    foreach ( $rulesets as $ruleset ) {
+        $sieveFilter[$ruleset] = array();
+        foreach ( $fields as $field ) {
+            $sieveFilter[$ruleset][$field] = array();
+        }
+    }
+
+    // Redirect Template
+    $sieveFilter["redirect"]["template"] = '%STATUS%redirect "%RECIPIENT%"; keep; # REDIRECT';
+    $sieveFilter["redirect"]["regex"] = '/^(.*)redirect "(.*)"; keep; # REDIRECT$/i';
+    $sieveFilter["redirect"]["values"] = array("STATUS" => "",
+                                               "RECIPIENT" => "");
+
+    // Spamfilter Template
+    $sieveFilter["spamfilter_discard"]["template"] = '%STATUS%if header :matches "X-Spam-Flag" "yes" { discard; }; # SPAMFILTER_DISCARD';
+    $sieveFilter["spamfilter_discard"]["regex"] = '/^(.*)if header :matches \"X-Spam-Flag\" \"yes\" \{(.*)\}; # SPAMFILTER_DISCARD$/i';
+    $sieveFilter["spamfilter_discard"]["values"] = array("STATUS" => "");
+
+    // Vacation Template
+    $sieveFilter["vacation"]["require"] = "\"vacation\"";
+    $sieveFilter["vacation"]["template"] = '%STATUS%vacation :days 7 :addresses "%RECIPIENT%" "%MESSAGE%"; # VACATION';
+    $sieveFilter["vacation"]["regex"] = '/^(.*)vacation :days 7 :addresses "(.*)" "(.*)"; # VACATION$/i';
+    $sieveFilter["vacation"]["values"] = array("STATUS" => "",
+                                               "RECIPIENT" => "",
+                                               "MESSAGE" => "");
+    
     return $sieveFilter;
 }
 
 function createSieveFilter ( $sieveFilter, $sieveValues ) {
+    $sieveFilter = loadSieveTemplates();
 
-    $requireValues .= implode(",",$sieveFilter["require"]);
-    $sieveFilterScript = "require [$requireValues];\n";
-
-    $index = 0;
-    foreach ( $sieveValues as $categorie ) {
-        $categories = array_keys($sieveValues);
-        $categorie_name = strtolower($categories[$index]);
-        foreach ( $categorie as $keyword => $value) {
-            $sieveFilter["rules"][$categorie_name] = str_replace("%$keyword%", $value, $sieveFilter["rules"][$categorie_name]);
+    foreach ( array_keys($sieveValues) as $categorie ) {
+        $sieveFilterStr[$categorie] = $sieveFilter[$categorie]["template"];
+        foreach ( $sieveValues[$categorie] as $keyword => $value) {
+           $sieveFilterStr[$categorie] = str_replace("%$keyword%", $value, $sieveFilterStr[$categorie]);
         }
-        $index++;
-        $sieveFilterScript .= implode("\n",$sieveFilter["rules"][$categorie_name])."\n";
     }
+    $sieveFilterScript = implode("\n",$sieveFilterStr)."\n";  
 
-    //$sieveFilterScript .= implode("\n",$sieveFilter["rules"][$categorie_name]);
-    my_print_r($sieveFilterScript);
     return (sieveEscapeChars($sieveFilterScript));
 }
 
-function parseSieveFilter ( $sieveFilter ) {
+function parseSieveFilter ( $sieveFilterString ) {
+    $sieveFilter = loadSieveTemplates();
+    
     $lines = array();
-    $lines = preg_split("/\n/",$sieveFilter);
+    $lines = preg_split("/\n/",$sieveFilterString);
     $line = array_shift($lines);
+
+
     while ( isset($line) ) {
-        unset ($values);
-        if ( preg_match(,$line,$values) ) {
-            echo "JA";
-            $sieveValues["spamfilter"] = array( STATUS => sieveUnescapeChars($values[1]), 
-                                                ACTION => sieveUnescapeChars($values[2]));
-        }
-        if ( preg_match('/^(.*)vacation :days 7 :addresses "(.*)" "(.*)"; # VACATION$/i',$line,$values) ) {
-            $sieveValues["vacation"] = array( STATUS => sieveUnescapeChars($values[1]), 
-                                           RECIPIENT => sieveUnescapeChars($values[2]),
-                                             MESSAGE => sieveUnescapeChars($values[3]));
-        }
-        if ( preg_match('/^(.*)redirect "(.*)"; keep; # REDIRECT$/i',$line,$values) ) {
-            $sieveValues["redirect"] = array( STATUS => sieveUnescapeChars($values[1]),
-                                           RECIPIENT => sieveUnescapeChars($values[2]));
+        foreach ( array_keys($sieveFilter) as $ruleset ) {
+            if ( preg_match($sieveFilter[$ruleset]["regex"],$line,$values) ) {
+                array_shift($values); // don't need the whole string in $0
+                $i = 0;
+                foreach ( array_keys($sieveFilter[$ruleset]["values"]) as $valuename ) {
+                    $sieveFilter[$ruleset]["values"][$valuename] = sieveUnescapeChars($values[$i]);
+                    $i++;
+                }
+            }
         }
     $line = array_shift($lines);
     }
-    return $sieveValues;
+    my_print_r($sieveFilter);
+    return $sieveFilter;
 }
 
 /**

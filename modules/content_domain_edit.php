@@ -173,7 +173,6 @@ class content_domain_edit extends module_base
 
         $sieveValues = parseSieveFilter($my_user["mailsievefilter"][0]);
         $this->smarty->assign("spamfiltersettings",$sieveValues["spamfilter"]);
-        my_print_r($sieveValues);
     }
 
     /**
