@@ -34,33 +34,6 @@
                                     <input type="checkbox" name="mailstatus" {if $alias.mailstatus.0 eq "FALSE"}{else}checked="checked"{/if} />
                                 </td>
                             </tr>
-                        <tr>
-                            <td colspan="2">
-                                    <hr/>
-                                </td>
-				            </tr>
-			                <tr>
-				                <td>
-                                    {t}Vacant?{/t}
-                                </td>
-                                <td>
-                                    <input type="checkbox" name="vacationstatus" {if $alias.vacationstatus.0 eq "FALSE"}{else}checked="checked"{/if} />
-                                </td>
-				            </tr>
-			                <tr>
-				                <td>
-                                    {t}Message:{/t}
-                                </td>
-                                <td>
-                                    <textarea name="vacationmessage">{$alias.vacationmessage.0}</textarea>
-                                </td>
-				            </tr>
-				            <tr>
-                            <tr>
-                                <td colspan="2">
-                                    <hr/>
-                                </td>
-                            </tr>
 				            <tr>
                                 <td colspan="2" class="buttons">
                                     <input type="submit" name="submit" value="{t}Save{/t}"/>

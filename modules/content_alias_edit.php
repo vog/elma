@@ -67,16 +67,6 @@ class content_alias_edit extends module_base
                 $my_alias["mailstatus"] = "FALSE";
             }
             
-            if (isset($_POST["vacationstatus"])) {
-                $my_alias["vacationstatus"] = "TRUE";
-            } else {    
-                $my_alias["vacationstatus"] = "FALSE";
-            }
-
-            if ($my_alias["vacationmessage"] == "") {
-                unset ($my_alias["vacationmessage"]);
-            }
-
             $my_alias["mailaliasedname"] = explode("\n", $_POST['nlo_mailaliasedname']);
             
             $validation_errors = validate_alias($my_alias);
