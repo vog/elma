@@ -57,10 +57,10 @@ class content_domain_edit extends module_base
         if (isset($_POST["submit"])) {
 
             // create array of submitted values
-            $sieveValues["spamfilter"]["values"] = array( STATUS => "", 
+            $eximFilterValues["spamfilter"]["values"] = array( STATUS => "", 
                                                           ACTION => $_POST["nlo_spamfilteraction"]);
             if ( ! isset($_POST["nlo_spamfilterstatus"]) ) {
-                $sieveValues["spamfilter"]["values"]["STATUS"] = "#";
+                $eximFilterValues["spamfilter"]["values"]["STATUS"] = "#";
             }
 
             // remove all non LDAP objects from submited form
@@ -84,7 +84,7 @@ class content_domain_edit extends module_base
             } else {
                 $my_domain["mailstatus"] = "FALSE";
             }
-            $my_domain["mailSieveFilter"] =  createSieveFilter( $sieveValues );
+            $my_domain["mailSieveFilter"] =  createSieveFilter( $eximFilterValues );
             $validation_errors = validate_domain($my_domain);
             if (count($validation_errors) == 0) {
                 $this->ldap->modifyDomain($my_domain);
@@ -166,8 +166,8 @@ class content_domain_edit extends module_base
         }
   
         /* parse Sieve filter and assign values */
-        $sieveValues = parseSieveFilter($my_domain["mailsievefilter"][0]);
-        $this->smarty->assign("spamfiltersettings",$sieveValues["spamfilter"]["values"]);
+        $eximFilterValues = parseSieveFilter($my_domain["maileximFilterfilter"][0]);
+        $this->smarty->assign("spamfiltersettings",$eximFilterValues["spamfilter"]["values"]);
     }
 
     /**
