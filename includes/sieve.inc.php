@@ -14,21 +14,21 @@ function loadSieveTemplates() {
     // Redirect Template
     $sieveFilter["redirect"]["template"] = '%STATUS%redirect "%RECIPIENT%"; keep; # REDIRECT';
     $sieveFilter["redirect"]["regex"] = '/^(.*)redirect "(.*)"; keep; # REDIRECT$/i';
-    $sieveFilter["redirect"]["values"] = array("STATUS" => "",
+    $sieveFilter["redirect"]["values"] = array("STATUS" => "#",
                                                "RECIPIENT" => "");
 
     // Spamfilter Template
     $sieveFilter["spamfilter"]["template"] = '%STATUS%if header :matches "X-Spam-Flag" "yes" { %SIEVEACTION% }; # SPAMFILTER %ACTION%';
     $sieveFilter["spamfilter"]["regex"] = '/^(.*)if header :matches \"X-Spam-Flag\" \"yes\" \{ (.*) \}; # SPAMFILTER (.*)$/i';
-    $sieveFilter["spamfilter"]["values"] = array("STATUS" => "",
+    $sieveFilter["spamfilter"]["values"] = array("STATUS" => "#",
                                                  "SIEVEACTION" => "",
-                                                 "ACTION" => "");
+                                                 "ACTION" => "MARK");
 
     // Vacation Template
     $sieveFilter["vacation"]["require"] = "\"vacation\"";
     $sieveFilter["vacation"]["template"] = '%STATUS%vacation :days 7 :addresses "%RECIPIENT%" "%MESSAGE%"; # VACATION';
     $sieveFilter["vacation"]["regex"] = '/^(.*)vacation :days 7 :addresses "(.*)" "(.*)"; # VACATION$/i';
-    $sieveFilter["vacation"]["values"] = array("STATUS" => "",
+    $sieveFilter["vacation"]["values"] = array("STATUS" => "#",
                                                "RECIPIENT" => "",
                                                "MESSAGE" => "");
     
