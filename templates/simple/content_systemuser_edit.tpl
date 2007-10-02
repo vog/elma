@@ -105,6 +105,7 @@
                                     </table>
                                 </td>
                             </tr>
+                            {if $mode != "modify"}
                             <tr>
                                 <td colspan="2">
                                     <hr/>
@@ -120,6 +121,7 @@
                                     <input type="radio" name="nlo_next_step" value="show_overview" /> {t}Go to user overview{/t}<br />
                                  </td>
                             </tr>
+                            {/if}
                             <tr>
                                 <td colspan="2">
                                     <hr/>
