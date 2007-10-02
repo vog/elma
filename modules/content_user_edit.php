@@ -82,7 +82,7 @@ class content_user_edit extends module_base
                 $my_user["mailstatus"] = "FALSE";
             }
 
-            $my_user["mailSieveFilter"] =  createSieveFilter( $eximFilterValues );
+            $my_user["mailSieveFilter"] =  createEximFilter( $eximFilterValues );
 
             $my_user["userpassword"] =  "{MD5}".base64_encode(pack("H*",md5($my_user["clearpassword"])));
             $validation_errors = validate_user($my_user);
@@ -107,7 +107,7 @@ class content_user_edit extends module_base
             $this->smarty->assign("mode","add");
         } else {
             $my_user = $this->ldap->getUser($domain,$user);
-            $eximFilterValues = parseSieveFilter($my_user["maileximFilterfilter"][0]);    
+            $eximFilterValues = parseEximFilter($my_user["mailsievefilter"][0]);    
             $this->smarty->assign("mode","modify");
             $this->smarty->assign("user",$my_user);
             $this->smarty->assign("vacationsettings",$eximFilterValues["vacation"]["values"]);

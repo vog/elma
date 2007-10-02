@@ -1,75 +1,75 @@
 <?php
 
-function loadSieveTemplates() {
+function loadEximFilterTemplates() {
     $fields = array("require","template","regex","values");
     $rulesets = array("redirect","spamfilter","vacation");
 
     foreach ( $rulesets as $ruleset ) {
-        $eximFilterFilter[$ruleset] = array();
+        $eximFilter[$ruleset] = array();
         foreach ( $fields as $field ) {
-            $eximFilterFilter[$ruleset][$field] = array();
+            $eximFilter[$ruleset][$field] = array();
         }
     }
 
     // Redirect Template
-    $eximFilterFilter["redirect"]["template"] = '%STATUS%redirect "%RECIPIENT%"; keep; # REDIRECT';
-    $eximFilterFilter["redirect"]["regex"] = '/^(.*)redirect "(.*)"; keep; # REDIRECT$/i';
-    $eximFilterFilter["redirect"]["values"] = array("STATUS" => "#",
+    $eximFilter["redirect"]["template"] = '%STATUS%redirect "%RECIPIENT%"; keep; # REDIRECT';
+    $eximFilter["redirect"]["regex"] = '/^(.*)redirect "(.*)"; keep; # REDIRECT$/i';
+    $eximFilter["redirect"]["values"] = array("STATUS" => "#",
                                                "RECIPIENT" => "");
 
     // Spamfilter Template
-    $eximFilterFilter["spamfilter"]["template"] = '%STATUS%if header :matches "X-Spam-Flag" "yes" { %SIEVEACTION% }; # SPAMFILTER %ACTION%';
-    $eximFilterFilter["spamfilter"]["regex"] = '/^(.*)if header :matches \"X-Spam-Flag\" \"yes\" \{ (.*) \}; # SPAMFILTER (.*)$/i';
-    $eximFilterFilter["spamfilter"]["values"] = array("STATUS" => "#",
+    $eximFilter["spamfilter"]["template"] = '%STATUS%if header :matches "X-Spam-Flag" "yes" { %SIEVEACTION% }; # SPAMFILTER %ACTION%';
+    $eximFilter["spamfilter"]["regex"] = '/^(.*)if header :matches \"X-Spam-Flag\" \"yes\" \{ (.*) \}; # SPAMFILTER (.*)$/i';
+    $eximFilter["spamfilter"]["values"] = array("STATUS" => "#",
                                                  "SIEVEACTION" => "",
                                                  "ACTION" => "MARK");
 
     // Vacation Template
-    $eximFilterFilter["vacation"]["require"] = "\"vacation\"";
-    $eximFilterFilter["vacation"]["template"] = '%STATUS%vacation :days 7 :addresses "%RECIPIENT%" "%MESSAGE%"; # VACATION';
-    $eximFilterFilter["vacation"]["regex"] = '/^(.*)vacation :days 7 :addresses "(.*)" "(.*)"; # VACATION$/i';
-    $eximFilterFilter["vacation"]["values"] = array("STATUS" => "#",
+    $eximFilter["vacation"]["require"] = "\"vacation\"";
+    $eximFilter["vacation"]["template"] = '%STATUS%vacation :days 7 :addresses "%RECIPIENT%" "%MESSAGE%"; # VACATION';
+    $eximFilter["vacation"]["regex"] = '/^(.*)vacation :days 7 :addresses "(.*)" "(.*)"; # VACATION$/i';
+    $eximFilter["vacation"]["values"] = array("STATUS" => "#",
                                                "RECIPIENT" => "",
                                                "MESSAGE" => "");
     
-    return $eximFilterFilter;
+    return $eximFilter;
 }
 
-function createSieveFilter ( $eximFilterValues ) {
-    $eximFilterFilter = loadSieveTemplates();
+function createEximFilter ( $eximFilterValues ) {
+    $eximFilter = loadEximFilterTemplates();
 
     foreach ( array_keys($eximFilterValues) as $categorie ) {
-        $eximFilterFilterStr[$categorie] = $eximFilterFilter[$categorie]["template"];
+        $eximFilterStr[$categorie] = $eximFilter[$categorie]["template"];
         foreach ( $eximFilterValues[$categorie]["values"] as $keyword => $value ) {
-           $eximFilterFilterStr[$categorie] = str_replace("%$keyword%", $value, $eximFilterFilterStr[$categorie]);
+           $eximFilterStr[$categorie] = str_replace("%$keyword%", $value, $eximFilterStr[$categorie]);
         }
     }
-    $eximFilterFilterScript = implode("\n",$eximFilterFilterStr)."\n";  
+    $eximFilterScript = implode("\n",$eximFilterStr)."\n";  
    
-    return (eximFilterEscapeChars($eximFilterFilterScript));
+    return (eximFilterEscapeChars($eximFilterScript));
 }
 
-function parseSieveFilter ( $eximFilterFilterString ) {
-    $eximFilterFilter = loadSieveTemplates();
+function parseEximFilter ( $eximFilterStr ) {
+    $eximFilter = loadEximFilterTemplates();
     
     $lines = array();
-    $lines = preg_split("/\n/",$eximFilterFilterString);
+    $lines = preg_split("/\n/",$eximFilterStr);
     $line = array_shift($lines);
 
     while ( isset($line) ) {
-        foreach ( array_keys($eximFilterFilter) as $ruleset ) {
-            if ( preg_match($eximFilterFilter[$ruleset]["regex"],$line,$values) ) {
+        foreach ( array_keys($eximFilter) as $ruleset ) {
+            if ( preg_match($eximFilter[$ruleset]["regex"],$line,$values) ) {
                 array_shift($values); // don't need the whole string in $0
                 $i = 0;
-                foreach ( array_keys($eximFilterFilter[$ruleset]["values"]) as $valuename ) {
-                    $eximFilterFilter[$ruleset]["values"][$valuename] = eximFilterUnescapeChars($values[$i]);
+                foreach ( array_keys($eximFilter[$ruleset]["values"]) as $valuename ) {
+                    $eximFilter[$ruleset]["values"][$valuename] = eximFilterUnescapeChars($values[$i]);
                     $i++;
                 }
             }
         }
     $line = array_shift($lines);
     }
-    return $eximFilterFilter;
+    return $eximFilter;
 }
 
 /**

@@ -84,7 +84,7 @@ class content_domain_edit extends module_base
             } else {
                 $my_domain["mailstatus"] = "FALSE";
             }
-            $my_domain["mailSieveFilter"] =  createSieveFilter( $eximFilterValues );
+            $my_domain["mailSieveFilter"] =  createEximFilter( $eximFilterValues );
             $validation_errors = validate_domain($my_domain);
             if (count($validation_errors) == 0) {
                 $this->ldap->modifyDomain($my_domain);
@@ -165,8 +165,8 @@ class content_domain_edit extends module_base
             $this->smarty->assign("nonadmins", $nonadmins);
         }
   
-        /* parse Sieve filter and assign values */
-        $eximFilterValues = parseSieveFilter($my_domain["maileximFilterfilter"][0]);
+        /* parse Exim filter and assign values */
+        $eximFilterValues = parseEximFilter($my_domain["mailsievefilter"][0]);
         $this->smarty->assign("spamfiltersettings",$eximFilterValues["spamfilter"]["values"]);
     }
 
