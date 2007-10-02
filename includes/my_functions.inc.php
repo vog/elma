@@ -131,7 +131,7 @@ function validate_data($string,$object) {
     switch ($object) {
         case "dc": if (preg_match("/^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6}$/",$string)) $valid_data = TRUE;
             break;
-        case "uid": if (preg_match("/^[a-zA-Z0-9\-\.]{1,64}$/",$string)) $valid_data = TRUE;
+        case "uid": if (preg_match("/^[a-zA-Z0-9\-\.\_]{1,64}$/",$string)) $valid_data = TRUE;
             break;  
         case "sn": if (preg_match("/^[a-zA-Z0-9\-\.]{1,64}$/",$string)) $valid_data = TRUE;
             break;
