@@ -57,6 +57,9 @@ class content_user_delete extends module_base
             $submit_status = ldap_errno($this->ldap->cid);
             if ($submit_status == "0") {
                 $this->smarty->assign("submit_status",$submit_status);
+                $user["uid"][0] = $uid;
+                $this->smarty->assign("user",$user);
+                $this->smarty->assign("domain",$domain);
             } else { 
                 $this->smarty->assign("submit_status",ldap_err2str($submit_status));
             }

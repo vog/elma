@@ -2,6 +2,8 @@
                 <h2>{t}Delete alias{/t} {$alias.uid.0}@{$domain}</h2>
 		        {if $smarty.post.submit}
                     {include file="print_submit_status.tpl"}
+                    <br />
+                    <a href="index.php?module=users_list&domain={$domain}">{t}Back to domain overview{/t}</a>
                 {else}
 		        <form action="{$smarty.server.php_self}" method="post">
 			        <fieldset>

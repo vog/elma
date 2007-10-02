@@ -60,6 +60,9 @@ class content_alias_delete extends module_base
             
             if ($submit_status == "0") {
                 $this->smarty->assign("submit_status",$submit_status);
+                $alias["uid"][0] = $uid;
+                $this->smarty->assign("alias",$alias);
+                $this->smarty->assign("domain",$domain);
             } else {
                 $this->smarty->assign("submit_status",ldap_err2str($submit_status));
             }
