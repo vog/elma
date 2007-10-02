@@ -62,7 +62,7 @@
                                     {t}Next Step{/t}
                                  </td>
                                  <td>
-                                    <input type="radio" name="nlo_next_step" value="add_another" checked="true" /> {t}Add another alias{/t}<br />
+                                    <input type="radio" name="nlo_next_step" value="add_another" checked="true" /> {t}Add another user{/t}<br />
                                     <input type="radio" name="nlo_next_step" value="show_overview" /> {t}Go to domain overview{/t}<br />
                                  </td>
                             </tr>

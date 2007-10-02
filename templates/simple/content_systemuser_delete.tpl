@@ -2,6 +2,8 @@
                 <h2>{t}Delete systemuser{/t} {$user.uid.0}</h2>
 		        {if $smarty.post.submit}
                     {include file="print_submit_status.tpl"}
+                    <br />
+                    <a href="index.php?module=systemusers_list">{t}Back to Systemusers overview{/t}</a>
                 {else}
 		        <form action="{$smarty.server.php_self}" method="post">
 			        <fieldset>

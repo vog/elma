@@ -57,6 +57,12 @@ class content_systemuser_edit extends module_base
         if (isset($_POST["submit"])) {
             // save all needed information which are no ldap objects themself
             $new_adminofdomains = $_POST["nlo_adminofdomains"];
+            if(!empty($_POST["nlo_next_step"])) {
+                $next_step = $_POST["nlo_next_step"];
+            }
+            else {
+                $next_step = "";
+            }
 
             // remove all non LDAP objects from submited form
             // an the submit and mode value
@@ -115,6 +121,19 @@ class content_systemuser_edit extends module_base
                 if ($submit_status == "0") {
                     $this->smarty->assign("submit_status",$submit_status);
                     $systemuser = $my_systemuser["uid"];
+                    switch($next_step) {
+                    case 'show_overview':
+                        Header("Location: index.php?module=systemusers_list" );
+                        exit;
+                        break;
+                    case 'add_another':
+                        Header("Location: index.php?module=systemuser_edit&user=new") ;
+                        exit;
+                        break;
+                    case 'edit_current':
+                        //nothing..
+                        break;
+                    }
                 } else {
                     $this->smarty->assign("submit_status",ldap_err2str($submit_status));
                 }
