@@ -43,15 +43,21 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>
+                                <td colspan="2"> 
                                     ACL
-                                </td>
-                                <td>
-                                    <table>
+                                    <table class="inside">
                                         <tr>
                                             <td>
                                                 {t}Administrators{/t}
-                                                <br />
+                                            </td>
+                                            <td>
+                                            </td>
+                                            <td>
+                                                {t}available users{/t}
+                                            </td>
+                                        <tr/>
+                                        <tr>
+                                            <td>
                                                 <select name="admins[]" size="8" multiple="multiple">
                                                     <optgroup label="{t}Systemusers{/t}">
                                                     {foreach from=$admins item=admin}
@@ -70,18 +76,10 @@
                                                 </select>
                                             </td>
                                             <td>
-                                                <div>
-                                                    <br />
-                                                    <br />
-                                                    <input type="button" name="delfromlist" value="&gt;" onclick="delAdmin()" />
-                                                    <br />
-                                                    <br />
-                                                    <input type="button" name="addtolist" value="&lt;" onclick="addAdmin()" />
-                                                </div>
+                                                <input type="button" name="delfromlist" value="&gt;" onclick="delAdmin()" /><br />
+                                                <input type="button" name="addtolist" value="&lt;" onclick="addAdmin()" />
                                             </td>
                                             <td>
-                                                {t}available users{/t}
-                                                <br />
                                                 <select name="nonadmins[]" size="8" multiple="multiple">
                                                     <optgroup label="{t}Systemusers{/t}">
                                                     {foreach from=$nonadmins item=nonadmin}
