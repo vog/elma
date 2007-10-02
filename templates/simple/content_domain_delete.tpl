@@ -2,6 +2,8 @@
                 <h2>{t}Delete domain{/t} {$domain}</h2>
 		        {if $smarty.post.submit}
                     {include file="print_submit_status.tpl"}
+                    <br />
+                    <a href="index.php?module=domains_list">{t}Back to domains list{/t}</a>
                 {else}
 		        <form action="{$smarty.server.php_self}" method="post">
 			        <fieldset>
