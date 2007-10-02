@@ -56,6 +56,13 @@ class content_alias_new extends module_base
 
         // new alias created or existing alias altert 
         if (isset($_POST["submit"])) {
+            if(!empty($_POST["nlo_next_step"])) {
+                $next_step = $_POST["nlo_next_step"];
+            }
+            else {
+                $next_step = "";
+            }
+
             // remove all non LDAP objects from submited form
             // an the submit and mode value
             $my_alias = remove_key_by_str($_POST,"nlo_");
@@ -77,13 +84,22 @@ class content_alias_new extends module_base
                 if ($submit_status == "0") {
                     $this->smarty->assign("submit_status",$submit_status);
                     $alias = $my_alias["uid"];
+                    switch($next_step) {
+                    case 'show_overview':
+                        Header("Location: index.php?module=users_list&domain=" . urlencode($domain) );
+                        exit;
+                        break;
+                    case 'add_another':
+                        // nothing
+                        break;
+                    }
                 } else {
                      $this->smarty->assign("submit_status",ldap_err2str($submit_status));
                 }
             } else {
                 $this->smarty->assign("submit_status","Invalid Data");
                 $this->smarty->assign("validation_errors",$validation_errors);
-            } 
+            }
         } else {
             $this->smarty->assign("submit_status",-1);
         }

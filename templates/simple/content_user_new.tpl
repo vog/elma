@@ -57,6 +57,20 @@
                                     <hr/>
                                 </td>
 				            </tr>
+                            <tr>
+                                <td>
+                                    {t}Next Step{/t}
+                                 </td>
+                                 <td>
+                                    <input type="radio" name="nlo_next_step" value="add_another" checked="true" /> {t}Add another alias{/t}<br />
+                                    <input type="radio" name="nlo_next_step" value="show_overview" /> {t}Go to domain overview{/t}<br />
+                                 </td>
+                            </tr>
+    			            <tr>
+				                <td colspan="2">
+                                    <hr/>
+                                </td>
+				            </tr>
 				            <tr>
                                 <td colspan="2" class="buttons">
                                     <input type="submit" name="submit" value="{t}Save{/t}" id="button"/>

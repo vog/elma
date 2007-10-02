@@ -56,6 +56,12 @@ class content_user_new extends module_base
 
         // new user created or existing user modified
         if (isset($_POST["submit"])) {
+            if(!empty($_POST["nlo_next_step"])) {
+                $next_step = $_POST["nlo_next_step"];
+            }
+            else {
+                $next_step = "";
+            }
             // remove all non LDAP objects from submited form
             // an the submit value
             $my_user = remove_key_by_str($_POST,"nlo_");
@@ -77,6 +83,15 @@ class content_user_new extends module_base
                 if ($submit_status == "0") {
                     $this->smarty->assign("submit_status",$submit_status);
                     $user = $my_user["uid"];
+                    switch($next_step) {
+                    case 'show_overview':
+                        Header("Location: index.php?module=users_list&domain=" . urlencode($domain) );
+                        exit;
+                        break;
+                    case 'add_another':
+                        // nothing
+                        break;
+                    }
                 } else {
                     $this->smarty->assign("submit_status",ldap_err2str($submit_status));
                 }
