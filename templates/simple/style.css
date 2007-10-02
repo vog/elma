@@ -129,7 +129,6 @@ div#Content th {
 
 div#Content td {
   padding: 1px 10px 1px 10px;
-  vertical-align: top;
 }
 
 div#Content td.status,th.status {
@@ -229,7 +228,6 @@ legend {
 
 div#Content td.buttons {
   text-align: right;
-  vertical-align: middle;
 }
 
 .center {
@@ -243,4 +241,10 @@ select {
 input#button {
   border: 1px gray solid ;
 
+}
+
+div#Content table.inside {
+  padding: 0;
+  margin: 0;
+  text-align: center;
 }
