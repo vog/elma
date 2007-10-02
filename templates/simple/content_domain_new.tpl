@@ -102,6 +102,22 @@
                                 </td>
                             </tr>
                             <tr>
+                                <td colspan="2">
+                                    <hr/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top">
+                                    {t}Next Step{/t}
+                                 </td>
+                                 <td>
+                                    <input type="radio" name="nlo_next_step" value="add_another" checked="true" /> {t}Add another domain{/t}<br />
+                                    <input type="radio" name="nlo_next_step" value="show_domain_list" /> {t}Go to domain list{/t}<br />
+                                    <input type="radio" name="nlo_next_step" value="show_overview" /> {t}Edit newly created domain{/t}<br />
+                                 </td>
+                            </tr>
+
+                            <tr>
                                 <td colspan="2"> 
                                     <hr />
                                 </td>

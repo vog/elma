@@ -43,7 +43,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>
+                                <td valign="top">
                                     {t}Next Step{/t}
                                  </td>
                                  <td>
