@@ -5,7 +5,7 @@
                     <br />
                     <a href="index.php?module=systemusers_list">{t}Back to Systemusers overview{/t}</a>
                 {else}
-		        <form action="{$smarty.server.php_self}" method="post">
+		        <form action="{$smarty.server.PHP_SELF}" method="post">
 			        <fieldset>
 			            <legend>{$user.uid.0}</legend>
 			            <table>

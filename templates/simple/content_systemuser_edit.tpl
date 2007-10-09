@@ -7,7 +7,7 @@
 		        {if $smarty.post.submit}
                     {include file="print_submit_status.tpl"}
                 {/if}
-		        <form action="{$smarty.server.php_self}" method="post" onsubmit="markAllDomains()">
+		        <form action="{$smarty.server.PHP_SELF}" method="post" onsubmit="markAllDomains()">
 			        <div>
                         <input type="hidden" name="mode" value="{$mode}"/>
                     </div>

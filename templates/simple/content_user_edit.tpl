@@ -3,7 +3,7 @@
 		        {if $smarty.post.submit}
                     {include file="print_submit_status.tpl"}
                 {/if}
-		        <form action="{$smarty.server.php_self}" method="post">
+		        <form action="{$smarty.server.PHP_SELF}" method="post">
 			        <fieldset>
 			            <legend>{$user.uid.0}@{$domain}</legend>
 			            <table>
