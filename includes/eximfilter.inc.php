@@ -1,7 +1,7 @@
 <?php
 
 function loadEximFilterTemplates() {
-    $fields = array("require","template","regex","values");
+    $fields = array("template","regex","values");
     $rulesets = array("redirect","spamfilter","vacation");
 
     foreach ( $rulesets as $ruleset ) {
@@ -12,25 +12,23 @@ function loadEximFilterTemplates() {
     }
 
     // Redirect Template
-    $eximFilter["redirect"]["template"] = '%STATUS%redirect "%RECIPIENT%"; keep; # REDIRECT';
-    $eximFilter["redirect"]["regex"] = '/^(.*)redirect "(.*)"; keep; # REDIRECT$/i';
+    $eximFilter["redirect"]["template"] = '%STATUS%deliver %RECIPIENT% # REDIRECT';
+    $eximFilter["redirect"]["regex"] = '/^(.*)deliver (.*) # REDIRECT$/i';
     $eximFilter["redirect"]["values"] = array("STATUS" => "#",
-                                               "RECIPIENT" => "");
+                                              "RECIPIENT" => "");
 
     // Spamfilter Template
-    $eximFilter["spamfilter"]["template"] = '%STATUS%if header :matches "X-Spam-Flag" "yes" { %SIEVEACTION% }; # SPAMFILTER %ACTION%';
-    $eximFilter["spamfilter"]["regex"] = '/^(.*)if header :matches \"X-Spam-Flag\" \"yes\" \{ (.*) \}; # SPAMFILTER (.*)$/i';
+    $eximFilter["spamfilter"]["template"] = '%STATUS%if $header_X-Spam-Flag: contains "YES" then %FILTERACTION% endif # SPAMFILTER %ACTION%';
+    $eximFilter["spamfilter"]["regex"] = '/^(.*)if \$header_X-Spam-Flag: contains "YES" then (.*) endif # SPAMFILTER (.*)$/i';
     $eximFilter["spamfilter"]["values"] = array("STATUS" => "#",
-                                                 "SIEVEACTION" => "",
-                                                 "ACTION" => "MARK");
+                                                "FILTERACTION" => "",
+                                                "ACTION" => "MARK");
 
     // Vacation Template
-    $eximFilter["vacation"]["require"] = "\"vacation\"";
-    $eximFilter["vacation"]["template"] = '%STATUS%vacation :days 7 :addresses "%RECIPIENT%" "%MESSAGE%"; # VACATION';
-    $eximFilter["vacation"]["regex"] = '/^(.*)vacation :days 7 :addresses "(.*)" "(.*)"; # VACATION$/i';
+    $eximFilter["vacation"]["template"] = '%STATUS%if personal then mail to $reply_address subject "Re: $h_subject:" text "%MESSAGE%" once $home/.vacation.db once_repeat 7d # VACATION';
+    $eximFilter["vacation"]["regex"] = '/^(.*)if personal then mail to \$reply_address subject "Re: \$h_subject:" text "(.*)" once \$home\/\.vacation.db once_repeat 7d # VACATION$/i';
     $eximFilter["vacation"]["values"] = array("STATUS" => "#",
-                                               "RECIPIENT" => "",
-                                               "MESSAGE" => "");
+                                              "MESSAGE" => "");
     
     return $eximFilter;
 }
@@ -45,7 +43,9 @@ function createEximFilter ( $eximFilterValues ) {
         }
     }
     $eximFilterScript = implode("\n",$eximFilterStr)."\n";  
-   
+
+my_print_r($eximFilterScript);
+
     return (eximFilterEscapeChars($eximFilterScript));
 }
 
@@ -69,6 +69,8 @@ function parseEximFilter ( $eximFilterStr ) {
         }
     $line = array_shift($lines);
     }
+
+    my_print_r($eximFilter);
     return $eximFilter;
 }
 
