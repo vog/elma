@@ -50,7 +50,10 @@ class content_user_new extends module_base
      */
     function proceed() 
     {
-        $user = $_GET["user"]; 
+        if ( !empty($_GET["user"]) ) {
+            $user = $_GET["user"]; 
+        }
+
         $domain =  $_GET["domain"];
         $this->smarty->assign("domain",$domain);
 
@@ -73,6 +76,7 @@ class content_user_new extends module_base
                 $my_user["mailstatus"] = "FALSE";
             }
 
+            $my_user["mailsievefilter"] = createEximFilter( loadEximFilterTemplates() );
             $my_user["userpassword"] =  "{MD5}".base64_encode(pack("H*",md5($my_user["clearpassword"])));
 
             $validation_errors = validate_user($my_user);

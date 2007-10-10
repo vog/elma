@@ -5,7 +5,7 @@
                     <br />
                     <a href="index.php?module=domains_list">{t}Back to domains list{/t}</a>
                 {else}
-		        <form action="{$smarty.server.PHP_SELF}" method="post">
+		        <form action="{$smarty.server.REQUEST_URI}" method="post">
 			        <fieldset>
 			            <legend>{$domain}</legend>
 			            <table>

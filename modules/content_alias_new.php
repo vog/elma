@@ -50,7 +50,10 @@ class content_alias_new extends module_base
      */
     function proceed() 
     {
-        $alias = $_GET["alias"]; 
+        if ( !empty($_GET["alias"]) ) {
+            $alias = $_GET["alias"]; 
+        }
+
         $domain =  $_GET["domain"];
         $this->smarty->assign("domain",$domain);
 

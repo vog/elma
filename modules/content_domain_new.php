@@ -50,8 +50,10 @@ class content_domain_new extends module_base
      */
     function proceed() 
     {
-        $domain = $_GET["domain"]; 
-        $this->smarty->assign("domain",$domain);
+        if ( ! empty($_GET["domain"]) ) { 
+            $domain = $_GET["domain"];  
+            $this->smarty->assign("domain",$domain);
+        }
         $this->smarty->assign("mailstorageservers",unserialize(MAILSTORAGESERVERS));
 
         // new domain created or existing domain altert 
@@ -91,6 +93,7 @@ class content_domain_new extends module_base
                     $admins = array();
                 }
 
+                $my_domain["mailsievefilter"] = createEximFilter( loadEximFilterTemplates() );
                 $this->ldap->addDomain($my_domain, $admins);
                         
                 $submit_status = ldap_errno($this->ldap->cid);

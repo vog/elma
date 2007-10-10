@@ -58,15 +58,15 @@ class content_user_edit extends module_base
         if (isset($_POST["submit"])) {
             
             // create array of submitted values
-            $eximFilterValues["vacation"]["values"] = array( STATUS => "",
-                                                     RECIPIENT => $_POST["uid"]."@".$domain,
-                                                       MESSAGE => $_POST["nlo_vacationmessage"]);
+            $eximFilterValues["vacation"]["values"] = array( "STATUS" => "",
+                                                          "RECIPIENT" => $_POST["uid"]."@".$domain,
+                                                            "MESSAGE" => $_POST["nlo_vacationmessage"]);
             if (! isset($_POST["nlo_vacationstatus"])) {
                 $eximFilterValues["vacation"]["values"]["STATUS"] = "#";
             }
 
-            $eximFilterValues["redirect"]["values"] = array( STATUS => "",
-                                                     RECIPIENT => $_POST["nlo_redirectrecipient"]);
+            $eximFilterValues["redirect"]["values"] = array( "STATUS" => "",
+                                                          "RECIPIENT" => $_POST["nlo_redirectrecipient"]);
             if (! isset($_POST["nlo_redirectstatus"])) {
                 $eximFilterValues["redirect"]["values"]["STATUS"] = "#";
             }

@@ -44,8 +44,6 @@ function createEximFilter ( $eximFilterValues ) {
     }
     $eximFilterScript = implode("\n",$eximFilterStr)."\n";  
 
-my_print_r($eximFilterScript);
-
     return (eximFilterEscapeChars($eximFilterScript));
 }
 
@@ -70,7 +68,6 @@ function parseEximFilter ( $eximFilterStr ) {
     $line = array_shift($lines);
     }
 
-    my_print_r($eximFilter);
     return $eximFilter;
 }
 

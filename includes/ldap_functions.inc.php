@@ -45,7 +45,7 @@ function my_ldap_delete($cid,$dn,$recursive=false) {
             //return result code, if delete fails
             return $result;
         }
-    }
+        }
     return ldap_delete($cid,$dn);
   }
 }
@@ -521,7 +521,7 @@ class ELMA {
         }
 
         /* if the above was successfull delete the user object */
-        if ($result == 0) {
+        if ( ( !empty($result) ) && ($result == 0) ) {
             ldap_delete($this->cid, "uid=".$systemuser.",".LDAP_USERS_ROOT_DN);
             
             if ( ldap_errno($this->cid) !== 0 ) {

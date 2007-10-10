@@ -3,7 +3,7 @@
 		        {if $smarty.post.submit}
                     {include file="print_submit_status.tpl"}
                 {/if}
-                <form action="{$smarty.server.PHP_SELF}" method="post" onsubmit="markAllAdmins()">
+                <form action="{$smarty.server.REQUEST_URI}" method="post" onsubmit="markAllAdmins()">
             	    <fieldset>
 			            <legend>{t}new domain{/t}</legend>
 			            <table>

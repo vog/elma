@@ -56,7 +56,10 @@ class content_systemuser_edit extends module_base
         // new systemuser created or existing systemuser modified
         if (isset($_POST["submit"])) {
             // save all needed information which are no ldap objects themself
-            $new_adminofdomains = $_POST["nlo_adminofdomains"];
+            if ( !empty($_POST["nlo_adminofdomains"]) ) {
+                $new_adminofdomains = $_POST["nlo_adminofdomains"];
+            }
+
             if(!empty($_POST["nlo_next_step"])) {
                 $next_step = $_POST["nlo_next_step"];
             }

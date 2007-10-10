@@ -57,8 +57,8 @@ class content_domain_edit extends module_base
         if (isset($_POST["submit"])) {
 
             // create array of submitted values
-            $eximFilterValues["spamfilter"]["values"] = array( STATUS => "", 
-                                                          ACTION => $_POST["nlo_spamfilteraction"]);
+            $eximFilterValues["spamfilter"]["values"] = array( "STATUS" => "", 
+                                                               "ACTION" => $_POST["nlo_spamfilteraction"]);
             if ( ! isset($_POST["nlo_spamfilterstatus"]) ) {
                 $eximFilterValues["spamfilter"]["values"]["STATUS"] = "#";
             }

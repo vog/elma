@@ -5,7 +5,7 @@
                     <br />
                     <a href="index.php?module=users_list&domain={$domain}">{t}Back to domain overview{/t}</a>
                 {else}
-		        <form action="{$smarty.server.PHP_SELF}" method="post">
+		        <form action="{$smarty.server.REQUEST_URI}" method="post">
 			        <fieldset>
 			            <legend>{$user.uid.0}@{$domain}</legend>
 			            <table>
