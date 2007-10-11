@@ -86,9 +86,18 @@ class content_systemuser_edit extends module_base
                 switch ($_POST["mode"]) {
                     case "add":
                         $this->ldap->addSystemUser($my_systemuser);
+                        if ( !isset($new_adminofdomains) || count($new_adminofdomains) == 0) $new_adminofdomains = array();
+
+                        $addDomainAdmin = $new_adminofdomains;
+
+                        if ( count($addDomainAdmin) > 0 ) {
+                            foreach($addDomainAdmin as $domain) {
+                                $this->ldap->addAdminUsers($domain, "uid=".$my_systemuser["uid"].",".LDAP_USERS_ROOT_DN);
+                            }
+                        }
                     break;
                     case "modify": 
-                        if ( count($new_adminofdomains) == 0) $new_adminofdomains = array();
+                        if ( !isset($new_adminofdomains) || count($new_adminofdomains) == 0) $new_adminofdomains = array();
                         $old_adminofdomains = $this->ldap->getSystemUsersDomains($systemuser);
                         unset ($my_systemuser["adminofdomains"]);
                         
