@@ -155,6 +155,18 @@ function my_unserialize(&$array,$position) {
     $array = unserialize($array); 
 } 
  
+function array_set_as_first($array,$element) {
+    if(array_key_exists($element,$array)) {
+        $extract[$element] = $array[$element];
+        unset($array[$element]);
 
+        $array = array_merge($extract,$array);
+
+        return $array;
+    } else {
+        trigger_error("\$element not a key in \$array!",E_USER_WARNING);
+        return $array;
+    }
+}
 
 // vim:tabstop=4:expandtab:shiftwidth=4:filetype=php:syntax:ruler:

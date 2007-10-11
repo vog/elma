@@ -1,7 +1,7 @@
 <?php
 
 function loadEximFilterTemplates() {
-    $fields = array("template","regex","values");
+    $fields = array("filtertype","template","regex","values");
     $rulesets = array("redirect","spamfilter","vacation");
 
     foreach ( $rulesets as $ruleset ) {
@@ -10,6 +10,11 @@ function loadEximFilterTemplates() {
             $eximFilter[$ruleset][$field] = array();
         }
     }
+
+    // set the header, so that exim can determine what kind of filter languiage is used
+    $eximFilter["filtertype"]["template"] = '%STATUS% Exim filter';
+    $eximFilter["filtertype"]["regex"] = '/^(.*) Exim filter$/i';
+    $eximFilter["filtertype"]["values"] = array("STATUS" => "#");
 
     // Redirect Template
     $eximFilter["redirect"]["template"] = '%STATUS%deliver %RECIPIENT% # REDIRECT';
@@ -35,7 +40,8 @@ function loadEximFilterTemplates() {
 
 function createEximFilter ( $eximFilterValues ) {
     $eximFilter = loadEximFilterTemplates();
-
+    $eximFilterValues["filtertype"]["values"] = $eximFilter["filtertype"]["values"];
+    $eximFilterValues = array_set_as_first($eximFilterValues,"filtertype");
     foreach ( array_keys($eximFilterValues) as $categorie ) {
         $eximFilterStr[$categorie] = $eximFilter[$categorie]["template"];
         foreach ( $eximFilterValues[$categorie]["values"] as $keyword => $value ) {
