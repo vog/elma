@@ -507,21 +507,26 @@ class ELMA {
     }
 
     /**
-     * delSystemUser - removes a systemUser
+     * deleteSystemUser - removes a systemUser
      *
      * This function will remove a systemUser and his entries in all adminsgroups he's in
      *
      * @systemuser      string  uid= value of the systemuser's DN
      */
     function deleteSystemUser ( $systemuser ) {
+        /* define 0 as default value for $result for further error checks */
+        $result = 0;
+
         /* delete admin from admingroups where neccessary */
         $adminofdomains = $this->getSystemUsersDomains($systemuser);
         foreach ($adminofdomains as $adminofdomain) {
-            $this->delAdminUsers($adminofdomain, "uid=$systemuser,".LDAP_USERS_ROOT_DN);
+            if ($this->deleteAdminUsers($adminofdomain, "uid=$systemuser,".LDAP_USERS_ROOT_DN) != 0) {
+                $result = 1;
+            }
         }
-
+        
         /* if the above was successfull delete the user object */
-        if ( ( !empty($result) ) && ($result == 0) ) {
+        if ($result == 0) {
             ldap_delete($this->cid, "uid=".$systemuser.",".LDAP_USERS_ROOT_DN);
             
             if ( ldap_errno($this->cid) !== 0 ) {
@@ -629,7 +634,7 @@ class ELMA {
     }
 
     /**
-     * delAdminUsers - remove users from an admingroup
+     * deleteAdminUsers - remove users from an admingroup
      *
      * This function will remove the submitted users from the global or the submitted domain's admingroup
      *
