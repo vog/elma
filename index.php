@@ -45,7 +45,7 @@ else if (isset($_GET["module"]))
     $module = $_GET["module"];
 else {
     $module = "main";
-    $_GET["module"] = 'main';
+    $_GET["module"] = $module;
 }
 
 if (!isset($_SESSION["login"])) {
