@@ -2,7 +2,7 @@
                 <h1>ELMA - Exim LDAP Mail Administrator - v0.3</h1>
             </div>
             <div id="Pathfinder">
-            {$get.module} > {$get.domain} > {$get.user}
+            {$get.module} {if $get.domain}&gt;{/if} {$get.domain} {if $get.user}&gt;{/if} {$get.user}
             </div>
 
 

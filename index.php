@@ -43,7 +43,10 @@ if (isset($_POST["module"]))
     $module = $_POST["module"];
 else if (isset($_GET["module"])) 
     $module = $_GET["module"];
-else $module = "main";
+else {
+    $module = "main";
+    $_GET["module"] = 'main';
+}
 
 if (!isset($_SESSION["login"])) {
     session_destroy();
