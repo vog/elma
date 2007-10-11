@@ -41,6 +41,18 @@ function loadEximFilterTemplates() {
 function createEximFilter ( $eximFilterValues ) {
     $eximFilter = loadEximFilterTemplates();
     $eximFilterValues["filtertype"]["values"] = $eximFilter["filtertype"]["values"];
+
+    if ( ! empty($eximFilterValues["spamfilter"]["values"]["ACTION"]) ) {
+        switch ($eximFilterValues["spamfilter"]["values"]["ACTION"]) {
+            case "DISCARD": $eximFilterValues["spamfilter"]["values"]["FILTERACTION"] = "finish";
+                            break;
+            case "REDIRECT": $eximFilterValues["spamfilter"]["values"]["FILTERACTION"] = "deliver spam@\$domain";
+                             break;
+            case "FOLDER": $eximFilterValues["spamfilter"]["values"]["FILTERACTION"] = "save \$home/Maildir/.Spam/";
+                           break;
+        }
+    }
+
     $eximFilterValues = array_set_as_first($eximFilterValues,"filtertype");
     foreach ( array_keys($eximFilterValues) as $categorie ) {
         $eximFilterStr[$categorie] = $eximFilter[$categorie]["template"];

@@ -53,10 +53,9 @@
                                 </td>
                                 <td>
                                     <select name="nlo_spamfilteraction">
-                                        <option {if $spamfiltersettings.ACTION eq "DISCARD"}selected{/if} value="DISCARD">discard</option>
-                                        <option {if $spamfiltersettings.ACTION eq "REDIRECT"}selected{/if} value="REDIRECT">redirect</option>
-                                        <option {if $spamfiltersettings.ACTION eq "FOLDER"}selected{/if} value="FOLDER">folder</option>
-                                        <option {if $spamfiltersettings.ACTION eq "MARK"}selected{/if} value="MARK">mark</option>
+                                        <option {if $spamfiltersettings.ACTION eq "DISCARD"}selected{/if} value="DISCARD">{t}discard email{/t}</option>
+                                        <option {if $spamfiltersettings.ACTION eq "REDIRECT"}selected{/if} value="REDIRECT">{t}redirect to{/t} spam@{$domain.dc.0}</option>
+                                        <option {if $spamfiltersettings.ACTION eq "FOLDER"}selected{/if} value="FOLDER">{t}save in user's spamfolder{/t}</option>
                                     </select>
                                 </td>
                             </tr>
@@ -82,7 +81,7 @@
                                         <tr/>
                                         <tr>
                                             <td>
-                                                <select name="admins[]" size="8" multiple="multiple">
+                                                <select name="admins[]" size="8" multiple="multiple" class="multiple">
                                                     <optgroup label="{t}Systemusers{/t}">
                                                     {foreach from=$admins item=admin}
                                                         {if ! @in_array("mailUser",$admin.objectclass) }
@@ -103,7 +102,7 @@
                                                 <input type="button" name="delfromlist" value="&gt;" onclick="delAdmin()" /><br /><input type="button" name="addtolist" value="&lt;" onclick="addAdmin()" />
                                             </td>
                                             <td>
-                                                <select name="nonadmins[]" size="8" multiple="multiple">
+                                                <select name="nonadmins[]" size="8" multiple="multiple" class="multiple">
                                                     <optgroup label="{t}Systemusers{/t}">
                                                     {foreach from=$nonadmins item=nonadmin}
                                                         {if ! @in_array("mailUser",$nonadmin.objectclass) }

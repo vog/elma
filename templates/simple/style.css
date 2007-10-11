@@ -234,7 +234,7 @@ div#Content td.buttons {
   text-align: center;
 }
 
-select {
+select.multiple {
   width: 15em;
 }
 
