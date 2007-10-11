@@ -67,10 +67,8 @@
                                 </td>
 				            </tr>
                             <tr>
-                                <td>
+                                <td colspan="2">
                                     {t}ACL{/t}
-                                </td>
-                                <td class="center">
                                     <table>
                                         <tr>
                                             <td>
