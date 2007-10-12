@@ -60,8 +60,10 @@ define ("LDAP_ADMIN_GROUP", "cn=admingroup");
 define ("DEFAULT_LANGUAGE","en_US");
 
 // Set all languages which should be available at login
-define ("AVAILABLE_LANGUAGES",serialize(array("deutsch" => "de_DE",
-                                              "english" => "en_US"
+define ("AVAILABLE_LANGUAGES",serialize(array(
+  "deutsch" => "de_DE",
+  "english" => "en_US"
+)));
 
 /* ######## Template Settings #### */
 
