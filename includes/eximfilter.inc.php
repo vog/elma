@@ -30,8 +30,8 @@ function loadEximFilterTemplates() {
                                                 "ACTION" => "MARK");
 
     // Vacation Template
-    $eximFilter["vacation"]["template"] = '%STATUS%if personal then mail to $reply_address subject "Re: $h_subject:" text "%MESSAGE%" once $home/.vacation.db once_repeat 7d endif # VACATION';
-    $eximFilter["vacation"]["regex"] = '/^(.*)if personal then mail to \$reply_address subject "Re: \$h_subject:" text "(.*)" once \$home\/\.vacation.db once_repeat 7d endif # VACATION$/i';
+    $eximFilter["vacation"]["template"] = '%STATUS%if personal then mail from $local_part@$domain to $reply_address subject "Re: $h_subject:" text "%MESSAGE%" once $home/.vacation.db once_repeat 7d endif # VACATION';
+    $eximFilter["vacation"]["regex"] = '/^(.*)if personal then mail from \$local_part@\$domain  to \$reply_address subject "Re: \$h_subject:" text "(.*)" once \$home\/\.vacation.db once_repeat 7d endif # VACATION$/i';
     $eximFilter["vacation"]["values"] = array("STATUS" => "#",
                                               "MESSAGE" => "");
     
