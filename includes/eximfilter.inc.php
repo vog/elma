@@ -44,12 +44,12 @@ function createEximFilter ( $eximFilterValues ) {
 
     if ( ! empty($eximFilterValues["spamfilter"]["values"]["ACTION"]) ) {
         switch ($eximFilterValues["spamfilter"]["values"]["ACTION"]) {
-            case "DISCARD": $eximFilterValues["spamfilter"]["values"]["FILTERACTION"] = "finish";
+            case "DISCARD": $eximFilterValues["spamfilter"]["values"]["FILTERACTION"] = "seen finish";
                             break;
             case "REDIRECT": $eximFilterValues["spamfilter"]["values"]["FILTERACTION"] = "deliver spam@\$domain";
-                             break;
+                            break;
             case "FOLDER": $eximFilterValues["spamfilter"]["values"]["FILTERACTION"] = "save \$home/Maildir/.Spam/";
-                           break;
+                            break;
         }
     }
 
