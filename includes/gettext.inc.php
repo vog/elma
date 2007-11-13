@@ -39,6 +39,7 @@ setlocale(LC_ALL, $set_language);
 // Set the text domain as 'messages'
 $domain = 'messages';
 bindtextdomain($domain, getcwd()."/templates/".TEMPLATE."/locale");
+bind_textdomain_codeset($domain, 'UTF-8');
 textdomain($domain);
 
 // vim:tabstop=4:expandtab:shiftwidth=4:filetype=php:syntax:ruler:

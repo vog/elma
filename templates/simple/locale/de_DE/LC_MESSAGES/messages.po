@@ -165,9 +165,9 @@ msgid ""
 "and aliases for that domain. Everything else should be pretty self "
 "explaining. Have fun ;-)"
 msgstr ""
-"Klicken Sie auf den Link Domänen in der linken Navigationsleiste um einen"
-"Überblick Ihrer Domänen yu erhalten. Klicken Sie dann auf den Domänennamen"
-"um eine Benutzerübersicht zu erhalten. Alles andere sollte relativ"
+"Klicken Sie auf den Link Domänen in der linken Navigationsleiste um einen "
+"Überblick Ihrer Domänen zu erhalten. Klicken Sie dann auf den Domänennamen "
+"um eine Benutzerübersicht zu erhalten. Alles andere sollte relativ "
 "selbsterklärend sein. Viel Spaß ;-)"
 
 #. ../templates/simple/content_user_delete.tpl
