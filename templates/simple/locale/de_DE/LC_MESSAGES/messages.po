@@ -1,164 +1,273 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2007 Daniel Weuthen
-# This file is distributed under the same license as the elma package.
-# Daniel Weuthen <daniel@weuthen-net.de>, 2007.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.1\n"
-"Report-Msgid-Bugs-To: daniel@weuthen-net.de\n"
-"POT-Creation-Date: 2007-05-01 16:51+0200\n"
-"PO-Revision-Date: 2007-05-01 16:51+0200\n"
-"Last-Translator: Daniel Weuthen <daniel@weuthen-net.de>\n"
-"Language-Team: de_DE <daniel@weuthen-net.de>\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-11-13 14:20+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#. ../templates/simple/content_alias_delete.tpl
 #. ../templates/simple/content_alias_delete.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:2
 msgid "Delete alias"
 msgstr "Lösche Alias"
 
 #. ../templates/simple/content_alias_delete.tpl
+#. ../templates/simple/content_alias_delete.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:5
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:8
 msgid "Are you sure you want to delete alias %1@%2?"
 msgstr "Sind Sie sicher, daß Sie den Alias %1@%2 löschen wollen?"
 
 #. ../templates/simple/content_alias_delete.tpl
 #. ../templates/simple/content_domain_delete.tpl
 #. ../templates/simple/content_user_delete.tpl
+#. ../templates/simple/content_alias_delete.tpl
+#. ../templates/simple/content_domain_delete.tpl
+#. ../templates/simple/content_systemuser_delete.tpl
+#. ../templates/simple/content_user_delete.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:8
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:41
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:95
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:11
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:65
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:251
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:335
 msgid "Yes"
 msgstr "Ja"
 
 #. ../templates/simple/content_alias_delete.tpl
 #. ../templates/simple/content_domain_delete.tpl
 #. ../templates/simple/content_user_delete.tpl
+#. ../templates/simple/content_alias_delete.tpl
+#. ../templates/simple/content_domain_delete.tpl
+#. ../templates/simple/content_systemuser_delete.tpl
+#. ../templates/simple/content_user_delete.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:11
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:44
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:98
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:14
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:68
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:254
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:338
 msgid "No"
 msgstr "Nein"
 
 #. ../templates/simple/content_alias_edit.tpl
+#. ../templates/simple/content_alias_edit.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:14
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:17
 msgid "Edit alias"
 msgstr "Bearbeite Alias"
 
 #. ../templates/simple/content_alias_edit.tpl
+#. ../templates/simple/content_alias_new.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:17
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:29
 msgid "New alias"
 msgstr "Neuer Alias"
 
 #. ../templates/simple/content_alias_edit.tpl
 #. ../templates/simple/content_users_list.tpl
+#. ../templates/simple/content_alias_new.tpl
+#. ../templates/simple/content_users_list.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:20
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:167
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:32
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:443
 msgid "new alias"
 msgstr "neuer Alias"
 
 #. ../templates/simple/content_alias_edit.tpl
 #. ../templates/simple/content_users_list.tpl
+#. ../templates/simple/content_alias_new.tpl
+#. ../templates/simple/content_users_list.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:23
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:149
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:35
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:425
 msgid "Alias"
 msgstr "Alias"
 
 #. ../templates/simple/content_alias_edit.tpl
 #. ../templates/simple/content_users_list.tpl
+#. ../templates/simple/content_alias_edit.tpl
+#. ../templates/simple/content_alias_new.tpl
+#. ../templates/simple/content_users_list.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:26
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:152
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:20
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:38
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:428
 msgid "Alias for"
 msgstr "Alias für"
 
 #. ../templates/simple/content_alias_edit.tpl
 #. ../templates/simple/content_domain_edit.tpl
 #. ../templates/simple/content_user_edit.tpl
+#. ../templates/simple/content_alias_edit.tpl
+#. ../templates/simple/content_alias_new.tpl
+#. ../templates/simple/content_domain_edit.tpl
+#. ../templates/simple/content_domain_new.tpl
+#. ../templates/simple/content_user_edit.tpl
+#. ../templates/simple/content_user_new.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:29
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:59
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:119
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:23
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:41
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:74
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:125
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:350
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:386
 msgid "Is active?"
-msgstr "Akitiviert?"
+msgstr "Aktiviert?"
 
 #. ../templates/simple/content_alias_edit.tpl
 #. ../templates/simple/content_domain_edit.tpl
 #. ../templates/simple/content_user_edit.tpl
+#. ../templates/simple/content_alias_edit.tpl
+#. ../templates/simple/content_alias_new.tpl
+#. ../templates/simple/content_domain_edit.tpl
+#. ../templates/simple/content_domain_new.tpl
+#. ../templates/simple/content_globaladmins_edit.tpl
+#. ../templates/simple/content_systemuser_edit.tpl
+#. ../templates/simple/content_user_edit.tpl
+#. ../templates/simple/content_user_new.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:32
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:62
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:125
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:26
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:53
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:113
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:161
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:197
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:302
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:368
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:401
 msgid "Save"
 msgstr "Speichern"
 
 #. ../templates/simple/content_domain_delete.tpl
+#. ../templates/simple/content_domain_delete.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:35
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:56
 msgid "Delete domain"
 msgstr "Domäne löschen"
 
 #. ../templates/simple/content_domain_delete.tpl
+#. ../templates/simple/content_domain_delete.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:38
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:62
 msgid "Are you sure you want to delete domain %1?"
 msgstr "Sind Sie sicher, daß Sie die Domäne %1 löschen wollen?"
 
 #. ../templates/simple/content_domain_edit.tpl
+#. ../templates/simple/content_domain_edit.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:47
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:71
 msgid "Edit domain"
 msgstr "Domäne bearbeiten"
 
 #. ../templates/simple/content_domain_edit.tpl
+#. ../templates/simple/content_domain_new.tpl
+#. ../templates/simple/content_domains_list.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:53
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:119
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:185
 msgid "new domain"
 msgstr "neue Domäne"
 
 #. ../templates/simple/content_domain_edit.tpl
 #. ../templates/simple/content_domains_list.tpl
+#. ../templates/simple/content_domain_new.tpl
+#. ../templates/simple/content_domains_list.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:56
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:65
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:122
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:164
 msgid "Domain"
 msgstr "Domäne"
 
 #. ../templates/simple/content_domains_list.tpl
 #. ../templates/simple/content_users_list.tpl
+#. ../templates/simple/content_domains_list.tpl
+#. ../templates/simple/content_users_list.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:68
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:134
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:155
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:173
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:410
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:431
 msgid "Active"
 msgstr "Aktiviert"
 
 #. ../templates/simple/content_domains_list.tpl
 #. ../templates/simple/content_users_list.tpl
+#. ../templates/simple/content_domains_list.tpl
+#. ../templates/simple/content_systemusers_list.tpl
+#. ../templates/simple/content_users_list.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:71
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:137
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:158
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:176
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:314
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:413
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:434
 msgid "Command"
 msgstr "Befehl"
 
 #. ../templates/simple/content_domains_list.tpl
 #. ../templates/simple/content_users_list.tpl
+#. ../templates/simple/content_domains_list.tpl
+#. ../templates/simple/content_systemusers_list.tpl
+#. ../templates/simple/content_users_list.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:74
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:140
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:161
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:179
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:317
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:416
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:437
 msgid "edit"
 msgstr "bearbeiten"
 
 #. ../templates/simple/content_domains_list.tpl
 #. ../templates/simple/content_users_list.tpl
+#. ../templates/simple/content_domains_list.tpl
+#. ../templates/simple/content_systemusers_list.tpl
+#. ../templates/simple/content_users_list.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:77
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:143
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:164
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:182
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:320
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:419
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:440
 msgid "delete"
 msgstr "löschen"
 
 #. ../templates/simple/content_main.tpl
+#. ../templates/simple/content_main.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:83
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:200
 msgid "Welcome to your Exim LDAP Mail Administrator Frontend"
 msgstr "Willkommen zu Ihrem Exim LDAP Mail Administrator"
 
 #. ../templates/simple/content_main.tpl
+#. ../templates/simple/content_main.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:86
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:203
 msgid ""
 "Click on the Domains link at the left navigation bar to get an overview of "
 "your email domains. When you click on the domain name you will see all users "
@@ -171,94 +280,435 @@ msgstr ""
 "selbsterklärend sein. Viel Spaß ;-)"
 
 #. ../templates/simple/content_user_delete.tpl
+#. ../templates/simple/content_user_delete.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:92
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:332
 msgid "Are you sure you want to delete user %1@%2?"
 msgstr "Sind Sie sicher, daß Sie den Benutzer %1@%2 löschen wollen?"
 
 #. ../templates/simple/content_user_edit.tpl
+#. ../templates/simple/content_user_edit.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:101
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:341
 msgid "Edit user"
 msgstr "Bearbeite Benutzer"
 
 #. ../templates/simple/content_user_edit.tpl
+#. ../templates/simple/content_user_new.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:104
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:371
 msgid "New user"
 msgstr "Neuer Benutzer"
 
 #. ../templates/simple/content_user_edit.tpl
 #. ../templates/simple/content_users_list.tpl
+#. ../templates/simple/content_systemuser_edit.tpl
+#. ../templates/simple/content_systemusers_list.tpl
+#. ../templates/simple/content_user_new.tpl
+#. ../templates/simple/content_users_list.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:107
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:146
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:263
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:323
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:374
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:422
 msgid "new user"
 msgstr "neuer Benutzer"
 
 #. ../templates/simple/content_user_edit.tpl
 #. ../templates/simple/content_users_list.tpl
 #. ../templates/simple/login.tpl
+#. ../templates/simple/content_systemuser_edit.tpl
+#. ../templates/simple/content_systemusers_list.tpl
+#. ../templates/simple/content_user_new.tpl
+#. ../templates/simple/content_users_list.tpl
+#. ../templates/simple/login.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:110
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:131
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:173
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:266
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:308
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:377
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:407
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:449
 msgid "Username"
 msgstr "Benutzername"
 
 #. ../templates/simple/content_user_edit.tpl
+#. ../templates/simple/content_systemuser_edit.tpl
+#. ../templates/simple/content_user_edit.tpl
+#. ../templates/simple/content_user_new.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:113
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:269
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:344
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:380
 msgid "First name"
 msgstr "Vorname"
 
 #. ../templates/simple/content_user_edit.tpl
+#. ../templates/simple/content_systemuser_edit.tpl
+#. ../templates/simple/content_user_edit.tpl
+#. ../templates/simple/content_user_new.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:116
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:272
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:347
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:383
 msgid "Last name"
 msgstr "Nachname"
 
 #. ../templates/simple/content_user_edit.tpl
 #. ../templates/simple/login.tpl
+#. ../templates/simple/content_systemuser_edit.tpl
+#. ../templates/simple/content_user_edit.tpl
+#. ../templates/simple/content_user_new.tpl
+#. ../templates/simple/login.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:122
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:176
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:275
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:365
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:389
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:452
 msgid "Password"
 msgstr "Passwort"
 
 #. ../templates/simple/content_users_list.tpl
+#. ../templates/simple/content_users_list.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:128
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:404
 msgid "Users and aliases for domain"
 msgstr "Benutzer und Aliase für Domäne"
 
 #. ../templates/simple/login.tpl
+#. ../templates/simple/login.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:170
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:446
 msgid "Invalid username and/or password."
 msgstr "Ungültiger Benutzername und/oder Passwort."
 
 #. ../templates/simple/login.tpl
+#. ../templates/simple/login.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:179
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:455
 msgid "Language"
 msgstr "Sprache"
 
 #. ../templates/simple/login.tpl
+#. ../templates/simple/login.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:182
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:458
 msgid "Login"
 msgstr "Anmelden"
 
 #. ../templates/simple/navigation.tpl
+#. ../templates/simple/navigation.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:185
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:461
 msgid "Home"
 msgstr "Übersicht"
 
 #. ../templates/simple/navigation.tpl
+#. ../templates/simple/content_main.tpl
+#. ../templates/simple/navigation.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:188
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:209
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:464
 msgid "Domains"
 msgstr "Domänen"
 
 #. ../templates/simple/navigation.tpl
+#. ../templates/simple/navigation.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:191
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:470
 msgid "Logout"
 msgstr "Abmelden"
 
 #. ../templates/simple/print_submit_status.tpl
+#. ../templates/simple/print_submit_status.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:194
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:473
 msgid "Data has been saved."
 msgstr "Daten wurden gespeichert."
 
 #. ../templates/simple/print_submit_status.tpl
+#. ../templates/simple/print_submit_status.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:197
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:476
 msgid "Sorry, your data could not be saved. The following error occured:"
-msgstr "Leider konnten Ihre Daten nicht gespeichert werden. Folgender Fehler ist aufgetreten:"
+msgstr ""
+"Leider konnten Ihre Daten nicht gespeichert werden. Folgender Fehler ist "
+"aufgetreten:"
+
+#. ../templates/simple/content_alias_delete.tpl
+#. ../templates/simple/content_user_delete.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:5
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:329
+msgid "Back to domain overview"
+msgstr "Zurück zur Domänen-Übersicht"
+
+#. ../templates/simple/content_alias_new.tpl
+#. ../templates/simple/content_domain_new.tpl
+#. ../templates/simple/content_systemuser_edit.tpl
+#. ../templates/simple/content_user_new.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:44
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:149
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:290
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:392
+msgid "Next Step"
+msgstr "Nächster Schritt"
+
+#. ../templates/simple/content_alias_new.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:47
+msgid "Add another alias"
+msgstr "Einen weiteren Alias hinzufügen"
+
+#. ../templates/simple/content_alias_new.tpl
+#. ../templates/simple/content_user_new.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:50
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:398
+msgid "Go to domain overview"
+msgstr "Zur Domänen-Übersicht"
+
+#. ../templates/simple/content_domain_delete.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:59
+msgid "Back to domains list"
+msgstr "Zurück zur Domänen-Übersicht"
+
+#. ../templates/simple/content_domain_edit.tpl
+#. ../templates/simple/content_domain_new.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:77
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:128
+msgid "Mailstorageserver"
+msgstr "Postfachserver"
+
+#. ../templates/simple/content_domain_edit.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:80
+msgid "Spamfilter enabled"
+msgstr "Spamfilter eingeschaltet"
+
+#. ../templates/simple/content_domain_edit.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:83
+msgid "Rule"
+msgstr "Regel"
+
+#. ../templates/simple/content_domain_edit.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:86
+msgid "discard email"
+msgstr "Email verwerfen"
+
+#. ../templates/simple/content_domain_edit.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:89
+msgid "redirect to"
+msgstr "Email umleiten zu"
+
+#. ../templates/simple/content_domain_edit.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:92
+msgid "save in user's spamfolder"
+msgstr "Im Spamordner des Benutzers speichern"
+
+#. ../templates/simple/content_domain_edit.tpl
+#. ../templates/simple/content_domain_new.tpl
+#. ../templates/simple/content_globaladmins_edit.tpl
+#. ../templates/simple/content_settings.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:95
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:131
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:191
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:236
+msgid "Administrators"
+msgstr "Administratoren"
+
+#. ../templates/simple/content_domain_edit.tpl
+#. ../templates/simple/content_domain_new.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:98
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:134
+msgid "available users"
+msgstr "verfügbare Benutzer"
+
+#. ../templates/simple/content_domain_edit.tpl
+#. ../templates/simple/content_domain_new.tpl
+#. ../templates/simple/content_systemusers_list.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:101
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:107
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:137
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:143
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:305
+msgid "Systemusers"
+msgstr "Systembenutzer"
+
+#. ../templates/simple/content_domain_edit.tpl
+#. ../templates/simple/content_domain_new.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:110
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:146
+msgid "Domainusers"
+msgstr "Domänen-Benutzer"
+
+#. ../templates/simple/content_domain_new.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:116
+msgid "New domain"
+msgstr "Neue Domäne"
+
+#. ../templates/simple/content_domain_new.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:152
+msgid "Add another domain"
+msgstr "Eine weitere Domäne hinzufügen"
+
+#. ../templates/simple/content_domain_new.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:155
+msgid "Go to domain list"
+msgstr "Zur Domänen-Übersicht"
+
+#. ../templates/simple/content_domain_new.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:158
+msgid "Edit newly created domain"
+msgstr "Neu hinzugefügte Domäne editieren"
+
+#. ../templates/simple/content_domains_list.tpl
+#. ../templates/simple/content_globaladmins_edit.tpl
+#. ../templates/simple/content_main.tpl
+#. ../templates/simple/content_settings.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:167
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:194
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:215
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:230
+msgid "Users"
+msgstr "Benutzer"
+
+#. ../templates/simple/content_domains_list.tpl
+#. ../templates/simple/content_main.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:170
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:221
+msgid "Aliases"
+msgstr "Aliase"
+
+#. ../templates/simple/content_globaladmins_edit.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:188
+msgid "Systemadminstrators"
+msgstr "Systemadministratoren"
+
+#. ../templates/simple/content_main.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:206
+msgid "Statistics"
+msgstr "Statistiken"
+
+#. ../templates/simple/content_main.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:212
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:218
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:224
+msgid "active"
+msgstr "aktiv"
+
+#. ../templates/simple/content_settings.tpl
+#. ../templates/simple/navigation.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:227
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:467
+msgid "Settings"
+msgstr "Einstellungen"
+
+#. ../templates/simple/content_settings.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:233
+msgid ""
+"Manage systemwide users. This gives you the ability to create users for your "
+"staff or customers, who should have access to certain domains only."
+msgstr ""
+"Systemweite Benutzer editieren. Sie können damit Benutzer für Mitarbeiter oder Kunden "
+"anlegen, die nur auf bestimmte Domänen zugreifen dürfen."
+
+#. ../templates/simple/content_settings.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:239
+msgid ""
+"Define which systemwide users should have global adminstrative rights. "
+"These can create new systemwide users as well as new domains."
+msgstr ""
+"Definieren Sie, welche systemweiten Benutzer globale administrative Rechte besitzen. "
+"Diese können sowohl neue systemweite Benutzer als auch neue Domänen erstellen."
+
+#. ../templates/simple/content_systemuser_delete.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:242
+msgid "Delete systemuser"
+msgstr "Systembenutzer löschen"
+
+#. ../templates/simple/content_systemuser_delete.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:245
+msgid "Back to Systemusers overview"
+msgstr "Zurück zur Systembenutzer-Übersicht"
+
+#. ../templates/simple/content_systemuser_delete.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:248
+msgid "Are you sure you want to delete user %1?"
+msgstr "Sind Sie sicher, dass Sie den Benutzer %1 löschen wollen?"
+
+#. ../templates/simple/content_systemuser_edit.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:257
+msgid "Edit systemuser"
+msgstr "Systembenutzer editieren"
+
+#. ../templates/simple/content_systemuser_edit.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:260
+msgid "New systemuser"
+msgstr "Neuer Systembenutzer"
+
+#. ../templates/simple/content_systemuser_edit.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:278
+msgid "(leave empty to keep password)"
+msgstr "(leer lassen um Passwort zu behalten)"
+
+#. ../templates/simple/content_systemuser_edit.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:281
+msgid "ACL"
+msgstr "ACL"
+
+#. ../templates/simple/content_systemuser_edit.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:284
+msgid "Administrator of"
+msgstr "Administrator von"
+
+#. ../templates/simple/content_systemuser_edit.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:287
+msgid "Not administrator of"
+msgstr "Nicht Administrator von"
+
+#. ../templates/simple/content_systemuser_edit.tpl
+#. ../templates/simple/content_user_new.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:293
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:395
+msgid "Add another user"
+msgstr "Einen weiteren Benutzer hinzufügen"
+
+#. ../templates/simple/content_systemuser_edit.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:296
+msgid "Edit new user"
+msgstr "neuen Benutzer bearbeiten"
+
+#. ../templates/simple/content_systemuser_edit.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:299
+msgid "Go to user overview"
+msgstr "Zur Benutzer-Übersicht"
+
+#. ../templates/simple/content_systemusers_list.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:311
+msgid "Realname"
+msgstr "vollständiger Name"
+
+#. ../templates/simple/content_user_delete.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:326
+msgid "Delete user"
+msgstr "Benutzer löschen"
+
+#. ../templates/simple/content_user_edit.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:353
+msgid "Redirect"
+msgstr "Umleiten"
+
+#. ../templates/simple/content_user_edit.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:356
+msgid "Recipient:"
+msgstr "Empfänger:"
+
+#. ../templates/simple/content_user_edit.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:359
+msgid "on vacation?"
+msgstr "abwesend?"
+
+#. ../templates/simple/content_user_edit.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:362
+msgid "Message:"
+msgstr "Nachricht:"

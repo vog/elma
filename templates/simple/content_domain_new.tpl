@@ -66,7 +66,7 @@
                                                         {/if}
                                                     {/foreach}
                                                     </optgroup>
-                                                    <optgroup label="{t}Domainsusers{/t}">
+                                                    <optgroup label="{t}Domainusers{/t}">
                                                     {foreach from=$admins item=admin}
                                                         {if @in_array("mailUser",$admin.objectclass) }
                                                         <option value="{$admin.dn}">{$admin.uid[0]} ({$admin.cn[0]} {$admin.sn[0]})</option>
