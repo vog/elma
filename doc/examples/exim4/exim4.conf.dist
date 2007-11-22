@@ -22,20 +22,21 @@
 #                                                                          #
 ########### IMPORTANT ########## IMPORTANT ########### IMPORTANT ###########
 
-
 ######################################################################
 #                    MAIN CONFIGURATION SETTINGS                     #
 ######################################################################
 
-# LDAP connection parameters <<<
-ldap_default_servers = 127.0.0.1::389
+# Global config parameter <<<
 
-#LDAP_HOSTNAME = 127.0.0.1:389
-LDAP_BASEDN = o=mybasedn
-LDAP_USERS_ROOT_DN = ou=users,LDAP_BASEDN
-LDAP_DOMAINS_ROOT_DN = ou=domains,LDAP_BASEDN
-LDAP_BIND_USER = uid=exim4,LDAP_USERS_ROOT_DN
-LDAP_BIND_PASS = exim4pass
+# include server specific settings
+.include /etc/exim4/local.conf
+
+# include server role definition
+.include /etc/exim4/server-role.conf
+
+#include ldap server definitions
+.include /etc/exim4/ldap.conf
+
 # >>>
 
 # LDAP macros <<<
@@ -49,10 +50,10 @@ LDAP_LOCAL_ACTIVE_DOMAINS = ${lookup ldapm{user=LDAP_BIND_USER pass=LDAP_BIND_PA
 LDAP_DOMAIN_IS_ACTIVE = ${if eqi {true}{${lookup ldap{user=LDAP_BIND_USER pass=LDAP_BIND_PASS ldap:///dc=${quote_ldap_dn:${domain}},LDAP_DOMAINS_ROOT_DN?mailStatus?base?}}} {yes}{no} }
 
 # returns status of user
-LDAP_USER_IS_ACTIVE = ${if eqi {true}{${lookup ldap{user=LDAP_BIND_USER pass=LDAP_BIND_PASS ldap:///uid=${quote_ldap_dn:${local_part}},dc=${quote_ldap_dn:${domain}},LDAP_DOMAINS_ROOT_DN?mailStatus?sub}}} {yes}{no} }
+LDAP_USER_IS_ACTIVE = ${if eqi {true}{${lookup ldap{user=LDAP_BIND_USER pass=LDAP_BIND_PASS ldap:///uid=${quote_ldap_dn:${local_part}},dc=${quote_ldap_dn:${domain}},LDAP_DOMAINS_ROOT_DN?mailStatus?sub?(objectclass=mailUser)}}} {yes}{no} }
 
 # return list of aliases otherwise return fail
-LDAP_ALIAS_FOR = ${lookup ldapm{user=LDAP_BIND_USER pass=LDAP_BIND_PASS ldap:///uid=${quote_ldap_dn:${local_part}},dc=${quote_ldap_dn:${domain}},LDAP_DOMAINS_ROOT_DN?mailaliasedname?base?(&(objectclass=mailalias)(mailStatus=TRUE))} {$value} fail}
+LDAP_ALIAS_FOR = ${lookup ldapm{user=LDAP_BIND_USER pass=LDAP_BIND_PASS ldap:///uid=${quote_ldap_dn:${local_part}},dc=${quote_ldap_dn:${domain}},LDAP_DOMAINS_ROOT_DN?mailaliasedname?base?(&(objectclass=mailalias)(mailStatus=TRUE)(mailaliasedname=*@*))} {$value} fail}
 
 # return the user's homeDirectory
 LDAP_HOME_DIRECTORY = ${lookup ldap{user=LDAP_BIND_USER pass=LDAP_BIND_PASS ldap:///uid=${quote_ldap_dn:${local_part}},dc=${quote_ldap_dn:${domain}},LDAP_DOMAINS_ROOT_DN?homeDirectory?base} {$value} fail}
@@ -62,6 +63,15 @@ LDAP_GET_USER_FILTER = ${lookup ldap{user=LDAP_BIND_USER pass=LDAP_BIND_PASS lda
 
 # get the mailSieveFilter attribute for a domain
 LDAP_GET_DOMAIN_FILTER = ${lookup ldap{user=LDAP_BIND_USER pass=LDAP_BIND_PASS ldap:///dc=${quote_ldap_dn:${domain}},LDAP_DOMAINS_ROOT_DN?mailSieveFilter?base?(objectclass=mailDomain)} {$value} fail}
+
+# get the mailStorageserver attribute for an user
+LDAP_GET_MAILSTORAGESERVER = ${lookup ldap{user=LDAP_BIND_USER pass=LDAP_BIND_PASS ldap:///uid=${quote_ldap_dn:${local_part}},dc=${quote_ldap_dn:${domain}},LDAP_DOMAINS_ROOT_DN?mailStorageserver?base?(objectclass=mailUser)} {$value} fail}
+
+# get the destination mailserver for an user
+LDAP_INCOMING_RELAY = ${lookup ldap{user=LDAP_BIND_USER pass=LDAP_BIND_PASS ldap:///uid=${quote_ldap_dn:${local_part}},dc=${quote_ldap_dn:${domain}},LDAP_DOMAINS_ROOT_DN?mailaliasedname?base?(&(objectclass=mailalias)(mailStatus=TRUE)(!(mailaliasedname=*@*)))} {$value} fail}
+
+LDAP_INCOMING_MORE = ${lookup ldap{user=LDAP_BIND_USER pass=LDAP_BIND_PASS ldap:///uid=${quote_ldap_dn:${local_part}},dc=${quote_ldap_dn:${domain}},LDAP_DOMAINS_ROOT_DN?mailaliasedname?base?(&(objectclass=mailalias)(mailStatus=TRUE)(!(mailaliasedname=*@*)))} {false} fail}
+
 # >>>
 
 # Hostname <<<
@@ -70,11 +80,11 @@ LDAP_GET_DOMAIN_FILTER = ${lookup ldap{user=LDAP_BIND_USER pass=LDAP_BIND_PASS l
 # uname() function is called to obtain the name. In many cases this does
 # the right thing and you need not set anything explicitly.
 
-#primary_hostname =
+primary_hostname = PRIMARY_HOSTNAME
 # >>>
 
 # Logging <<<
-log_selector = -retry_defer -skip_delivery -queue_run +smtp_connection \
+log_selector = -retry_defer -skip_delivery -queue_run +smtp_connection\
   +delivery_size +deliver_time +received_recipients +sender_on_delivery +subject
 # >>>
 
@@ -100,19 +110,14 @@ hostlist   relay_from_hosts = 127.0.0.1
 # >>>
 
 # TLS options <<<
-#
+
+.ifndef SERVER_ROLE_MAILSTORAGE
+
 # Allow any client to use TLS.
 
-#tls_advertise_hosts = *
+tls_advertise_hosts = *
 
-# Specify the location of the Exim server's TLS certificate and private key.
-# The private key must not be encrypted (password protected). You can put
-# the certificate and private key in the same file, in which case you only
-# need the first setting, or in separate files, in which case you need both
-# options.
-
-#tls_certificate = /etc/ssl/exim.crt
-#tls_privatekey = /etc/ssl/exim.pem
+.endif
 
 # In order to support roaming users who wish to send email from anywhere,
 # you may want to make Exim listen on other ports as well as port 25, in
@@ -123,9 +128,12 @@ hostlist   relay_from_hosts = 127.0.0.1
 # them you should also allow TLS-on-connect on the traditional but
 # non-standard port 465.
 
-#daemon_smtp_ports = 25 : 465 : 587
-#tls_on_connect_ports = 465
-
+.ifdef SERVER_ROLE_CMX
+daemon_smtp_ports = 25 : 465 : 587
+tls_on_connect_ports = 465
+.elifdef
+daemon_smtp_ports = 25
+.endif
 # >>>
 
 # Unqualified senders/recipients <<<
@@ -176,7 +184,8 @@ acl_smtp_data = acl_check_data
 
 begin acl
 
-# RCPT TO: <<<
+# RCPT TO: (C)MX <<<
+.ifndef SERVER_ROLE_MAILSTORE
 acl_check_rcpt:
 
   # accept if sender is localhost
@@ -205,21 +214,54 @@ acl_check_rcpt:
   accept  hosts         = +relay_from_hosts
           control       = submission/sender_retain
 
+.ifdef SERVER_ROLE_CMX
   accept  authenticated = *
           control       = submission/sender_retain
+.endif
 
-  require message = relay not permitted
+  require message = Relay not permitted
           domains = +local_domains
 
   # Return debuggable error message if domain it inactive
-  require message = domain inactive
+  require message = Domain inactive
           domains = +active_domains
 
   # Verify recipient, both for local and remote recipients
-  require verify = recipient
+  require verify  = recipient
+          message = User unknown
 
   # Accept finally if all other checks were passed
   accept
+.endif
+# >>>
+
+# RCPT TO: MAILSTORE <<<
+.ifdef SERVER_ROLE_MAILSTORE
+acl_check_rcpt:
+
+  # accept if sender is localhost
+  accept  hosts = :
+
+  # The two following rules restrict characters in local_parts
+  deny    message       = Restricted characters in address
+          domains       = +local_domains
+          local_parts   = ^[.] : ^.*[@%!/|]
+
+  deny    message       = Restricted characters in address
+          domains       = !+local_domains
+          local_parts   = ^[./|] : ^.*[@%!] : ^.*/\\.\\./
+
+  # Accept mails to postmaster
+  accept  local_parts   = postmaster
+          domains       = +local_domains
+
+  # The following two rules accept mails on a per-host basis 
+  # or if sender is authenticated. Return-path and/or From: will
+  # not be adjusted
+  accept  hosts         = +cmx_hosts : +mx_hosts
+
+  deny    message       = Unauthorized host trying to send
+.endif
 # >>>
 
 # DATA <<<
@@ -262,6 +304,16 @@ dnslookup:
   no_more
 # >>>
 
+# route to mailstorage <<<
+.ifndef SERVER_ROLE_MAILSTORAGE
+route_mailstorageserver:
+  driver = manualroute
+  condition = LDAP_GET_MAILSTORAGESERVER
+  transport = remote_smtp
+  route_list = * "${extract{1}{/}{LDAP_GET_MAILSTORAGESERVER}}"
+.endif
+# >>>
+
 # resolve aliases given in /etc/aliases <<<
 system_aliases:
   driver = redirect
@@ -270,6 +322,19 @@ system_aliases:
   data = ${lookup{$local_part}lsearch{/etc/aliases}}
   file_transport = address_file
   pipe_transport = address_pipe
+# >>>
+
+# LDAP incoming relay <<<
+.ifdef SERVER_ROLE_MX
+ldap_incoming_relay:
+  driver = manualroute
+  condition = LDAP_INCOMING_RELAY
+  more = LDAP_INCOMING_MORE
+  transport = remote_smtp
+  route_list = * "${extract{1}{/}{LDAP_INCOMING_RELAY}}"
+  host_find_failed = decline
+  cannot_route_message = "Failed to lookup destination host"
+.endif
 # >>>
 
 # resolve LDAP aliases <<<
@@ -284,6 +349,7 @@ ldap_aliases:
 
 # Spam filtering is done on a <<<
 # per-domain basis
+.ifdef SERVER_ROLE_MAILSTORAGE
 ldap_domain_filter:
   driver = redirect
   no_verify
@@ -294,9 +360,11 @@ ldap_domain_filter:
   data = LDAP_GET_DOMAIN_FILTER
   router_home_directory = LDAP_HOME_DIRECTORY
   directory_transport = local_delivery
+.endif
 # >>>
 
 # user filter: vacation, redirects <<<
+.ifdef SERVER_ROLE_MAILSTORAGE
 ldap_user_filter:
   driver = redirect
   no_verify
@@ -307,14 +375,17 @@ ldap_user_filter:
   data = LDAP_GET_USER_FILTER
   router_home_directory = LDAP_HOME_DIRECTORY
   file_transport = local_delivery
+.endif
 # >>>
 
 # deliver to local user <<<
+.ifdef SERVER_ROLE_MAILSTORAGE
 ldap_user:
   driver = accept
   condition = LDAP_USER_IS_ACTIVE
   transport = local_delivery
   cannot_route_message = Unknown user
+.endif
 # >>>
 
 ######################################################################
@@ -381,6 +452,8 @@ begin rewrite
 
 begin authenticators
 
+.ifdef SERVER_ROLE_CMX
+
 # AUTH PLAIN <<<
 plain:
   driver = plaintext
@@ -419,6 +492,8 @@ cram:
   server_set_id = $1
 # >>>
 
+.endif
+
 ######################################################################
 #                   CONFIGURATION FOR local_scan()                   #
 ######################################################################
@@ -431,4 +506,4 @@ cram:
 
 # begin local_scan
 
-# vim:foldmethod=marker:foldmarker=<<<,>>>
+# vim:foldmethod=marker:foldmarker=<<<,>>>:nofoldenable
