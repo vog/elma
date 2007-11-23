@@ -13,6 +13,7 @@
 <P>    1.1.1 Debian Etch<BR>
 <STRONG>1.2 PREPARATIONS</STRONG>
 <P>    1.2.1 LDAP Server<BR>
+    1.2.1 EXIM Configuration<BR>
 <STRONG>1.3 INSTALLATION</STRONG>
 
 <P><STRONG>-----------------------------------------------------</STRONG>
@@ -39,14 +40,14 @@ run it on any other distributions plaese send a short mail and this list will be
 <P>ELMA has been testet only to work with OpenLDAP Server.
 
 <P>Install and set up your ldap server as described in your distriubution's manual. 
-There is an example openldap slapd.conf in the ldap subdirectory of the doc folder.
+There is an example openldap slapd.conf in the ldap subdirectory of the doc/examples folder.
 First copy the elma-0.2.schema file into you LDAP server schema folder
 
-<P>   # cp examples/ldap/elma-0.2.schema /etc/ldap/schema/
+<P>    # cp examples/ldap/elma-0.2.schema /etc/ldap/schema/
 
 <P>To start with an empty LDAP tree, clear your LDAP tree (refer to distriubution's manual) and run
 
-<P>   # slapadd -l examples/ldap/example.ldif
+<P>    # slapadd -l examples/ldap/example.ldif
 
 <P>from within the directory where this INSTALL file is located. This will create an admin user 
 with the dn "uid=admin,ou=users,o=mybasedn" and the password "adminpass". Also an exim user 
@@ -57,26 +58,56 @@ IMPORTANT NOTE: The above step creates the database files who's owner is "root".
 your LDAP server under an other uid/gid, as you should if you care about security concerns, you 
 will have to change the ownership of the LDAP database files corrosponding to the LDAP servers uid/gid.
 
+<P>1.2.2 EXIM4 Configuration
+
+<P>Install you exim4 package as described in your distriubution's manual.
+There are example exim4 configuration files in the exim4 subfolder of doc/examples. If you do not 
+have any exim4 configuration running, it is a good way to start with example configuration files.
+
+<P>    # cp examples/exim4/* /etc/exim4/<BR>
+    # cd /etc/exim4 <BR>
+    # rename 's/conf\.dist/conf/g' *.dist
+
+<P>The example configuration files provide an easy way to establish a single server setup as well as 
+a multiple server setup. The folowing terminology is used to describe the role of a server:
+  
+<PRE>
+  mx        mxes only receive mails from other mailservers on the internet, they do not handle 
+            authentication, but do content filtering.
+
+  cmx       customer mxes do not receive mails from other mailservers. only authenticated delivery 
+            is possible. No content filtering is done on cmxes.
+</PRE>
+<P>  mailstore the only purpose of mailstore server is to receive and store mails delivered from 
+<P>            mx or/and cmx server on the local filesystem and handling of vaction settings.
+
+<P>If you want to run just a single server setup,  you will have to enable all three server roles in the 
+server-role.conf file.
+
+<P>The only files you will have to make changes to are the local.conf, server-role.conf and ldap.conf file.
+The parameter inside those files should be selfexplaining and all have coments to explain their purpose.
+
 <P><STRONG>1.3 INSTALLATION</STRONG>
 
 <P>Copy the downloaded tarball to your webserver's document root directory (e.g. /var/www). 
  
-<P>   # cp elma-0.2.tar.gz /var/www
+<P>    # cp elma-0.2.tar.gz /var/www
 
 <P>Extract the tarball in your webserver's document root directory.
 
-<P>   # tar -xzvf elma-0.2.tar.gz
+<P>    # tar -xzvf elma-0.2.tar.gz
 
 <P>Create the smart's template cache directory called "template_c" and make it writable for you 
 webserver's user (e.g www-data)
 
-<P>   # mkdir /var/www/templates_c/<BR>
-   # chown www-data:www-data /var/www/templates_c/
-   # chmod 775 /var/www/templates_c/
+<P>    # mkdir /var/www/templates_c/<BR>
+    # chown www-data:www-data /var/www/templates_c/
+    # chmod 775 /var/www/templates_c/
 
 <P>Now you should be able to log in to ELMA via a webbrowser using the user "admin" with password 
 "adminpass". To change the admin's user password you have to use the ldap tools of you distribution 
 or use something similar to "phpLdapAdmin" or "gq".
 
+<P>vim:tabstop=4:expandtab:shiftwidth=4:syntax:ruler:
 </BODY>
 </HTML>

@@ -6,6 +6,7 @@ Content of this document
     1.1.1 Debian Etch
 1.2 PREPARATIONS
     1.2.1 LDAP Server
+    1.2.2 EXIM Configuration
 1.3 INSTALLATION
 
 #-----------------------------------------------------#
@@ -32,14 +33,14 @@ run it on any other distributions plaese send a short mail and this list will be
 ELMA has been testet only to work with OpenLDAP Server.
 
 Install and set up your ldap server as described in your distriubution's manual. 
-There is an example openldap slapd.conf in the ldap subdirectory of the doc folder.
+There is an example openldap slapd.conf in the ldap subdirectory of the doc/examples folder.
 First copy the elma-0.2.schema file into you LDAP server schema folder
 
-   # cp examples/ldap/elma-0.2.schema /etc/ldap/schema/
+    # cp examples/ldap/elma-0.2.schema /etc/ldap/schema/
 
 To start with an empty LDAP tree, clear your LDAP tree (refer to distriubution's manual) and run
 
-   # slapadd -l examples/ldap/example.ldif
+    # slapadd -l examples/ldap/example.ldif
 
 from within the directory where this INSTALL file is located. This will create an admin user 
 with the dn "uid=admin,ou=users,o=mybasedn" and the password "adminpass". Also an exim user 
@@ -50,22 +51,51 @@ IMPORTANT NOTE: The above step creates the database files who's owner is "root".
 your LDAP server under an other uid/gid, as you should if you care about security concerns, you 
 will have to change the ownership of the LDAP database files corrosponding to the LDAP servers uid/gid.
 
+1.2.2 EXIM4 Configuration
+
+Install you exim4 package as described in your distriubution's manual.
+There are example exim4 configuration files in the exim4 subfolder of doc/examples. If you do not 
+have any exim4 configuration running, it is a good way to start with example configuration files.
+
+    # cp examples/exim4/* /etc/exim4/
+    # cd /etc/exim4 
+    # rename 's/conf\.dist/conf/g' *.dist
+
+The example configuration files provide an easy way to establish a single server setup as well as 
+a multiple server setup. The folowing terminology is used to describe the role of a server:
+  
+  mx        mxes only receive mails from other mailservers on the internet, they do not handle 
+            authentication, but do content filtering.
+
+  cmx       customer mxes do not receive mails from other mailservers. only authenticated delivery 
+            is possible. No content filtering is done on cmxes.
+
+  mailstore the only purpose of mailstore server is to receive and store mails delivered from 
+            mx or/and cmx server on the local filesystem and handling of vaction settings.
+
+
+If you want to run just a single server setup,  you will have to enable all three server roles in the 
+server-role.conf file.
+
+The only files you will have to make changes to are the local.conf, server-role.conf and ldap.conf file.
+The parameter inside those files should be selfexplaining and all have coments to explain their purpose.
+
 1.3 INSTALLATION
 
 Copy the downloaded tarball to your webserver's document root directory (e.g. /var/www). 
  
-   # cp elma-0.2.tar.gz /var/www
+    # cp elma-0.2.tar.gz /var/www
 
 Extract the tarball in your webserver's document root directory.
 
-   # tar -xzvf elma-0.2.tar.gz
+    # tar -xzvf elma-0.2.tar.gz
 
 Create the smart's template cache directory called "template_c" and make it writable for you 
 webserver's user (e.g www-data)
 
-   # mkdir /var/www/templates_c/
-   # chown www-data:www-data /var/www/templates_c/
-   # chmod 775 /var/www/templates_c/
+    # mkdir /var/www/templates_c/
+    # chown www-data:www-data /var/www/templates_c/
+    # chmod 775 /var/www/templates_c/
 
 Now you should be able to log in to ELMA via a webbrowser using the user "admin" with password 
 "adminpass". To change the admin's user password you have to use the ldap tools of you distribution 
