@@ -1,0 +1,507 @@
+########### IMPORTANT ########## IMPORTANT ########### IMPORTANT ###########
+#                                                                          #
+# Whenever you change Exim's configuration file, you *must* remember to    #
+# HUP the Exim daemon, because it will not pick up the new configuration   #
+# until you do. However, any other Exim processes that are started, for    #
+# example, a process started by an MUA in order to send a message, will    #
+# see the new configuration as soon as it is in place.                     #
+#                                                                          #
+# You do not need to HUP the daemon for changes in auxiliary files that    #
+# are referenced from this file. They are read every time they are used.   #
+#                                                                          #
+# It is usually a good idea to test a new configuration for syntactic      #
+# correctness before installing it (for example, by running the command    #
+# "exim -C /config/file.new -bV").                                         #
+#                                                                          #
+# This configuration contains just the needed parameters to run ELMA,      #
+# with short or even none comments.                                        #
+# For a full and comprehensive documentation of all available parameters,  #
+# see http://www.exim.org/exim-html-current/doc/html/spec_html/index.html  #
+#                                                                          #
+# vim folding: use zo to open, zc to close a folding                       #
+#                                                                          #
+########### IMPORTANT ########## IMPORTANT ########### IMPORTANT ###########
+
+######################################################################
+#                    MAIN CONFIGURATION SETTINGS                     #
+######################################################################
+
+# Global config parameter <<<
+
+# include server specific settings
+.include /etc/exim4/local.conf
+
+# include server role definition
+.include /etc/exim4/server-role.conf
+
+#include ldap server definitions
+.include /etc/exim4/ldap.conf
+
+# >>>
+
+# LDAP macros <<<
+# returns list of all local domains (active and inactive)
+LDAP_LOCAL_DOMAINS = ${lookup ldapm{user=LDAP_BIND_USER pass=LDAP_BIND_PASS ldap:///LDAP_DOMAINS_ROOT_DN?dc?one?(objectclass=mailDomain)}}
+
+# return list of active domains
+LDAP_LOCAL_ACTIVE_DOMAINS = ${lookup ldapm{user=LDAP_BIND_USER pass=LDAP_BIND_PASS ldap:///LDAP_DOMAINS_ROOT_DN?dc?one?(&(mailStatus=TRUE)(objectclass=mailDomain))}}
+
+# returns status of domain
+LDAP_DOMAIN_IS_ACTIVE = ${if eqi {true}{${lookup ldap{user=LDAP_BIND_USER pass=LDAP_BIND_PASS ldap:///dc=${quote_ldap_dn:${domain}},LDAP_DOMAINS_ROOT_DN?mailStatus?base?}}} {yes}{no} }
+
+# returns status of user
+LDAP_USER_IS_ACTIVE = ${if eqi {true}{${lookup ldap{user=LDAP_BIND_USER pass=LDAP_BIND_PASS ldap:///uid=${quote_ldap_dn:${local_part}},dc=${quote_ldap_dn:${domain}},LDAP_DOMAINS_ROOT_DN?mailStatus?sub?(objectclass=mailUser)}}} {yes}{no} }
+
+# return list of aliases otherwise return fail
+LDAP_ALIAS_FOR = ${lookup ldapm{user=LDAP_BIND_USER pass=LDAP_BIND_PASS ldap:///uid=${quote_ldap_dn:${local_part}},dc=${quote_ldap_dn:${domain}},LDAP_DOMAINS_ROOT_DN?mailaliasedname?base?(&(objectclass=mailalias)(mailStatus=TRUE)(mailaliasedname=*@*))} {$value} fail}
+
+# return the user's homeDirectory
+LDAP_HOME_DIRECTORY = ${lookup ldap{user=LDAP_BIND_USER pass=LDAP_BIND_PASS ldap:///uid=${quote_ldap_dn:${local_part}},dc=${quote_ldap_dn:${domain}},LDAP_DOMAINS_ROOT_DN?homeDirectory?base} {$value} fail}
+
+# get the mailSieveFilter attribute for an user
+LDAP_GET_USER_FILTER = ${lookup ldap{user=LDAP_BIND_USER pass=LDAP_BIND_PASS ldap:///uid=${quote_ldap_dn:${local_part}},dc=${quote_ldap_dn:${domain}},LDAP_DOMAINS_ROOT_DN?mailSieveFilter?base?(objectclass=mailUser)} {$value} fail}
+
+# get the mailSieveFilter attribute for a domain
+LDAP_GET_DOMAIN_FILTER = ${lookup ldap{user=LDAP_BIND_USER pass=LDAP_BIND_PASS ldap:///dc=${quote_ldap_dn:${domain}},LDAP_DOMAINS_ROOT_DN?mailSieveFilter?base?(objectclass=mailDomain)} {$value} fail}
+
+# get the mailStorageserver attribute for an user
+LDAP_GET_MAILSTORAGESERVER = ${lookup ldap{user=LDAP_BIND_USER pass=LDAP_BIND_PASS ldap:///uid=${quote_ldap_dn:${local_part}},dc=${quote_ldap_dn:${domain}},LDAP_DOMAINS_ROOT_DN?mailStorageserver?base?(objectclass=mailUser)} {$value} fail}
+
+# get the destination mailserver for an user
+LDAP_INCOMING_RELAY = ${lookup ldap{user=LDAP_BIND_USER pass=LDAP_BIND_PASS ldap:///uid=${quote_ldap_dn:${local_part}},dc=${quote_ldap_dn:${domain}},LDAP_DOMAINS_ROOT_DN?mailaliasedname?base?(&(objectclass=mailalias)(mailStatus=TRUE)(!(mailaliasedname=*@*)))} {$value} fail}
+
+# >>>
+
+# Hostname <<<
+# Specify your host's canonical name here. This should normally be the fully
+# qualified "official" name of your host. If this option is not set, the
+# uname() function is called to obtain the name. In many cases this does
+# the right thing and you need not set anything explicitly.
+
+primary_hostname = PRIMARY_HOSTNAME
+# >>>
+
+# Logging <<<
+log_selector = -retry_defer -skip_delivery -queue_run +smtp_connection\
+  +delivery_size +deliver_time +received_recipients +sender_on_delivery +subject
+# >>>
+
+# Domain-lists, host-lists <<<
+# local_domains: domains which reside in our system(s)
+# active_domains: activated domains. inactive domains are just listed in local_domains
+# relay_from_hosts: relaying is permitted for these hosts
+domainlist local_domains = @ : ${tr {LDAP_LOCAL_DOMAINS} {\n}{:}}
+domainlist active_domains = ${tr {LDAP_LOCAL_ACTIVE_DOMAINS} {\n}{:}}
+hostlist   relay_from_hosts = 127.0.0.1
+# >>>
+
+# av scanner <<<
+# On debian systems, the clamd socket is usually found under
+# clamd:/var/run/clamav/clamd.ctl
+#av_scanner = clamd:/tmp/clamd
+# >>>
+
+# Spam scanning <<<
+# currently only SpamAssassin is supported
+# to activate, remove the comment mark
+#spamd_address = 127.0.0.1 783
+# >>>
+
+# TLS options <<<
+
+.ifndef SERVER_ROLE_MAILSTORAGE
+
+# Allow any client to use TLS.
+
+tls_advertise_hosts = *
+
+.endif
+
+# In order to support roaming users who wish to send email from anywhere,
+# you may want to make Exim listen on other ports as well as port 25, in
+# case these users need to send email from a network that blocks port 25.
+# The standard port for this purpose is port 587, the "message submission"
+# port. See RFC 4409 for details. Microsoft MUAs cannot be configured to
+# talk the message submission protocol correctly, so if you need to support
+# them you should also allow TLS-on-connect on the traditional but
+# non-standard port 465.
+
+.ifdef SERVER_ROLE_CMX
+daemon_smtp_ports = 25 : 465 : 587
+tls_on_connect_ports = 465
+.elifdef
+daemon_smtp_ports = 25
+.endif
+# >>>
+
+# Unqualified senders/recipients <<<
+# By default, unqualified senders will be qualified with our primary_hostname.
+# Unqualified senders are just permitted the message originates from localhost,
+# unqualified recipients never.
+#
+#qualify_domain =
+sender_unqualified_hosts = localhost
+# >>>
+
+# Never deliver as root <<<
+# don't forget to provide an alias for root
+never_users = root
+# >>>
+
+# Reverse DNS lookup for every host <<<
+host_lookup = *
+# >>>
+
+# Disable ident lookup <<<
+rfc1413_hosts = *
+rfc1413_query_timeout = 5s
+# >>>
+
+# Bounce messages <<<
+# This option unfreezes frozen bounce messages after two days, tries
+# once more to deliver them, and ignores any delivery failures.
+ignore_bounce_errors_after = 2d
+
+# This option cancels (removes) frozen messages that are older than a week.
+timeout_frozen_after = 7d
+# >>>
+
+# Disable pipelining <<<
+pipelining_advertise_hosts = :
+# >>>
+
+######################################################################
+#                       ACL CONFIGURATION                            #
+#         Specifies access control lists for incoming SMTP mail      #
+######################################################################
+
+# ACL assignment <<<
+acl_smtp_rcpt = acl_check_rcpt
+acl_smtp_data = acl_check_data
+# >>>
+
+begin acl
+
+# RCPT TO: (C)MX <<<
+.ifndef SERVER_ROLE_MAILSTORE
+acl_check_rcpt:
+
+  # accept if sender is localhost
+  accept  hosts = :
+
+  # The two following rules restrict characters in local_parts
+  deny    message       = Restricted characters in address
+          domains       = +local_domains
+          local_parts   = ^[.] : ^.*[@%!/|]
+
+  deny    message       = Restricted characters in address
+          domains       = !+local_domains
+          local_parts   = ^[./|] : ^.*[@%!] : ^.*/\\.\\./
+
+  # Accept mails to postmaster
+  accept  local_parts   = postmaster
+          domains       = +local_domains
+
+  # Verify sender
+  # disable, if you get blocked by AOL...
+  require verify        = sender
+
+  # The following two rules accept mails on a per-host basis 
+  # or if sender is authenticated. Return-path and/or From: will
+  # not be adjusted
+  accept  hosts         = +relay_from_hosts
+          control       = submission/sender_retain
+
+.ifdef SERVER_ROLE_CMX
+  accept  authenticated = *
+          control       = submission/sender_retain
+.endif
+
+  require message = Relay not permitted
+          domains = +local_domains
+
+  # Return debuggable error message if domain it inactive
+  require message = Domain inactive
+          domains = +active_domains
+
+  # Verify recipient, both for local and remote recipients
+  require verify  = recipient
+          message = User unknown
+
+  # Accept finally if all other checks were passed
+  accept
+.endif
+# >>>
+
+# RCPT TO: MAILSTORE <<<
+.ifdef SERVER_ROLE_MAILSTORE
+acl_check_rcpt:
+
+  # accept if sender is localhost
+  accept  hosts = :
+
+  # The two following rules restrict characters in local_parts
+  deny    message       = Restricted characters in address
+          domains       = +local_domains
+          local_parts   = ^[.] : ^.*[@%!/|]
+
+  deny    message       = Restricted characters in address
+          domains       = !+local_domains
+          local_parts   = ^[./|] : ^.*[@%!] : ^.*/\\.\\./
+
+  # Accept mails to postmaster
+  accept  local_parts   = postmaster
+          domains       = +local_domains
+
+  # The following two rules accept mails on a per-host basis 
+  # or if sender is authenticated. Return-path and/or From: will
+  # not be adjusted
+  accept  hosts         = +cmx_hosts : +mx_hosts
+
+  deny    message       = Unauthorized host trying to send
+.endif
+# >>>
+
+# DATA <<<
+acl_check_data:
+
+  # Deny if the message contains a virus. Before enabling this check, you
+  # must install a virus scanner and set the av_scanner option above.
+  #
+  # deny    malware    = *
+  #         message    = This message contains a virus ($malware_name).
+
+  # Add headers to a message if it is judged to be spam. Before enabling this,
+  # you must install SpamAssassin. You may also need to set the spamd_address
+  # option above.
+  #
+  # warn    spam       = nobody
+  #         add_header = X-Spam_score: $spam_score\n\
+  #                      X-Spam_score_int: $spam_score_int\n\
+  #                      X-Spam_bar: $spam_bar\n\
+  #                      X-Spam_report: $spam_report
+
+  # Accept the message.
+
+  accept
+# >>>
+
+######################################################################
+#                      ROUTERS CONFIGURATION                         #
+#               Specifies how addresses are handled                  #
+######################################################################
+
+begin routers
+
+# Route addresses not local <<<
+dnslookup:
+  driver = dnslookup
+  domains = ! +local_domains
+  transport = remote_smtp
+  ignore_target_hosts = 0.0.0.0 : 127.0.0.0/8
+  no_more
+# >>>
+
+# route to mailstorage <<<
+.ifndef SERVER_ROLE_MAILSTORAGE
+route_mailstorageserver:
+  driver = manualroute
+  condition = LDAP_GET_MAILSTORAGESERVER
+  transport = remote_smtp
+  route_list = * "${extract{1}{/}{LDAP_GET_MAILSTORAGESERVER}}"
+.endif
+# >>>
+
+# resolve aliases given in /etc/aliases <<<
+system_aliases:
+  driver = redirect
+  allow_fail
+  allow_defer
+  data = ${lookup{$local_part}lsearch{/etc/aliases}}
+  file_transport = address_file
+  pipe_transport = address_pipe
+# >>>
+
+# LDAP incoming relay <<<
+.ifdef SERVER_ROLE_MX
+ldap_incoming_relay:
+  driver = manualroute
+  condition = LDAP_INCOMING_RELAY
+  more = ${if match {LDAP_INCOMING_RELAY}{fail} {true}{false}}
+  transport = remote_smtp
+  route_list = * "${extract{1}{/}{LDAP_INCOMING_RELAY}}"
+  host_find_failed = decline
+  cannot_route_message = "Failed to lookup destination host"
+.endif
+# >>>
+
+# resolve LDAP aliases <<<
+ldap_aliases:
+  driver = redirect
+  allow_fail
+  allow_defer
+  data = LDAP_ALIAS_FOR
+  file_transport = address_file
+  pipe_transport = address_pipe
+# >>>
+
+# Spam filtering is done on a <<<
+# per-domain basis
+.ifdef SERVER_ROLE_MAILSTORAGE
+ldap_domain_filter:
+  driver = redirect
+  no_verify
+  allow_filter
+  user = mail
+  group = mail
+  reply_transport = autoreply
+  data = LDAP_GET_DOMAIN_FILTER
+  router_home_directory = LDAP_HOME_DIRECTORY
+  directory_transport = local_delivery
+.endif
+# >>>
+
+# user filter: vacation, redirects <<<
+.ifdef SERVER_ROLE_MAILSTORAGE
+ldap_user_filter:
+  driver = redirect
+  no_verify
+  allow_filter
+  user = mail
+  group = mail
+  reply_transport = autoreply
+  data = LDAP_GET_USER_FILTER
+  router_home_directory = LDAP_HOME_DIRECTORY
+  file_transport = local_delivery
+.endif
+# >>>
+
+# deliver to local user <<<
+.ifdef SERVER_ROLE_MAILSTORAGE
+ldap_user:
+  driver = accept
+  condition = LDAP_USER_IS_ACTIVE
+  transport = local_delivery
+  cannot_route_message = Unknown user
+.endif
+# >>>
+
+######################################################################
+#                      TRANSPORTS CONFIGURATION                      #
+######################################################################
+
+begin transports
+
+# This transport is used for delivering messages over SMTP connections <<<
+remote_smtp:
+  driver = smtp
+# >>>
+
+# This Transport is used for auto reply answers like vaction <<<
+autoreply:
+   driver = autoreply
+   from = $local_part@$domain
+# >>>
+
+# This transport is used for local delivery to the users Maildirs which are <<<
+# located under their domain.
+local_delivery:
+  driver = appendfile
+  mode_fail_narrower = false
+  directory = LDAP_HOME_DIRECTORY/Maildir
+  maildir_format
+  delivery_date_add
+  envelope_to_add
+  return_path_add
+  user = mail
+  group = mail
+  mode = 0660
+# >>>
+
+######################################################################
+#                      RETRY CONFIGURATION                           #
+######################################################################
+
+begin retry
+
+# This single retry rule applies to all domains and all errors. It specifies <<<
+# retries every 15 minutes for 2 hours, then increasing retry intervals,
+# starting at 1 hour and increasing each time by a factor of 1.5, up to 16
+# hours, then retries every 6 hours until 4 days have passed since the first
+# failed delivery.
+
+# Address or Domain    Error       Retries
+# -----------------    -----       -------
+
+*                      *           F,2h,15m; G,16h,1h,1.5; F,4d,6h
+# >>>
+
+######################################################################
+#                      REWRITE CONFIGURATION                         #
+######################################################################
+
+# There are no rewriting specifications in this default configuration file.
+
+begin rewrite
+
+######################################################################
+#                   AUTHENTICATION CONFIGURATION                     #
+######################################################################
+
+begin authenticators
+
+.ifdef SERVER_ROLE_CMX
+
+# AUTH PLAIN <<<
+plain:
+  driver = plaintext
+  public_name = PLAIN
+  server_prompts = :
+  server_condition = ${if and {\
+    {match {${extract{1}{@}{$auth2}}} {\N[\w-\.]{1,64}\N}}\
+    {match {${extract{2}{@}{$auth2}}} {\N^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6}$\N}}\
+    {ldapauth {user="uid=${quote_ldap_dn:${extract{1}{@}{$auth2}}},dc=${quote_ldap_dn:${extract{2}{@}{$auth2}}},LDAP_DOMAINS_ROOT_DN" pass=${quote:$auth3} ldap:///}}\
+  } {yes}{no}}
+  server_set_id = $auth2
+# >>>
+
+# AUTH LOGIN <<<
+login:
+  driver = plaintext
+  public_name = LOGIN
+  server_prompts = Username:: : Password::
+  server_condition = ${if and {\
+    {match {${extract{1}{@}{$auth1}}} {\N[\w-\.]{1,64}\N}}\
+    {match {${extract{2}{@}{$auth1}}} {\N^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6}$\N}}\
+    {ldapauth {user="uid=${quote_ldap_dn:${extract{1}{@}{$auth1}}},dc=${quote_ldap_dn:${extract{2}{@}{$auth1}}},LDAP_DOMAINS_ROOT_DN" pass=${quote:$auth2} ldap:///}}\
+  } {yes}{no}}
+  server_set_id = $auth1
+# >>>
+
+# AUTH CRAM-MD5 <<<
+cram:
+  driver = cram_md5
+  public_name = CRAM-MD5
+  server_secret = ${if and {\
+    {match {${extract{1}{@}{$auth1}}} {\N[\w-\.]{1,64}\N}}\
+    {match {${extract{2}{@}{$auth1}}} {\N^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6}$\N}}\
+  }\
+  {${lookup ldapm{user=LDAP_BIND_USER pass=LDAP_BIND_PASS ldap:///uid=${quote_ldap_dn:${extract{1}{@}{$auth1}}},dc=${quote_ldap_dn:${extract{2}{@}{$auth1}}},LDAP_DOMAINS_ROOT_DN?clearPassword?sub}{$value}fail}} fail}
+  server_set_id = $1
+# >>>
+
+.endif
+
+######################################################################
+#                   CONFIGURATION FOR local_scan()                   #
+######################################################################
+
+# If you have built Exim to include a local_scan() function that contains
+# tables for private options, you can define those options here. Remember to
+# uncomment the "begin" line. It is commented by default because it provokes
+# an error with Exim binaries that are not built with LOCAL_SCAN_HAS_OPTIONS
+# set in the Local/Makefile.
+
+# begin local_scan
+
+# vim:foldmethod=marker:foldmarker=<<<,>>>:nofoldenable
