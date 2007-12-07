@@ -27,7 +27,7 @@
  * =====================================================================
  */
 
-require("/usr/share/php/smarty/libs/Smarty.class.php");
+require(getcwd().'/vendor/smarty/libs/Smarty.class.php');
 
 $smarty = new Smarty;
 $smarty->template_dir = getcwd().'/templates/'.TEMPLATE.'/';

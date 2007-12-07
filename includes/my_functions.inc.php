@@ -139,7 +139,12 @@ function validate_data($string,$object) {
             break;
         case "password": if (!preg_match("/^$/",$string)) $valid_data = TRUE;
             break;
-        case "mailaliasedname": if ((validate_data($string,"uid")) || (validate_data($string,"email"))) $valid_data = TRUE;
+        case "mailaliasedname": 
+            if (
+                (validate_data($string,"email")) || 
+                (preg_match("/(?:[a-z-]\.)+[a-z-]/", $string))
+            )
+                $valid_data = TRUE;
             break;
         case "email": if (preg_match("/^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@(([0-9a-zA-Z])+([-\w]*[0-9a-zA-Z])*\.)+[a-zA-Z]{2,9})$/",$string)) $valid_data = TRUE;
             break;

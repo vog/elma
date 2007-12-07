@@ -1,0 +1,1 @@
+../../../smarty-gettext-1.0b1/block.t.php
