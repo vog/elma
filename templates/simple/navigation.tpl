@@ -4,6 +4,9 @@
                     {if @in_array("domains_list",$acl) }
 	                <li><a href="{$smarty.server.PHP_SELF}?module=domains_list">{t}Domains{/t}</a></li>
                     {/if}
+                    {if $smarty.session.userclass eq "user" }
+                    <li><a href="{$smarty.server.PHP_SELF}?module=user_edit">{t}Settings{/t}</a></li>
+                    {/if}
                     {if @in_array("settings",$acl) }
                     <li><a href="{$smarty.server.PHP_SELF}?module=settings">{t}Settings{/t}</a></li>
                     {/if}

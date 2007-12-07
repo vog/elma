@@ -50,8 +50,19 @@ class content_user_edit extends module_base
      */
     function proceed() 
     {
+
+        if ($_SESSION["userclass"] = "user") {
+
+            $email = split ( '@', $_SESSION["username"] );
+            $user = $email[0];
+            $domain = $email[1];
+        } else {
+
         $user = $_GET["user"]; 
         $domain =  $_GET["domain"];
+
+        }
+
         $this->smarty->assign("domain",$domain);
 
         // new user created or existing user modified
