@@ -33,7 +33,6 @@ if ( isset($_SESSION["language"]) ) {
     $set_language = DEFAULT_LANGUAGE;	
 }
 
-putenv("LANG=".$set_language);
 setlocale(LC_ALL, $set_language);
 
 // Set the text domain as 'messages'
