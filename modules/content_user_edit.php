@@ -51,7 +51,7 @@ class content_user_edit extends module_base
     function proceed() 
     {
 
-        if ($_SESSION["userclass"] = "user") {
+        if ($_SESSION["userclass"] == "user") {
 
             $email = split ( '@', $_SESSION["username"] );
             $user = $email[0];
