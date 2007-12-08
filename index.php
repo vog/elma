@@ -43,10 +43,7 @@ if (isset($_POST["module"]))
     $module = $_POST["module"];
 else if (isset($_GET["module"])) 
     $module = $_GET["module"];
-else if ( (isset($_SESSION["userclass"])) && ($_SESSION["userclass"] == "user") ) {
-     $module = "user_edit";
-     $_GET["module"] = $module;
-} else {
+else {
     $module = "main";
     $_GET["module"] = $module;
 }
