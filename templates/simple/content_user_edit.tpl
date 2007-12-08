@@ -28,6 +28,7 @@
                                     <input type="text" name="sn" value="{$user.sn.0}" />
                                 </td>
                             </tr>
+                            {if @in_array("user_edit.active",$acl)}
 			                <tr>
 				                <td>
                                     {t}Is active?{/t}
@@ -36,6 +37,7 @@
                                     <input type="checkbox" name="mailstatus" {if $user.mailstatus.0 eq "FALSE"}{else}checked="checked"{/if} />
                                 </td>
 				            </tr>
+                            {/if}
 				            <tr>
 				                <td colspan="2">
                                     <hr/>
@@ -89,7 +91,7 @@
                                     {t}Password{/t}
                                 </td>
                                 <td>
-                                    <input type="text" name="clearpassword" value="{$user.clearpassword.0}" />
+                                    <input type="password" name="clearpassword" value="{$user.clearpassword.0}" />
                                 </td>
                             </tr>
     			            <tr>
