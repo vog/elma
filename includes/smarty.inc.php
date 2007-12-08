@@ -29,7 +29,9 @@
 
 require(getcwd().'/vendor/smarty/libs/Smarty.class.php');
 
-$smarty = new Smarty;
+if ( !isset($smarty) ) {
+    $smarty = new Smarty;
+}
 $smarty->template_dir = getcwd().'/templates/'.TEMPLATE.'/';
 $smarty->caching = false;
 $smarty->php_handling = SMARTY_PHP_REMOVE;
