@@ -101,6 +101,11 @@ class content_user_edit extends module_base
                 $this->ldap->modifyUser($domain,$my_user);
                 $submit_status = ldap_errno($this->ldap->cid);
                 if ($submit_status == "0") {
+                    if ($_SESSION["userclass"] == "user") {
+                        $LDAP_BINDPASS = $my_user["clearpassword"];
+                        $crypt = new mycrypt();
+                        $_SESSION["ldap_bindpass"] = $crypt->encrypt($LDAP_BINDPASS);
+                    }
                     $this->smarty->assign("submit_status",$submit_status);
                     $user = $my_user["uid"];
                 } else {
