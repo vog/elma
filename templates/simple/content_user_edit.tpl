@@ -1,3 +1,4 @@
+{validate id="password" message="passwords do not match<br>" assign="submit_status1"}
             <div id="Content">
                 <h2>{t}Edit user{/t} {$user.uid.0}@{$domain}</h2>
 		        {if $smarty.post.submit}
@@ -91,7 +92,8 @@
                                     {t}Password{/t}
                                 </td>
                                 <td>
-                                    <input type="password" name="clearpassword" value="{$user.clearpassword.0}" />
+                                   password: <input type="password" name="clearpassword" size="10" value="{$user.clearpassword.0}"><br />
+                                   password: <input type="password" name="nlo_clearpassword1" size="10" value="{$user.clearpassword.0}"><br />
                                 </td>
                             </tr>
     			            <tr>

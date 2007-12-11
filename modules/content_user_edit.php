@@ -67,6 +67,8 @@ class content_user_edit extends module_base
 
         // new user created or existing user modified
         if (isset($_POST["submit"])) {
+            SmartyValidate::connect($this->smarty);
+            if(SmartyValidate::is_valid($_POST)) {
             
             // create array of submitted values
             $eximFilterValues["vacation"]["values"] = array( "STATUS" => "",
@@ -114,9 +116,15 @@ class content_user_edit extends module_base
             } else {
                $this->smarty->assign("submit_status","Invalid Data");
                $this->smarty->assign("validation_errors",$validation_errors);
+               SmartyValidate::disconnect();
             }
         } else {
+            $this->smarty->assign($_POST);
+        }
+        } else { //END SUBMIT
             $this->smarty->assign("submit_status",-1);
+            SmartyValidate::connect($this->smarty, true);
+            SmartyValidate::register_validator('password', 'clearpassword:nlo_clearpassword1', 'isEqual');
         }
 
         if ( $user == "new" ) {
