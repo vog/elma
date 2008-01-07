@@ -124,6 +124,8 @@ class content_user_edit extends module_base
         } else { //END SUBMIT
             $this->smarty->assign("submit_status",-1);
             SmartyValidate::connect($this->smarty, true);
+            SmartyValidate::register_validator('cn', 'cn', 'notEmpty');
+            SmartyValidate::register_validator('sn', 'sn', 'notEmpty');
             SmartyValidate::register_validator('password', 'clearpassword:nlo_clearpassword1', 'isEqual');
         }
 

@@ -222,6 +222,20 @@ legend {
   padding-right: 5px;
 }
 
+fieldset.error {
+  border: 1px red solid;
+}
+
+legend.error {
+  font-weight: bold;
+  border: 0;
+  border-left: 2px red solid;
+  border-right: 2px red solid;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+
 .space25 {
   height: 25px;
 }

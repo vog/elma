@@ -1,10 +1,15 @@
-{validate id="password" message="passwords do not match<br>" assign="submit_status1"}
+            {validate id="cn" message="First name not valid or empty" append="validation_errors"}
+            {validate id="sn" message="Last name not valid or empty" append="validation_errors"}
+            {validate id="password" message="passwords do not match" append="validation_errors"}
+
             <div id="Content">
                 <h2>{t}Edit user{/t} {$user.uid.0}@{$domain}</h2>
 		        {if $smarty.post.submit}
                     {include file="print_submit_status.tpl"}
                 {/if}
+
 		        <form action="{$smarty.server.REQUEST_URI}" method="post">
+
 			        <fieldset>
 			            <legend>{$user.uid.0}@{$domain}</legend>
 			            <table>
