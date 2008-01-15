@@ -77,8 +77,10 @@ class content_alias_new extends module_base
                 $my_alias["mailstatus"] = "FALSE";
             }
 
-            $my_alias["mailaliasedname"] = explode("\n", $_POST['nlo_mailaliasedname']);
+            $my_alias["mailaliasedname"] = preg_split("/\r?\n/", $_POST['nlo_mailaliasedname']);
             
+            print_r($my_alias);
+
             $validation_errors = validate_alias($my_alias);
             if (count($validation_errors) == 0) {
                 $this->ldap->addAlias($domain,$my_alias);
