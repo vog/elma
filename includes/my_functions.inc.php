@@ -174,4 +174,8 @@ function array_set_as_first($array,$element) {
     }
 }
 
+function my_generate_password() {
+    return intval(rand(0,9)) . intval(rand(0,9)) . intval(rand(0,9)) . chr(intval(rand(0,26) + 65)) . chr(intval(rand(0,26) + 65)) . chr(intval(rand(0,26) + 65));
+}
+
 // vim:tabstop=4:expandtab:shiftwidth=4:filetype=php:syntax:ruler:

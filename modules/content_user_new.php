@@ -56,6 +56,7 @@ class content_user_new extends module_base
 
         $domain =  $_GET["domain"];
         $this->smarty->assign("domain",$domain);
+        $this->smarty->assign("autogen_password", my_generate_password());
 
         // new user created or existing user modified
         if (isset($_POST["submit"])) {

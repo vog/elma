@@ -49,7 +49,7 @@
                                     {t}Password{/t}
                                 </td>
                                 <td>
-                                    <input type="text" name="clearpassword" value="{$user.clearpassword.0}" />
+                                    <input type="text" name="clearpassword" value="{if isset($user.clearpassword.0)}{$user.clearpassword.0}{else}{$autogen_password}{/if}" />
                                 </td>
                             </tr>
     			            <tr>
