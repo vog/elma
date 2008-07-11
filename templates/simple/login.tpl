@@ -26,7 +26,7 @@
                                 {t}Username{/t}
                             </td>
                             <td>
-                                <input type="text" name="username" size="30" maxlength="30" />
+                                <input type="text" name="username" size="30" maxlength="60" />
                             </td>
                         </tr>
                         <tr>
