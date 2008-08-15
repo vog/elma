@@ -122,7 +122,7 @@ class ELMA {
      */
     function getDomain ( $domain_dc="*", $active="*", $attributes=array() ) {
         $result = ldap_list($this->cid, LDAP_DOMAINS_ROOT_DN, "(&(objectClass=mailDomain)(dc=$domain_dc)(mailStatus=$active))", $attributes);
-        ldap_sort($this->cid,$result,"dn");
+        ldap_sort($this->cid,$result,"dc");
         $domain = ldap_get_entries($this->cid, $result);
 
         if (isset($domain[0])) {
