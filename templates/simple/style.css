@@ -120,7 +120,6 @@ div#Content table {
   margin: 0;
   border-spacing: 0;
   width: 100%;
-  vertical-align: top;
 }
 
 div#Content th {
@@ -130,6 +129,7 @@ div#Content th {
 
 div#Content td {
   padding: 1px 10px 1px 10px;
+  vertical-align: top;
 }
 
 div#Content td.status,th.status {
