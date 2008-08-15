@@ -67,7 +67,7 @@ class content_alias_edit extends module_base
                 $my_alias["mailstatus"] = "FALSE";
             }
             
-            $my_alias["mailaliasedname"] =  preg_split("/\r?\n/", $_POST['nlo_mailaliasedname']);
+            $my_alias["mailaliasedname"] = preg_split("/\r?\n/", $_POST['nlo_mailaliasedname']);
             
             $validation_errors = validate_alias($my_alias);
             if (count($validation_errors) == 0) {

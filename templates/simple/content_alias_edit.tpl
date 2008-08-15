@@ -17,13 +17,7 @@
                                     {t}Alias for{/t}
                                 </td>
                                 <td>
-                                    {strip}
-                                        <textarea name="nlo_mailaliasedname" cols="40" rows="10">
-                                            {section name=mailaliasedname_sec loop=$alias.mailaliasedname}
-                                                {$alias.mailaliasedname[mailaliasedname_sec]}
-                                            {/section}
-                                        </textarea>
-                                    {/strip}
+                                        <textarea name="nlo_mailaliasedname" cols="40" rows="10">{$alias.mailaliasedname}</textarea>
                                 </td>
                             </tr>
                             <tr>
