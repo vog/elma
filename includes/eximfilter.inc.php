@@ -2,7 +2,7 @@
 
 function loadEximFilterTemplates() {
     $fields = array("filtertype","template","regex","values");
-    $rulesets = array("redirect","spamfilter","vacation");
+    $rulesets = array("spamfilter","vacation");
 
     foreach ( $rulesets as $ruleset ) {
         $eximFilter[$ruleset] = array();
