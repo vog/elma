@@ -120,6 +120,7 @@ div#Content table {
   margin: 0;
   border-spacing: 0;
   width: 100%;
+  vertical-align: top;
 }
 
 div#Content th {

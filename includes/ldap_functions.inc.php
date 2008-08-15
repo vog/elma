@@ -122,6 +122,7 @@ class ELMA {
      */
     function getDomain ( $domain_dc="*", $active="*", $attributes=array() ) {
         $result = ldap_list($this->cid, LDAP_DOMAINS_ROOT_DN, "(&(objectClass=mailDomain)(dc=$domain_dc)(mailStatus=$active))", $attributes);
+        ldap_sort($this->cid,$result,"dn");
         $domain = ldap_get_entries($this->cid, $result);
 
         if (isset($domain[0])) {
@@ -227,6 +228,7 @@ class ELMA {
      */
     function listUsers( $domain_dc, $active="*", $attribute = array() ) {
         $users = $this->getUser( $domain_dc, "*", $active="*", $attribute );
+        my_print_r($users);
         return $users;
     }
 
@@ -242,6 +244,7 @@ class ELMA {
      */
     function getUser ( $domain_dc, $user_uid="*", $active="*", $attribute = array() ) {
         $result = ldap_list($this->cid, "dc=".$domain_dc.",".LDAP_DOMAINS_ROOT_DN, "(&(objectclass=mailUser)(mailStatus=$active)(uid=$user_uid))", $attribute);
+        ldap_sort($this->cid,$result,"uid");
         $user = ldap_get_entries($this->cid, $result);
         if ( $user_uid !== "*" ) $user = $user[0];
         return $user;
@@ -368,6 +371,7 @@ class ELMA {
      */ 
     function getAlias ( $domain_dc, $alias_uid="*", $active="*", $attributes=array() ) {
         $result = ldap_list($this->cid, "dc=".$domain_dc.",".LDAP_DOMAINS_ROOT_DN, "(&(objectclass=mailAlias)(uid=$alias_uid)(mailStatus=$active))", $attributes);
+        ldap_sort($this->cid,$result,"uid");
         $alias = ldap_get_entries($this->cid, $result);
         if ( $alias_uid !== "*" ) $alias = $alias[0];
         return $alias;
@@ -457,6 +461,7 @@ class ELMA {
      */
     function getSystemUser ( $systemuser_uid = "*", $attributes = array() ) {
         $result = ldap_list($this->cid, LDAP_USERS_ROOT_DN, "(&(objectclass=inetOrgPerson)(uid=$systemuser_uid))", $attributes);
+        ldap_sort($this->cid,$result,"uid");
         $systemuser = ldap_get_entries($this->cid, $result);
 
         if ($systemuser_uid != "*") {
