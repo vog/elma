@@ -87,7 +87,10 @@ class content_alias_edit extends module_base
         } else {
             $this->smarty->assign("submit_status",-1);
         }
-        $this->smarty->assign("alias",$this->ldap->getAlias($domain,$alias));
+        $al = $this->ldap->getAlias($domain,$alias);
+        unset($al['mailaliasedname']['count']);
+        $al['mailaliasedname'] = implode("\r\n", $al['mailaliasedname']);
+        $this->smarty->assign("alias",$al);
     }
 
     /**
