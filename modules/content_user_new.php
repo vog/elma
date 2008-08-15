@@ -90,7 +90,7 @@ class content_user_new extends module_base
                     $user = $my_user["uid"];
                     switch($next_step) {
                     case 'show_overview':
-                        Header("Location: index.php?module=users_list&domain=" . urlencode($domain) );
+                        header("Location: index.php?module=users_list&domain=" . urlencode($domain) );
                         exit;
                         break;
                     case 'add_another':
