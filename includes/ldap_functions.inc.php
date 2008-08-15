@@ -228,7 +228,6 @@ class ELMA {
      */
     function listUsers( $domain_dc, $active="*", $attribute = array() ) {
         $users = $this->getUser( $domain_dc, "*", $active="*", $attribute );
-        my_print_r($users);
         return $users;
     }
 
