@@ -58,38 +58,41 @@ class content_user_new extends module_base
         $this->smarty->assign("domain",$domain);
         $this->smarty->assign("autogen_password", my_generate_password());
 
-        // new user created or existing user modified
+        // validate and create new user if data is valid
         if (isset($_POST["submit"])) {
-            if(!empty($_POST["nlo_next_step"])) {
-                $next_step = $_POST["nlo_next_step"];
-            }
-            else {
-                $next_step = "";
-            }
-            // remove all non LDAP objects from submited form
-            // an the submit value
-            $my_user = remove_key_by_str($_POST,"nlo_");
-            unset($my_user["submit"]);
+            SmartyValidate::connect($this->smarty);
 
-            if (isset($_POST["mailstatus"])) {
-                $my_user["mailstatus"] = "TRUE";
-            } else {    
-                $my_user["mailstatus"] = "FALSE";
-            }
+            if(SmartyValidate::is_valid($_POST)) {
 
-            $my_user["mailsievefilter"] = createEximFilter( loadEximFilterTemplates() );
-            $my_user["userpassword"] =  "{MD5}".base64_encode(pack("H*",md5($my_user["clearpassword"])));
+                if(!empty($_POST["nlo_next_step"])) {
+                    $next_step = $_POST["nlo_next_step"];
+                } else {
+                    $next_step = "";
+                }
+                // remove all non LDAP objects from submited form
+                // an the submit value
+                $my_user = remove_key_by_str($_POST,"nlo_");
+                unset($my_user["submit"]);
 
-            $validation_errors = validate_user($my_user);
-            if (count($validation_errors) == 0) {
+                if (isset($_POST["mailstatus"])) {
+                    $my_user["mailstatus"] = "TRUE";
+                } else {    
+                    $my_user["mailstatus"] = "FALSE";
+                }
+
+                $my_user["mailsievefilter"] = createEximFilter( loadEximFilterTemplates() );
+                $my_user["userpassword"] =  "{MD5}".base64_encode(pack("H*",md5($my_user["clearpassword"])));
+                
+                // add user to LDAP
                 $this->ldap->addUser($domain,$my_user);
-
+                
                 $submit_status = ldap_errno($this->ldap->cid);
                 if ($submit_status == "0") {
                     $this->smarty->assign("submit_status",$submit_status);
                     $user = $my_user["uid"];
                     switch($next_step) {
                     case 'show_overview':
+                        SmartyValidate::disconnect();
                         header("Location: index.php?module=users_list&domain=" . urlencode($domain) );
                         exit;
                         break;
@@ -97,15 +100,19 @@ class content_user_new extends module_base
                         // nothing
                         break;
                     }
-                } else {
+                } else { // LDAP error occured
                     $this->smarty->assign("submit_status",ldap_err2str($submit_status));
                 }
-            } else {
-               $this->smarty->assign("submit_status","Invalid Data");
-               $this->smarty->assign("validation_errors",$validation_errors);
+            } else { // input validation failed
+                $this->smarty->assign("user",$_POST);
             }
-        } else {
+        } else { // form has not yet been submitted
             $this->smarty->assign("submit_status",-1);
+            SmartyValidate::connect($this->smarty, true);
+            SmartyValidate::register_validator('uid', 'uid', 'notEmpty');
+            SmartyValidate::register_validator('cn', 'cn', 'notEmpty');
+            SmartyValidate::register_validator('sn', 'sn', 'notEmpty');
+            SmartyValidate::register_validator('password', 'clearpassword', 'notEmpty');
         }
     }
 

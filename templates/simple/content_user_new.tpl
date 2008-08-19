@@ -1,3 +1,8 @@
+            {validate id="uid" message="Username not valid or empty" append="validation_errors"}
+            {validate id="cn" message="First name not valid or empty" append="validation_errors"}
+            {validate id="sn" message="Last name not valid or empty" append="validation_errors"}
+            {validate id="password" message="passwords do not match" append="validation_errors"}
+
             <div id="Content">
                 <h2>{t}New user{/t}</h2>
 		        {if $smarty.post.submit}
@@ -12,7 +17,7 @@
                                     {t}Username{/t}
                                 </td>
                                 <td>
-                                    <input type="text" name="uid" value="{$user.uid.0}" />@{$domain}
+                                    <input type="text" name="uid" value="{$user.uid}" />@{$domain}
                                 </td>
 				            </tr>
 		                    <tr>
@@ -20,7 +25,7 @@
                                     {t}First name{/t}
                                 </td>
                                 <td>
-                                    <input type="text" name="cn" value="{$user.cn.0}" />
+                                    <input type="text" name="cn" value="{$user.cn}" />
                                 </td>
 				            </tr>
                             <tr>
@@ -28,7 +33,7 @@
                                     {t}Last name{/t}
                                 </td>
                                 <td>
-                                    <input type="text" name="sn" value="{$user.sn.0}" />
+                                    <input type="text" name="sn" value="{$user.sn}" />
                                 </td>
                             </tr>
 			                <tr>
@@ -36,7 +41,7 @@
                                     {t}Is active?{/t}
                                 </td>
                                 <td>
-                                    <input type="checkbox" name="mailstatus" {if $user.mailstatus.0 eq "FALSE"}{else}checked="checked"{/if} />
+                                    <input type="checkbox" name="mailstatus" {if $user.mailstatus eq "FALSE"}{else}checked="checked"{/if} />
                                 </td>
 				            </tr>
 				            <tr>
@@ -49,7 +54,7 @@
                                     {t}Password{/t}
                                 </td>
                                 <td>
-                                    <input type="text" name="clearpassword" value="{if isset($user.clearpassword.0)}{$user.clearpassword.0}{else}{$autogen_password}{/if}" />
+                                    <input type="text" name="clearpassword" value="{if isset($user.clearpassword)}{$user.clearpassword}{else}{$autogen_password}{/if}" />
                                 </td>
                             </tr>
     			            <tr>

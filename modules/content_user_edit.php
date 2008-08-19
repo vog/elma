@@ -68,39 +68,40 @@ class content_user_edit extends module_base
         // new user created or existing user modified
         if (isset($_POST["submit"])) {
             SmartyValidate::connect($this->smarty);
-            if(SmartyValidate::is_valid($_POST)) {
+            if (SmartyValidate::is_valid($_POST)) {
             
-            // create array of submitted values
-            $eximFilterValues["vacation"]["values"] = array( "STATUS" => "",
-                                                          "RECIPIENT" => $_POST["uid"]."@".$domain,
-                                                            "MESSAGE" => $_POST["nlo_vacationmessage"]);
-            if (! isset($_POST["nlo_vacationstatus"])) {
-                $eximFilterValues["vacation"]["values"]["STATUS"] = "#";
-            }
+                // create array of submitted values
+                $eximFilterValues["vacation"]["values"] = array( "STATUS" => "",
+                                                              "RECIPIENT" => $_POST["uid"]."@".$domain,
+                                                                "MESSAGE" => $_POST["nlo_vacationmessage"]);
+                if (! isset($_POST["nlo_vacationstatus"])) {
+                    $eximFilterValues["vacation"]["values"]["STATUS"] = "#";
+                }
 
-            $eximFilterValues["redirect"]["values"] = array( "STATUS" => "",
-                                                          "RECIPIENT" => $_POST["nlo_redirectrecipient"]);
-            if (! isset($_POST["nlo_redirectstatus"])) {
-                $eximFilterValues["redirect"]["values"]["STATUS"] = "#";
-            }
+                $eximFilterValues["redirect"]["values"] = array( "STATUS" => "",
+                                                              "RECIPIENT" => $_POST["nlo_redirectrecipient"]);
+                if (! isset($_POST["nlo_redirectstatus"])) {
+                    $eximFilterValues["redirect"]["values"]["STATUS"] = "#";
+                }
 
-            // remove all non LDAP objects from submited form
-            // an the submit and mode value
-            $my_user = remove_key_by_str($_POST,"nlo_");
-            unset($my_user["submit"]);
+                // remove all non LDAP objects from submited form
+                // an the submit and mode value
+                $my_user = remove_key_by_str($_POST,"nlo_");
+                unset($my_user["submit"]);
 
-            if (isset($_POST["mailstatus"])) {
-                $my_user["mailstatus"] = "TRUE";
-            } else {    
-                $my_user["mailstatus"] = "FALSE";
-            }
+                if (isset($_POST["mailstatus"])) {
+                    $my_user["mailstatus"] = "TRUE";
+                } else {    
+                    $my_user["mailstatus"] = "FALSE";
+                }
 
-            $my_user["mailSieveFilter"] =  createEximFilter( $eximFilterValues );
+                $my_user["mailSieveFilter"] =  createEximFilter( $eximFilterValues );
 
-            $my_user["userpassword"] =  "{MD5}".base64_encode(pack("H*",md5($my_user["clearpassword"])));
-            $validation_errors = validate_user($my_user);
-            if (count($validation_errors) == 0) {
+                $my_user["userpassword"] =  "{MD5}".base64_encode(pack("H*",md5($my_user["clearpassword"])));
+
+                // modify LDAP entry
                 $this->ldap->modifyUser($domain,$my_user);
+                
                 $submit_status = ldap_errno($this->ldap->cid);
                 if ($submit_status == "0") {
                     if ($_SESSION["userclass"] == "user") {
@@ -110,18 +111,13 @@ class content_user_edit extends module_base
                     }
                     $this->smarty->assign("submit_status",$submit_status);
                     $user = $my_user["uid"];
-                } else {
+                } else { // LDAP error occured
                     $this->smarty->assign("submit_status",ldap_err2str($submit_status));
                 }
-            } else {
-               $this->smarty->assign("submit_status","Invalid Data");
-               $this->smarty->assign("validation_errors",$validation_errors);
-               SmartyValidate::disconnect();
+            } else { // input validation failed
+                $this->smarty->assign($_POST);
             }
-        } else {
-            $this->smarty->assign($_POST);
-        }
-        } else { //END SUBMIT
+        } else { // form has not yet been submitted
             $this->smarty->assign("submit_status",-1);
             SmartyValidate::connect($this->smarty, true);
             SmartyValidate::register_validator('cn', 'cn', 'notEmpty');
