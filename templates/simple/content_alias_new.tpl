@@ -1,3 +1,6 @@
+            {validate id="uid" message="Aliasname not valid or empty" append="validation_errors"}
+            {validate id="nlo_mailaliasedname" message="Destinations must not be empty" append="validation_errors"}
+
             <div id="Content">
                 <h2>{t}New alias{/t}</h2>
 		        {if $smarty.post.submit}
@@ -12,7 +15,7 @@
                                     {t}Alias{/t}
                                 </td>
                                 <td>
-                                    <input type="text" name="uid" value="{$alias.uid.0}" />@{$domain}
+                                    <input type="text" name="uid" value="{$alias.uid}" />@{$domain}
                                 </td>
 				            </tr>
                             <tr>
@@ -34,7 +37,7 @@
                                     {t}Is active?{/t}
                                 </td>
                                 <td>
-                                    <input type="checkbox" name="mailstatus" {if $alias.mailstatus.0 eq "FALSE"}{else}checked="checked"{/if} />
+                                    <input type="checkbox" name="mailstatus" {if $alias.mailstatus eq "FALSE"}{else}checked="checked"{/if} />
                                 </td>
                             </tr>
                             <tr>

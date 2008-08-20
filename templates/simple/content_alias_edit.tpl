@@ -1,3 +1,5 @@
+            {validate id="nlo_mailaliasedname" message="Destinations must not be empty" append="validation_errors"}
+
             <div id="Content">
                 <h2>{t}Edit alias{/t} {$alias.uid.0}@{$domain}</h2>
 		        {if $smarty.post.submit}
@@ -17,7 +19,7 @@
                                     {t}Alias for{/t}
                                 </td>
                                 <td>
-                                        <textarea name="nlo_mailaliasedname" cols="40" rows="10">{$alias.mailaliasedname}</textarea>
+                                    <textarea name="nlo_mailaliasedname" cols="40" rows="10">{$alias.mailaliasedname}</textarea>
                                 </td>
                             </tr>
                             <tr>

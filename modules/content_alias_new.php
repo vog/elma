@@ -59,28 +59,31 @@ class content_alias_new extends module_base
 
         // new alias created or existing alias altert 
         if (isset($_POST["submit"])) {
-            if(!empty($_POST["nlo_next_step"])) {
-                $next_step = $_POST["nlo_next_step"];
-            }
-            else {
-                $next_step = "";
-            }
+            SmartyValidate::connect($this->smarty);
 
-            // remove all non LDAP objects from submited form
-            // an the submit and mode value
-            $my_alias = remove_key_by_str($_POST,"nlo_");
-            unset($my_alias["submit"]);
+            if(SmartyValidate::is_valid($_POST)) {
 
-            if (isset($_POST["mailstatus"])) {
-                $my_alias["mailstatus"] = "TRUE";
-            } else {
-                $my_alias["mailstatus"] = "FALSE";
-            }
+                if(!empty($_POST["nlo_next_step"])) {
+                    $next_step = $_POST["nlo_next_step"];
+                }
+                else {
+                    $next_step = "";
+                }
 
-            $my_alias["mailaliasedname"] = preg_split("/\r?\n/", $_POST['nlo_mailaliasedname']);
-            
-            $validation_errors = validate_alias($my_alias);
-            if (count($validation_errors) == 0) {
+                // remove all non LDAP objects from submited form
+                // an the submit and mode value
+                $my_alias = remove_key_by_str($_POST,"nlo_");
+                unset($my_alias["submit"]);
+
+                if (isset($_POST["mailstatus"])) {
+                    $my_alias["mailstatus"] = "TRUE";
+                } else {
+                    $my_alias["mailstatus"] = "FALSE";
+                }
+
+                $my_alias["mailaliasedname"] = preg_split("/\r?\n/", $_POST['nlo_mailaliasedname']);
+
+                // add alias to LDAP
                 $this->ldap->addAlias($domain,$my_alias);
 
                 $submit_status = ldap_errno($this->ldap->cid);
@@ -89,6 +92,7 @@ class content_alias_new extends module_base
                     $alias = $my_alias["uid"];
                     switch($next_step) {
                     case 'show_overview':
+                        SmartyValidate::disconnect();
                         Header("Location: index.php?module=users_list&domain=" . urlencode($domain) );
                         exit;
                         break;
@@ -96,15 +100,18 @@ class content_alias_new extends module_base
                         // nothing
                         break;
                     }
-                } else {
+                } else { // LDAP error occured
                      $this->smarty->assign("submit_status",ldap_err2str($submit_status));
                 }
-            } else {
-                $this->smarty->assign("submit_status","Invalid Data");
-                $this->smarty->assign("validation_errors",$validation_errors);
+            } else { // input validation failed
+                my_print_r($_POST);
+                $this->smarty->assign("alias",$_POST);
             }
-        } else {
+        } else { // form has not yet been submitted
             $this->smarty->assign("submit_status",-1);
+            SmartyValidate::connect($this->smarty, true);
+            SmartyValidate::register_validator('uid', 'uid', 'notEmpty');
+            SmartyValidate::register_validator('nlo_mailaliasedname', 'nlo_mailaliasedname', 'notEmpty');
         }
     }
 

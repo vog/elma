@@ -54,39 +54,41 @@ class content_alias_edit extends module_base
         $domain =  $_GET["domain"];
         $this->smarty->assign("domain",$domain);
 
-        // new alias created or existing alias altert 
+        // existing alias altert 
         if (isset($_POST["submit"])) {
-            // remove all non LDAP objects from submited form
-            // an the submit and mode value
-            $my_alias = remove_key_by_str($_POST,"nlo_");
-            unset($my_alias["submit"]);
+            SmartyValidate::connect($this->smarty);
+            if (SmartyValidate::is_valid($_POST)) {
+                // remove all non LDAP objects from submited form
+                // an the submit and mode value
+                $my_alias = remove_key_by_str($_POST,"nlo_");
+                unset($my_alias["submit"]);
 
-            if (isset($_POST["mailstatus"])) {
-                $my_alias["mailstatus"] = "TRUE";
-            } else {
-                $my_alias["mailstatus"] = "FALSE";
-            }
-            
-            $my_alias["mailaliasedname"] = preg_split("/\r?\n/", $_POST['nlo_mailaliasedname']);
-            
-            $validation_errors = validate_alias($my_alias);
-            if (count($validation_errors) == 0) {
+                if (isset($_POST["mailstatus"])) {
+                    $my_alias["mailstatus"] = "TRUE";
+                } else {
+                    $my_alias["mailstatus"] = "FALSE";
+                }
+                
+                $my_alias["mailaliasedname"] = preg_split("/\r?\n/", $_POST['nlo_mailaliasedname']);
+                
                 $this->ldap->modifyAlias($domain,$my_alias);
                 
                 $submit_status = ldap_errno($this->ldap->cid);
                 if ($submit_status == "0") {
                     $this->smarty->assign("submit_status",$submit_status);
                     $alias = $my_alias["uid"];
-                } else {
+                } else { // LDAP error occured
                      $this->smarty->assign("submit_status",ldap_err2str($submit_status));
                 }
-            } else {
-                $this->smarty->assign("submit_status","Invalid Data");
-                $this->smarty->assign("validation_errors",$validation_errors);
+            } else { // input validation failed
+                 $this->smarty->assign($_POST);
             } 
         } else {
             $this->smarty->assign("submit_status",-1);
+            SmartyValidate::connect($this->smarty, true);
+            SmartyValidate::register_validator('nlo_mailaliasedname', 'nlo_mailaliasedname', 'notEmpty');
         }
+
         $al = $this->ldap->getAlias($domain,$alias);
         unset($al['mailaliasedname']['count']);
         $al['mailaliasedname'] = implode("\r\n", $al['mailaliasedname']);
