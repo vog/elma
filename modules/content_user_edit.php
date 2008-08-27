@@ -68,7 +68,6 @@ class content_user_edit extends module_base
         // new user created or existing user modified
         if (isset($_POST["submit"])) {
             SmartyValidate::connect($this->smarty);
-            my_print_r($_POST);
             if (SmartyValidate::is_valid($_POST)) {
             
                 // create array of submitted values
@@ -129,7 +128,6 @@ class content_user_edit extends module_base
         if ( $user == "new" ) {
             $this->smarty->assign("mode","add");
         } else {
-            my_print_r("OMG","");
             $my_user = $this->ldap->getUser($domain,$user);
             $eximFilterValues = parseEximFilter($my_user["mailsievefilter"][0]);    
             $this->smarty->assign("mode","modify");

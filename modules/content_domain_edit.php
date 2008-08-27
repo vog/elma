@@ -56,7 +56,6 @@ class content_domain_edit extends module_base
         // existing domain altert 
         if (isset($_POST["submit"])) {
 
-            my_print_r($_POST);
             SmartyValidate::connect($this->smarty);
 
             if(SmartyValidate::is_valid($_POST)) {

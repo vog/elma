@@ -80,8 +80,6 @@ if (!isset($_SESSION["login"])) {
         $content = $content_module->getContent();
     } else {
         $content = "no access";
-        my_print_r($_SESSION);
-         my_print_r($acl);
     }
 
     $smarty->display("header.tpl");
