@@ -1,3 +1,5 @@
+            {validate id="dc" message="Domain not valid or empty" append="validation_errors"}
+            
             <div id="Content">
                 <h2>{t}New domain{/t}</h2>
 		        {if $smarty.post.submit}

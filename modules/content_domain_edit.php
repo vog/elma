@@ -56,37 +56,41 @@ class content_domain_edit extends module_base
         // existing domain altert 
         if (isset($_POST["submit"])) {
 
-            // create array of submitted values
-            $eximFilterValues["spamfilter"]["values"] = array( "STATUS" => "", 
-                                                               "ACTION" => $_POST["nlo_spamfilteraction"]);
-            if ( ! isset($_POST["nlo_spamfilterstatus"]) ) {
-                $eximFilterValues["spamfilter"]["values"]["STATUS"] = "#";
-            }
+            my_print_r($_POST);
+            SmartyValidate::connect($this->smarty);
 
-            // remove all non LDAP objects from submited form
-            // an the submit and mode value
-            $my_domain = remove_key_by_str($_POST,"nlo_");
+            if(SmartyValidate::is_valid($_POST)) {
 
-            if (isset($_POST["admins"])) {
-                $admins = $my_domain["admins"];
-                unset($my_domain["admins"]);
-            }
+                // create array of submitted values
+                $eximFilterValues["spamfilter"]["values"] = array( "STATUS" => "", 
+                                                                   "ACTION" => $_POST["nlo_spamfilteraction"]);
+                if ( ! isset($_POST["nlo_spamfilterstatus"]) ) {
+                    $eximFilterValues["spamfilter"]["values"]["STATUS"] = "#";
+                }
 
-            if (isset($_POST["nonadmins"])) {
-                $nonadmins = $my_domain["nonadmins"];
-                unset($my_domain["nonadmins"]);
-            }
+                // remove all non LDAP objects from submited form
+                // an the submit and mode value
+                $my_domain = remove_key_by_str($_POST,"nlo_");
 
-            unset($my_domain["submit"]);
-            
-            if (isset($_POST["mailstatus"])) {
-                $my_domain["mailstatus"] = "TRUE";
-            } else {
-                $my_domain["mailstatus"] = "FALSE";
-            }
-            $my_domain["mailSieveFilter"] =  createEximFilter( $eximFilterValues );
-            $validation_errors = validate_domain($my_domain);
-            if (count($validation_errors) == 0) {
+                if (isset($_POST["admins"])) {
+                    $admins = $my_domain["admins"];
+                    unset($my_domain["admins"]);
+                }
+
+                if (isset($_POST["nonadmins"])) {
+                    $nonadmins = $my_domain["nonadmins"];
+                    unset($my_domain["nonadmins"]);
+                }
+
+                unset($my_domain["submit"]);
+                
+                if (isset($_POST["mailstatus"])) {
+                    $my_domain["mailstatus"] = "TRUE";
+                } else {
+                    $my_domain["mailstatus"] = "FALSE";
+                }
+                $my_domain["mailSieveFilter"] =  createEximFilter( $eximFilterValues );
+                
                 $this->ldap->modifyDomain($my_domain);
 
                 $admins_cur = $this->ldap->listAdminUsers($domain, TRUE);
@@ -108,21 +112,22 @@ class content_domain_edit extends module_base
                 if ( count($adminsdel) > 0 ) {
                     $this->ldap->deleteAdminUsers($domain, $adminsdel);
                 }
-
                 $submit_status = ldap_errno($this->ldap->cid);
                 if ($submit_status == "0") {
                     $this->smarty->assign("submit_status",$submit_status);
                     $domain = $my_domain["dc"];
-                } else { 
+                } else {  // LDAP error occured
                     $this->smarty->assign("submit_status",ldap_err2str($submit_status));
                 }
-            } else {
-                $this->smarty->assign("submit_status","Invalid Data");
-                $this->smarty->assign("validation_errors",$validation_errors);
+            } else { // input validation failed
+                $this->smarty->assign($_POST);
             }
-        } else {
+        } else { // form has not yet been submitted
             $this->smarty->assign("submit_status",-1);
-        }
+            SmartyValidate::connect($this->smarty, true);
+            SmartyValidate::register_validator('dc', 'dc', 'notEmpty');
+        }    
+        
         $my_domain = $this->ldap->getDomain($domain);
         $this->smarty->assign("domain",$my_domain);
         
