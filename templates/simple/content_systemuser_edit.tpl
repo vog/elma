@@ -1,3 +1,7 @@
+            {validate id="uid" message="Username not valid or empty" append="validation_errors"}
+            {validate id="cn" message="First name not valid or empty" append="validation_errors"}
+            {validate id="sn" message="Last name not valid or empty" append="validation_errors"}
+
             <div id="Content">
                 {if $mode == "modify"}
                 <h2>{t}Edit systemuser{/t} {$user.uid.0}</h2>

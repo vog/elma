@@ -55,34 +55,35 @@ class content_systemuser_edit extends module_base
 
         // new systemuser created or existing systemuser modified
         if (isset($_POST["submit"])) {
-            // save all needed information which are no ldap objects themself
-            if ( !empty($_POST["nlo_adminofdomains"]) ) {
-                $new_adminofdomains = $_POST["nlo_adminofdomains"];
-            }
+            SmartyValidate::connect($this->smarty);
+            if (SmartyValidate::is_valid($_POST)) {
 
-            if(!empty($_POST["nlo_next_step"])) {
-                $next_step = $_POST["nlo_next_step"];
-            }
-            else {
-                $next_step = "";
-            }
+                // save all needed information which are no ldap objects themself
+                if ( !empty($_POST["nlo_adminofdomains"]) ) {
+                    $new_adminofdomains = $_POST["nlo_adminofdomains"];
+                }
 
-            // remove all non LDAP objects from submited form
-            // an the submit and mode value
-            $my_systemuser = remove_key_by_str($_POST,"nlo_");
-            unset($my_systemuser["submit"]);
-            unset($my_systemuser["mode"]);
+                if(!empty($_POST["nlo_next_step"])) {
+                    $next_step = $_POST["nlo_next_step"];
+                }
+                else {
+                    $next_step = "";
+                }
 
-            if (! $my_systemuser["clearpassword"] == "") { 
-                $my_systemuser["userpassword"] =  "{MD5}".base64_encode(pack("H*",md5($my_systemuser["clearpassword"])));
-            }
+                // remove all non LDAP objects from submited form
+                // an the submit and mode value
+                $my_systemuser = remove_key_by_str($_POST,"nlo_");
+                unset($my_systemuser["submit"]);
+                unset($my_systemuser["mode"]);
 
-            //if (! defined(SAVECLEARPASS) || empty($my_systemuser["clearpassword"])) {
-                unset($my_systemuser["clearpassword"]);
-           // }
+                if (! $my_systemuser["clearpassword"] == "") { 
+                    $my_systemuser["userpassword"] =  "{MD5}".base64_encode(pack("H*",md5($my_systemuser["clearpassword"])));
+                }
 
-            $validation_errors = validate_systemuser($my_systemuser);
-            if (count($validation_errors) == 0) {
+                //if (! defined(SAVECLEARPASS) || empty($my_systemuser["clearpassword"])) {
+                    unset($my_systemuser["clearpassword"]);
+                // }
+
                 switch ($_POST["mode"]) {
                     case "add":
                         $this->ldap->addSystemUser($my_systemuser);
@@ -146,16 +147,21 @@ class content_systemuser_edit extends module_base
                         //nothing..
                         break;
                     }
-                } else {
+                } else {  // LDAP error occured
                     $this->smarty->assign("submit_status",ldap_err2str($submit_status));
                 }
-            } else {
-               $this->smarty->assign("submit_status","Invalid Data");
-               $this->smarty->assign("validation_errors",$validation_errors);
+            } else { // input validation failed
+                $this->smarty->assign($_POST);
             }
-        } else {
+        } else { // form has not yet been submitted
             $this->smarty->assign("submit_status",-1);
+            SmartyValidate::connect($this->smarty, true);
+            SmartyValidate::register_validator('uid', 'uid', 'notEmpty');
+            SmartyValidate::register_validator('cn', 'cn', 'notEmpty');
+            SmartyValidate::register_validator('sn', 'sn', 'notEmpty');
+            //SmartyValidate::register_validator('password', 'clearpassword', 'notEmpty');
         }
+
 
         $adminofdomains = $this->ldap->getSystemUsersDomains($systemuser);
         $domains_dn = $this->ldap->listDomains();
