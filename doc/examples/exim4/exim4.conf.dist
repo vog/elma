@@ -153,7 +153,7 @@ host_lookup = *
 # >>>
 
 # Disable ident lookup <<<
-rfc1413_hosts = *
+rfc1413_hosts =
 rfc1413_query_timeout = 5s
 # >>>
 
