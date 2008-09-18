@@ -13,7 +13,7 @@
 # --with-ssldir=/etc/ssl
 
 # Base directory where to store runtime data.
-base_dir = /var/run/dovecot/
+base_dir = /var/run/dovecot
 
 # Protocols we want to be serving: imap imaps pop3 pop3s
 # If you only want to use dovecot-auth, you can set this to "none".
