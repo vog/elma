@@ -17,7 +17,7 @@ base_dir = /var/run/dovecot
 
 # Protocols we want to be serving: imap imaps pop3 pop3s
 # If you only want to use dovecot-auth, you can set this to "none".
-protocols = imap pop3
+protocols = imap imaps pop3 pop3s
 
 # IP or host address where to listen in for connections. It's not currently
 # possible to specify multiple addresses. "*" listens in all IPv4 interfaces.
@@ -81,14 +81,14 @@ log_timestamp = "%Y-%m-%d %H:%M:%S "
 # to above if not specified.
 #ssl_listen =
 
-# Disable SSL/TLS support.
-ssl_disable = yes
+# Enable SSL/TLS support.
+ssl_disable = no
 
 # PEM encoded X.509 SSL/TLS certificate and private key. They're opened before
 # dropping root privileges, so keep the key file unreadable by anyone but
 # root.
-#ssl_cert_file = /etc/ssl/certs/dovecot.pem
-#ssl_key_file = /etc/ssl/private/dovecot.pem
+ssl_cert_file = /etc/dovecot/cert.pem
+ssl_key_file = /etc/dovecot/key.pem
 
 # If key file is password protected, give the password here. Alternatively
 # give it when starting dovecot with -p parameter.
