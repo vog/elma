@@ -36,7 +36,7 @@ if ( isset($_SESSION['language']) ) {
 $codeset = 'UTF-8';
 $textdomain = 'messages';
 
-setlocale(LC_ALL, $set_language.'.'.$codeset);
+setlocale(LC_ALL, $language.'.'.$codeset);
 bindtextdomain($textdomain, getcwd().'/templates/'.TEMPLATE.'/locale');
 bind_textdomain_codeset($textdomain, $codeset);
 textdomain($textdomain);
