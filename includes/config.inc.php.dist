@@ -95,5 +95,5 @@ define ("SPAMFILTER_AVAILABLE_ACTIONS",serialize(array("none" => "none",
 define("MAILSTORAGESERVERS",serialize(array("mailstore01.megabit.net","mailstore02.megabit.net")));
 
 // The default root directory for homeDirectory attribute of each mailuser.
-define("DEFAULT_HOMEDIR_ROOT","/var/mailhome");
+define("DEFAULT_HOMEDIR_ROOT","/var/mail");
 ?>

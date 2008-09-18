@@ -335,7 +335,7 @@ last_valid_gid = 8
 # may lead to root exploit. Usually this should be done only if you don't
 # allow shell access for users. See
 # /usr/share/doc/dovecot-common/configuration.txt for more information.
-valid_chroot_dirs = /var/mailhome
+valid_chroot_dirs = /var/mail
 
 # Default chroot directory for mail processes. This can be overridden for
 # specific users in user database by giving /./ in user's home directory
