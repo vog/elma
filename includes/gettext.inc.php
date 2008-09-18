@@ -27,18 +27,18 @@
  * =====================================================================
  */
 
-if ( isset($_SESSION["language"]) ) {
-    $set_language = $_SESSION["language"];
+// Set language, codeset and text domain
+if ( isset($_SESSION['language']) ) {
+    $language = $_SESSION['language'];
 } else {
-    $set_language = DEFAULT_LANGUAGE;	
+    $language = DEFAULT_LANGUAGE;	
 }
+$codeset = 'UTF-8';
+$textdomain = 'messages';
 
-setlocale(LC_ALL, $set_language);
-
-// Set the text domain as 'messages'
-$domain = 'messages';
-bindtextdomain($domain, getcwd()."/templates/".TEMPLATE."/locale");
-bind_textdomain_codeset($domain, 'UTF-8');
-textdomain($domain);
+setlocale(LC_ALL, $set_language.'.'.$codeset);
+bindtextdomain($textdomain, getcwd().'/templates/'.TEMPLATE.'/locale');
+bind_textdomain_codeset($textdomain, $codeset);
+textdomain($textdomain);
 
 // vim:tabstop=4:expandtab:shiftwidth=4:filetype=php:syntax:ruler:
