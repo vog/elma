@@ -622,7 +622,7 @@ protocol pop3 {
   #     Outlook Express and Netscape Mail breaks if end of headers-line is
   #     missing. This option simply sends it if it's missing.
   # The list is space-separated.
-  pop3_client_workarounds =  outlook-no-nuls oe-ns-eoh
+  pop3_client_workarounds = outlook-no-nuls oe-ns-eoh
 }
 
 ##
@@ -900,10 +900,10 @@ auth default {
 
   # LDAP database
   # http://wiki.dovecot.org/AuthDatabase/LDAP
-  userdb ldap {
+  #userdb ldap {
     # Path for LDAP configuration file, see /etc/dovecot/dovecot-ldap.conf for example
-    args = /etc/dovecot/dovecot-ldap.conf
-  }
+    #args = 
+  #}
 
   # vpopmail
   # http://wiki.dovecot.org/AuthDatabase/VPopMail
@@ -915,8 +915,8 @@ auth default {
   # This can be made to work with SQL and LDAP databases, see their example
   # configuration files for more information how to do it.
   # http://wiki.dovecot.org/UserDatabase/Prefetch
-  #userdb prefetch {
-  #}
+  userdb prefetch {
+  }
 
   # User to use for the process. This user needs access to only user and
   # password databases, nothing else. Only shadow and pam authentication

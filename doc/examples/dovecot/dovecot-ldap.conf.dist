@@ -19,10 +19,10 @@ hosts = 127.0.0.1
 #uris = 
 
 # Distinguished Name - the username used to login to the LDAP server
-dn = 
+dn = uid=exim4,ou=users,o=mybasedn
 
 # Password for LDAP server
-dnpass = 
+dnpass = exim4pass
 
 # Use SASL binding instead of the simple binding. Note that this changes
 # ldap_version automatically to be 3 if it's lower. Also note that SASL binds
@@ -57,19 +57,19 @@ auth_bind = no
 # For example:
 #   auth_bind_userdn = cn=%u,ou=people,o=org
 #
-#auth_bind_userdn = uid=%n,dc=%d,ou=domains,o=
+#auth_bind_userdn =
 
 # LDAP protocol version to use. Likely 2 or 3.
 ldap_version = 3
 
 # LDAP base. %variables can be used here.
-base = 
+base = uid=%n,dc=%d,ou=domains,o=mybasedn
 
 # Dereference: never, searching, finding, always
 deref = never
 
 # Search scope: base, onelevel, subtree
-scope = subtree
+scope = base
 
 # User attributes are given in LDAP-name=dovecot-internal-name list. The
 # internal names are:
@@ -80,14 +80,14 @@ scope = subtree
 #
 # There are also other special fields which can be returned, see
 # http://wiki.dovecot.org/UserDatabase/ExtraFields
-user_attrs = homeDirectory=home
+#user_attrs = homeDirectory=home,uidNumber=uid,gidNumber=gid
 
 # Filter for user lookup. Some variables can be used (see
 # http://wiki.dovecot.org/Variables for full list):
 #   %u - username
 #   %n - user part in user@domain, same as %u if there's no domain
 #   %d - domain part in user@domain, empty if user there's no domain
-user_filter = (&(objectClass=mailUser)(uid=%n)(mailStatus=TRUE))
+#user_filter = (&(objectClass=posixAccount)(uid=%u))
 
 # Password checking attributes:
 #  user: Virtual user name (user@domain), if you wish to change the
@@ -95,16 +95,16 @@ user_filter = (&(objectClass=mailUser)(uid=%n)(mailStatus=TRUE))
 #  password: Password, may optionally start with {type}, eg. {crypt}
 # There are also other special fields which can be returned, see
 # http://wiki.dovecot.org/PasswordDatabase/ExtraFields
-pass_attrs = uid=user,userPassword=password
+#pass_attrs = uid=user,userPassword=password
 
 # If you wish to avoid two LDAP lookups (passdb + userdb), you can use
 # userdb prefetch instead of userdb ldap in dovecot.conf. In that case you'll
 # also have to include user_attrs in pass_attrs field prefixed with "userdb_"
 # string. For example:
-#pass_attrs = uid=user,userPassword=password,homeDirectory=userdb_home,uidNumber=userdb_uid,gidNumber=userdb_gid
+pass_attrs = uid=user,userPassword=password,homeDirectory=userdb_home
 
 # Filter for password lookups
-pass_filter = (&(objectClass=mailUser)(uid=%n)(mailStatus=TRUE))
+pass_filter = (&(objectClass=mailUser)(mailStatus=TRUE))
 
 # Default password scheme. "{scheme}" before password overrides this.
 # List of supported schemes is in: http://wiki.dovecot.org/Authentication
