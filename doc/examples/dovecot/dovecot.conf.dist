@@ -848,7 +848,7 @@ auth default {
   # http://wiki.dovecot.org/AuthDatabase/LDAP
   passdb ldap {
     # Path for LDAP configuration file, see /etc/dovecot/dovecot-ldap.conf for example
-    args =  /etc/dovecot/dovecot-ldap.conf
+    args = /etc/dovecot/dovecot-ldap.conf
   }
 
   # vpopmail authentication
