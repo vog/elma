@@ -101,14 +101,14 @@ scope = base
 # userdb prefetch instead of userdb ldap in dovecot.conf. In that case you'll
 # also have to include user_attrs in pass_attrs field prefixed with "userdb_"
 # string. For example:
-pass_attrs = uid=user,userPassword=password,homeDirectory=userdb_home
+pass_attrs = uid=user,clearpassword=password,homeDirectory=userdb_home
 
 # Filter for password lookups
 pass_filter = (&(objectClass=mailUser)(mailStatus=TRUE))
 
 # Default password scheme. "{scheme}" before password overrides this.
 # List of supported schemes is in: http://wiki.dovecot.org/Authentication
-#default_pass_scheme = CRYPT
+default_pass_scheme = PLAIN
 
 # You can use same UID and GID for all user accounts if you really want to.
 # If the UID/GID is still found from LDAP reply, it overrides these values.
