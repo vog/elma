@@ -1,7 +1,7 @@
 # LDAP connection parameters <<<
 
 # which LDAP server to use as default
-ldap_default_servers = 127.0.0.1::389
+ldap_default_servers = /var/run/slapd/ldapi:127.0.0.1::389
 
 LDAP_BASEDN = o=mybasedn
 LDAP_USERS_ROOT_DN = ou=users,LDAP_BASEDN
