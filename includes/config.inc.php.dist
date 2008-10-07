@@ -34,7 +34,7 @@
 /* ######## LDAP Settings ######## */
 
 // LDAP Server hostname
-define ("LDAP_HOSTNAME","ldap://127.0.0.1");
+define ("LDAP_HOSTNAME","ldapi:/// ldap:///");
 
 // use TLS for LDAP connection
 define ("LDAP_USE_TLS","0");
