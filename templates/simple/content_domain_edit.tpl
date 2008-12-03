@@ -42,22 +42,14 @@
                             {if @in_array("domain_edit.spamfilter",$acl) }
                             <tr>
                                 <td>
-                                    {t}Spamfilter enabled{/t}
+                                    {t}Spamfitler{/t}
                                 </td>
                                 <td>
-                                    <input type="checkbox" name="nlo_spamfilterstatus" {if $spamfiltersettings.STATUS eq "#"}{else}checked="checked"{/if} />
-                                </td>
-                            </tr>
-                            <tr>
-
-                                <td>
-                                    {t}Rule{/t}
-                                </td>
-                                <td>
-                                    <select name="nlo_spamfilteraction">
-                                        <option {if $spamfiltersettings.ACTION eq "DISCARD"}selected{/if} value="DISCARD">{t}discard email{/t}</option>
-                                        <option {if $spamfiltersettings.ACTION eq "REDIRECT"}selected{/if} value="REDIRECT">{t}redirect to{/t} spam@{$domain.dc}</option>
-                                        <option {if $spamfiltersettings.ACTION eq "FOLDER"}selected{/if} value="FOLDER">{t}save in user's spamfolder{/t}</option>
+                                    <select name="mailspamfilter">
+                                        <option {if $domain.mailspamfilter.0 eq "FALSE"}selected{/if} value="FALSE">{t}disabled{/t}</option>
+                                        <option {if $domain.mailspamfilter.0 eq "DISCARD"}selected{/if} value="DISCARD">{t}discard email{/t}</option>
+                                        <option {if $domain.mailspamfilter.0 eq "REDIRECT"}selected{/if} value="REDIRECT">{t}redirect to{/t} spam@{$domain.dc.0}</option>
+                                        <option {if $domain.mailspamfilter.0 eq "FOLDER"}selected{/if} value="FOLDER">{t}save in user's spamfolder{/t}</option>
                                     </select>
                                 </td>
                             </tr>
