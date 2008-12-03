@@ -1,13 +1,8 @@
-            {validate id="uid" message="Username not valid or empty" append="validation_errors"}
             {validate id="cn" message="First name not valid or empty" append="validation_errors"}
             {validate id="sn" message="Last name not valid or empty" append="validation_errors"}
 
             <div id="Content">
-                {if $mode == "modify"}
                 <h2>{t}Edit systemuser{/t} {$user.uid.0}</h2>
-                {else}
-                <h2>{t}New systemuser{/t}</h2>
-                {/if}
 		        {if $smarty.post.submit}
                     {include file="print_submit_status.tpl"}
                 {/if}
@@ -16,7 +11,6 @@
                         <input type="hidden" name="mode" value="{$mode}"/>
                     </div>
 			        <fieldset>
-			        {if $mode == "modify"}
 			            <legend>{$user.uid.0}</legend>
 			            <table>
 			                <tr>
@@ -24,18 +18,6 @@
                                     <input type="hidden" name="uid" value="{$user.uid.0}" />
                                 </td>
 				            </tr>
-			        {else}
-			            <legend>{t}new user{/t}</legend>
-			            <table>
-			                <tr>
-				                <td>
-                                    {t}Username{/t}
-                                </td>
-                                <td>
-                                    <input type="text" name="uid" value="{$user.uid.0}" />
-                                </td>
-				            </tr>
-                    {/if}
 		                    <tr>
 				                <td>
                                     {t}First name{/t}
@@ -55,14 +37,11 @@
 	                        <tr>
                                 <td>
                                     {t}Password{/t}
-                                    {if $mode == "modify"}
-                                    <br />
-                                    {/if}
                                 </td>
                                 <td>
                                     <input type="hidden" name="userpassword" value="{$user.userpassword.0}" />
                                     <input type="text" name="clearpassword" value="{$user.clearpassword.0}" />
-                                    {t}(leave empty to keep password){/t}
+                                    {t}(leave empty to keep current password){/t}
                                 </td>
                             </tr>
 				            <tr>
@@ -107,23 +86,6 @@
                                     </table>
                                 </td>
                             </tr>
-                            {if $mode != "modify"}
-                            <tr>
-                                <td colspan="2">
-                                    <hr/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    {t}Next Step{/t}
-                                 </td>
-                                 <td>
-                                    <input type="radio" name="nlo_next_step" value="add_another" checked="true" /> {t}Add another user{/t}<br />
-                                    <input type="radio" name="nlo_next_step" value="edit_current" /> {t}Edit new user{/t}<br />
-                                    <input type="radio" name="nlo_next_step" value="show_overview" /> {t}Go to user overview{/t}<br />
-                                 </td>
-                            </tr>
-                            {/if}
                             <tr>
                                 <td colspan="2">
                                     <hr/>
