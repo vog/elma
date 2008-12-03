@@ -58,6 +58,9 @@ LDAP_ALIAS_FOR = ${lookup ldapm{user=LDAP_BIND_USER pass=LDAP_BIND_PASS ldap:///
 # return the user's homeDirectory
 LDAP_HOME_DIRECTORY = ${lookup ldap{user=LDAP_BIND_USER pass=LDAP_BIND_PASS ldap:///uid=${quote_ldap_dn:${local_part}},dc=${quote_ldap_dn:${domain}},LDAP_DOMAINS_ROOT_DN?homeDirectory?base} {$value} fail}
 
+# returns the domain spamfilter action
+LDAP_DOMAIN_SPAMFILTER_ACTION = ${lookup ldap{user=LDAP_BIND_USER pass=LDAP_BIND_PASS ldap:///uid=${quote_ldap_dn:${local_part}},dc=${quote_ldap_dn:${domain}},LDAP_DOMAINS_ROOT_DN?mailSpamFilter?base?} {$value} fail}
+
 # get the mailSieveFilter attribute for an user
 LDAP_GET_USER_FILTER = ${lookup ldap{user=LDAP_BIND_USER pass=LDAP_BIND_PASS ldap:///uid=${quote_ldap_dn:${local_part}},dc=${quote_ldap_dn:${domain}},LDAP_DOMAINS_ROOT_DN?mailSieveFilter?base?(objectclass=mailUser)} {$value} fail}
 

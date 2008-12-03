@@ -65,7 +65,7 @@ class content_systemusers_list extends module_base
             array_push($my_users,$user);
         }
 
-        $this->smarty->assign("link_newsystemuser",$_SERVER['PHP_SELF']."?module=systemuser_edit&amp;user=new");
+        $this->smarty->assign("link_newsystemuser",$_SERVER['PHP_SELF']."?module=systemuser_new");
         $this->smarty->assign('systemusers',$my_users);   
     }
 

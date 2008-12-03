@@ -60,13 +60,6 @@ class content_domain_edit extends module_base
 
             if(SmartyValidate::is_valid($_POST)) {
 
-                // create array of submitted values
-                $eximFilterValues["spamfilter"]["values"] = array( "STATUS" => "", 
-                                                                   "ACTION" => $_POST["nlo_spamfilteraction"]);
-                if ( ! isset($_POST["nlo_spamfilterstatus"]) ) {
-                    $eximFilterValues["spamfilter"]["values"]["STATUS"] = "#";
-                }
-
                 // remove all non LDAP objects from submited form
                 // an the submit and mode value
                 $my_domain = remove_key_by_str($_POST,"nlo_");
@@ -88,7 +81,7 @@ class content_domain_edit extends module_base
                 } else {
                     $my_domain["mailstatus"] = "FALSE";
                 }
-                $my_domain["mailSieveFilter"] =  createEximFilter( $eximFilterValues );
+                $my_domain["mailSieveFilter"] = createEximFilter( $eximFilterValues );
                 
                 $this->ldap->modifyDomain($my_domain);
 

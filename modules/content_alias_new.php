@@ -73,6 +73,7 @@ class content_alias_new extends module_base
                 // remove all non LDAP objects from submited form
                 // an the submit and mode value
                 $my_alias = remove_key_by_str($_POST,"nlo_");
+                $my_alias["uid"] = strtolower($my_alias["uid"]);
                 unset($my_alias["submit"]);
 
                 if (isset($_POST["mailstatus"])) {

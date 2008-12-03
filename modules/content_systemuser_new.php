@@ -1,6 +1,6 @@
 <?php
 /**
- * @author Sven Ludwig <adan0s@adan0s.net>
+ * @author Daniel Weuthen <daniel@weuthen-net.de>
  * @version $LastChangedRevision$
  * @package ELMA
  *
@@ -28,19 +28,19 @@
  */
 
 /**
- * content systemsystemuser edit
+ * content systemsystemuser new
  * 
- * This content module is used for creating the systemsystemuser edit/add 
- * form and handling the submited data.
+ * This content module is used for creating the systemsystemuser 
+ * add form and handling of the submited data.
  */
 
-class content_systemuser_edit extends module_base
+class content_systemuser_new extends module_base
 {
 
     /**
      * Constructor of this class
      */
-    function content_systemsystemuser_edit() 
+    function content_systemsystemuser_new() 
     {
         parent::module_base();
     }
@@ -50,86 +50,75 @@ class content_systemuser_edit extends module_base
      */
     function proceed() 
     {
-        $systemuser = $_GET["user"]; 
-        $this->smarty->assign("uid",$systemuser);
-
-        // new systemuser created or existing systemuser modified
+        // new systemuser should be created 
         if (isset($_POST["submit"])) {
 
+            // check if submitted data is valid
             SmartyValidate::connect($this->smarty);
             if (SmartyValidate::is_valid($_POST)) {
 
-                // save all needed information which are no ldap objects themself
+                // save all needed information which are no ldap objects themself 
+                // as they get removed in the next step
                 if ( !empty($_POST["nlo_adminofdomains"]) ) {
                     $new_adminofdomains = $_POST["nlo_adminofdomains"];
                 }
 
                 if(!empty($_POST["nlo_next_step"])) {
                     $next_step = $_POST["nlo_next_step"];
-                }
-                else {
+                } else {
                     $next_step = "";
                 }
 
                 // remove all non LDAP objects from submited form
-                // an the submit and mode value
+                // and the submit value
                 $my_systemuser = remove_key_by_str($_POST,"nlo_");
                 unset($my_systemuser["submit"]);
                 unset($my_systemuser["mode"]);
-
+                
+                // create md5 password hash from submitted cleartext password 
+                // and if not defined in the global config, remove clearpassword 
+                // from array to prevent storing it in the LDAP database
                 if (! $my_systemuser["clearpassword"] == "") { 
                     $my_systemuser["userpassword"] =  "{MD5}".base64_encode(pack("H*",md5($my_systemuser["clearpassword"])));
                 }
-
                 //if (! defined(SAVECLEARPASS) || empty($my_systemuser["clearpassword"])) {
                     unset($my_systemuser["clearpassword"]);
                 // }
 
-                if ( !isset($new_adminofdomains) || count($new_adminofdomains) == 0) $new_adminofdomains = array();
-                $old_adminofdomains = $this->ldap->getSystemUsersDomains($systemuser);
-                unset ($my_systemuser["adminofdomains"]);
-                
-                $this->ldap->modifySystemUser($my_systemuser);
-
-                $addDomainAdmin = array();
-                $delDomainAdmin = array();
-                
-
-                /* check if the user is admin already */
-                /* and put him onto the add array if not */
-                $addDomainAdmin = array_diff($new_adminofdomains,$old_adminofdomains);
-                
-                /* check if the user used to be admin */
-                /* and put him onto the del array if he isn't any longer */
-                $delDomainAdmin = array_diff($old_adminofdomains,$new_adminofdomains);
-
-                if ( count($addDomainAdmin) > 0 ) {
-                    foreach($addDomainAdmin as $domain) {
-                        $this->ldap->addAdminUsers($domain, "uid=".$systemuser.",".LDAP_USERS_ROOT_DN);
-                    }
-                }
-                
-                if ( count($delDomainAdmin) > 0) {
-                    foreach($delDomainAdmin as $domain) {
-                        $this->ldap->deleteAdminUsers($domain, "uid=".$systemuser.",".LDAP_USERS_ROOT_DN);
-                    }
-                }
-
+                // finally create the system user in the ldap database
+                $this->ldap->addSystemUser($my_systemuser);
                 $submit_status = ldap_errno($this->ldap->cid);
                 if ($submit_status == "0") {
+                    
+                    // if user has been successfully created, add him to the admin group of selected domains 
+                    // otherwise just create and empty array to prevent further errors
+                    if ( !isset($new_adminofdomains) || count($new_adminofdomains) == 0) $new_adminofdomains = array();
+                    $addDomainAdmin = $new_adminofdomains;
+
+                    if ( count($addDomainAdmin) > 0 ) {
+                        foreach($addDomainAdmin as $domain) {
+                            $this->ldap->addAdminUsers($domain, "uid=".$my_systemuser["uid"].",".LDAP_USERS_ROOT_DN);
+                            if (ldap_errno($this->ldap->cid) != "0") {
+                                $submit_status .= ldap_errno($this->ldap->cid);
+                            }
+                        }
+                    }
+     
                     $this->smarty->assign("submit_status",$submit_status);
-                    $systemuser = $my_systemuser["uid"];
+
                     switch($next_step) {
                     case 'show_overview':
+                        SmartyValidate::disconnect();
                         Header("Location: index.php?module=systemusers_list" );
                         exit;
                         break;
-                    case 'add_another':
-                        Header("Location: index.php?module=systemuser_edit&user=new") ;
+                    case 'edit_current':
+                        SmartyValidate::disconnect();
+                        Header("Location: index.php?module=systemuser_edit&user=" . urlencode($my_systemuser["uid"]));
                         exit;
                         break;
-                    case 'edit_current':
-                        //nothing..
+                    case 'add_another':
+                        // nothing
                         break;
                     }
                 } else {  // LDAP error occured
@@ -144,9 +133,8 @@ class content_systemuser_edit extends module_base
             SmartyValidate::register_validator('uid', 'uid', 'notEmpty');
             SmartyValidate::register_validator('cn', 'cn', 'notEmpty');
             SmartyValidate::register_validator('sn', 'sn', 'notEmpty');
-            //SmartyValidate::register_validator('password', 'clearpassword', 'notEmpty');
+            SmartyValidate::register_validator('password', 'clearpassword', 'notEmpty');
         }
-
 
         $adminofdomains = $this->ldap->getSystemUsersDomains($systemuser);
         $domains_dn = $this->ldap->listDomains();
@@ -172,14 +160,6 @@ class content_systemuser_edit extends module_base
             $this->smarty->assign("availabledomains", $available_domains);
             $this->smarty->assign("adminofdomains", $adminofdomains);
         }
-
-        if ( $systemuser == "new" ) {
-            $this->smarty->assign("mode","add");
-            
-        } else {
-            $this->smarty->assign("mode","modify");
-            $this->smarty->assign("user",$this->ldap->getSystemUser($systemuser));
-        }
     }
 
     /**
@@ -190,7 +170,7 @@ class content_systemuser_edit extends module_base
      */
     function getContent() 
     {
-        $_content = $this->smarty->fetch('content_systemuser_edit.tpl');
+        $_content = $this->smarty->fetch('content_systemuser_new.tpl');
         return $_content;
     }
 }

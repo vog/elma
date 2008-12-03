@@ -72,6 +72,7 @@ class content_user_new extends module_base
                 // remove all non LDAP objects from submited form
                 // an the submit value
                 $my_user = remove_key_by_str($_POST,"nlo_");
+                $my_user["uid"] = strtolower($my_user["uid"]);
                 unset($my_user["submit"]);
 
                 if (isset($_POST["mailstatus"])) {
@@ -90,15 +91,21 @@ class content_user_new extends module_base
                 if ($submit_status == "0") {
                     $this->smarty->assign("submit_status",$submit_status);
                     $user = $my_user["uid"];
+
                     switch($next_step) {
-                    case 'show_overview':
-                        SmartyValidate::disconnect();
-                        header("Location: index.php?module=users_list&domain=" . urlencode($domain) );
-                        exit;
-                        break;
-                    case 'add_another':
-                        // nothing
-                        break;
+                        case 'show_overview':
+                            SmartyValidate::disconnect();
+                            header("Location: index.php?module=sysemuser_list");
+                            exit;
+                            break;
+                        case 'edit_current':
+                            SmartyValidate::disconnect();
+                            header("Location: index.php?module=systemuser_edit&&user=" . urlencode($user) );
+                            exit;
+                            break;
+                        case 'add_another':
+                            // nothing
+                            break;
                     }
                 } else { // LDAP error occured
                     $this->smarty->assign("submit_status",ldap_err2str($submit_status));

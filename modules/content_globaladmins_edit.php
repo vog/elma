@@ -52,8 +52,9 @@ class content_globaladmins_edit extends module_base
     {
         // working on the admingroup 
         if (isset($_POST["submit"])) {
+
             // remove all non LDAP objects from submited form
-            // an the submit and mode value
+            // and the submit value
             $my_domain = remove_key_by_str($_POST,"nlo_");
 
             if (isset($_POST["admins"])) {
@@ -91,12 +92,9 @@ class content_globaladmins_edit extends module_base
             } else { 
                 $this->smarty->assign("submit_status",ldap_err2str($submit_status));
             }
-        } else {
+        } else { // LDAP error occured
             $this->smarty->assign("submit_status",-1);
         }
-
-        $this->smarty->assign("mode","modify");
-
 
         $systemusers = $this->ldap->listSystemUsers();
         if ( count($systemusers) == 0 ) $systemusers = array();
