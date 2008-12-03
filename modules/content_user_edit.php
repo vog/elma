@@ -69,7 +69,6 @@ class content_user_edit extends module_base
         if (isset($_POST["submit"])) {
             SmartyValidate::connect($this->smarty);
             if (SmartyValidate::is_valid($_POST)) {
-            
                 // create array of submitted values
                 $eximFilterValues["vacation"]["values"] = array( "STATUS" => "",
                                                               "RECIPIENT" => $_POST["uid"]."@".$domain,

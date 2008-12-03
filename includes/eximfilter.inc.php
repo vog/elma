@@ -16,11 +16,11 @@ function loadEximFilterTemplates() {
     $eximFilter["filtertype"]["regex"] = '/^(.*) Exim filter$/i';
     $eximFilter["filtertype"]["values"] = array("STATUS" => "#");
 
-/*  // Redirect Template
+  // Redirect Template
     $eximFilter["redirect"]["template"] = '%STATUS%deliver %RECIPIENT% # REDIRECT';
     $eximFilter["redirect"]["regex"] = '/^(.*)deliver (.*) # REDIRECT$/i';
     $eximFilter["redirect"]["values"] = array("STATUS" => "#",
-        "RECIPIENT" => "");*/
+        "RECIPIENT" => "");
 
     // Spamfilter Template
     $eximFilter["spamfilter"]["template"] = '%STATUS%if $header_X-Spam-Flag: contains "YES" then %FILTERACTION% endif # SPAMFILTER %ACTION%';
