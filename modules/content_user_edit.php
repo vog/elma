@@ -87,11 +87,14 @@ class content_user_edit extends module_base
                 // an the submit and mode value
                 $my_user = remove_key_by_str($_POST,"nlo_");
                 unset($my_user["submit"]);
+                unset($my_user["mailstatus"]);
 
-                if (isset($_POST["mailstatus"])) {
-                    $my_user["mailstatus"] = "TRUE";
-                } else {    
-                    $my_user["mailstatus"] = "FALSE";
+                if (in_array('user_edit.active', $acl[$_SESSION['userclass']])) {
+                    if (isset($_POST["mailstatus"])) {
+                        $my_user["mailstatus"] = "TRUE";
+                    } else {    
+                        $my_user["mailstatus"] = "FALSE";
+                    }
                 }
 
                 $my_user["mailSieveFilter"] =  createEximFilter( $eximFilterValues );
