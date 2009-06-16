@@ -89,7 +89,7 @@ class content_user_edit extends module_base
                 unset($my_user["submit"]);
                 unset($my_user["mailstatus"]);
 
-                if (in_array('user_edit.active', $acl[$_SESSION['userclass']])) {
+                if ($_SESSION["userclass"] != "user") {
                     if (isset($_POST["mailstatus"])) {
                         $my_user["mailstatus"] = "TRUE";
                     } else {    
