@@ -121,7 +121,10 @@ class ELMA {
      * @attribute       array   ldap attributes to return, empty array returns everything
      */
     function getDomain ( $domain_dc="*", $active="*", $attributes=array() ) {
-        $result = ldap_list($this->cid, LDAP_DOMAINS_ROOT_DN, "(&(objectClass=mailDomain)(dc=$domain_dc)(mailStatus=$active))", $attributes);
+        $result = @ldap_list($this->cid, LDAP_DOMAINS_ROOT_DN, "(&(objectClass=mailDomain)(dc=$domain_dc)(mailStatus=$active))", $attributes);
+        if ($result === FALSE) {
+            return array();
+        }
         ldap_sort($this->cid,$result,"dc");
         $domain = ldap_get_entries($this->cid, $result);
 
@@ -756,16 +759,15 @@ class ELMA {
      * @user_uid         string  uid= value of a user's dn
      */
     function isAdminUser ($user_uid) {
-        $is_admin = FALSE;
         $user_dn = "uid=".$user_uid.",".LDAP_USERS_ROOT_DN;
+        $result = @ldap_list($this->cid, LDAP_USERS_ROOT_DN, "(&(member=$user_dn)(cn=admingroup))");
 
-        $result = ldap_list($this->cid, LDAP_USERS_ROOT_DN, "(&(member=$user_dn)(cn=admingroup))");
-        $entries = ldap_get_entries($this->cid, $result);
-
-        if ($entries["count"] > 0) {
-            $is_admin = TRUE;
+        if ($result === FALSE) {
+            return FALSE;
+        } else {
+            $entries = ldap_get_entries($this->cid, $result);
+            return $entries["count"] > 0;
         }
-        return $is_admin;
     }
 
     /**
@@ -776,10 +778,12 @@ class ELMA {
      * @dn          string  a ldap dn
      */
     function getEntry($dn, $filter="(objectClass=*)", $attributes = array()) {
-        $result = ldap_read($this->cid, $dn, $filter, $attributes);
-        $entries = ldap_get_entries($this->cid, $result);
-
-        return $entries;
+        $result = @ldap_read($this->cid, $dn, $filter, $attributes);
+        if ($result === FALSE) {
+            return array();
+        } else {
+            return ldap_get_entries($this->cid, $result);
+        }
     }
 }
 // vim:tabstop=4:expandtab:shiftwidth=4:filetype=php:syntax:ruler: 
