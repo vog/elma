@@ -95,7 +95,7 @@ class content_user_new extends module_base
                     switch($next_step) {
                         case 'show_overview':
                             SmartyValidate::disconnect();
-                            header("Location: index.php?module=sysemuser_list");
+                            header("Location: index.php?module=users_list&domain=" . urlencode($domain) );
                             exit;
                             break;
                         case 'edit_current':
