@@ -132,8 +132,8 @@ class content_user_edit extends module_base
 
         if ( $user == "new" ) {
             $this->smarty->assign("mode","add");
-        } else {
-            $my_user = $this->ldap->getUser($domain,$user);
+	} else {
+	    $my_user = $this->ldap->getUser($domain,$user);
             $eximFilterValues = parseEximFilter($my_user["mailsievefilter"][0]);    
             $this->smarty->assign("mode","modify");
             $this->smarty->assign("user",$my_user);

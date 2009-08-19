@@ -245,7 +245,11 @@ class ELMA {
      * @attribute       array   ldap attributes to return, empty array returns everything
      */
     function getUser ( $domain_dc, $user_uid="*", $active="*", $attribute = array() ) {
-        $result = ldap_list($this->cid, "dc=".$domain_dc.",".LDAP_DOMAINS_ROOT_DN, "(&(objectclass=mailUser)(mailStatus=$active)(uid=$user_uid))", $attribute);
+	if ($user_uid == "*") 
+		$result = ldap_list($this->cid, "dc=".$domain_dc.",".LDAP_DOMAINS_ROOT_DN, "(&(objectclass=mailUser)(mailStatus=$active)(uid=$user_uid))", $attribute);
+	else
+		$result = ldap_read($this->cid, "uid=".$user_uid.",dc=".$domain_dc.",".LDAP_DOMAINS_ROOT_DN, "(&(objectclass=mailUser)(mailStatus=$active))", $attribute);
+
         ldap_sort($this->cid,$result,"uid");
         $user = ldap_get_entries($this->cid, $result);
         if ( $user_uid !== "*" ) $user = $user[0];
