@@ -1,6 +1,5 @@
             {validate id="cn" message="First name not valid or empty" append="validation_errors"}
             {validate id="sn" message="Last name not valid or empty" append="validation_errors"}
-            {validate id="password" message="passwords do not match" append="validation_errors"}
 
             <div id="Content">
                 <h2>{t}Edit user{/t} {$user.uid.0}@{$domain}</h2>
@@ -97,8 +96,8 @@
                                     {t}Password{/t}
                                 </td>
                                 <td>
-                                   password: <input type="password" name="clearpassword" size="10" value="{$user.clearpassword.0}"><br />
-                                   password: <input type="password" name="nlo_clearpassword1" size="10" value="{$user.clearpassword.0}"><br />
+                                    <input type="text" name="clearpassword" size="10" value=""><br />
+				    {t}If you do not want to change the password leave this field empty{/t}
                                 </td>
                             </tr>
     			            <tr>

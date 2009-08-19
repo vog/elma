@@ -63,7 +63,7 @@ class content_user_edit extends module_base
 
         }
 
-        $this->smarty->assign("domain",$domain);
+	$this->smarty->assign("domain",$domain);
 
         // new user created or existing user modified
         if (isset($_POST["submit"])) {
@@ -85,7 +85,7 @@ class content_user_edit extends module_base
 
                 // remove all non LDAP objects from submited form
                 // an the submit and mode value
-                $my_user = remove_key_by_str($_POST,"nlo_");
+		$my_user = remove_key_by_str($_POST,"nlo_");
                 unset($my_user["submit"]);
                 unset($my_user["mailstatus"]);
 
@@ -99,7 +99,10 @@ class content_user_edit extends module_base
 
                 $my_user["mailSieveFilter"] =  createEximFilter( $eximFilterValues );
 
-                $my_user["userpassword"] =  "{MD5}".base64_encode(pack("H*",md5($my_user["clearpassword"])));
+		if (empty($my_user["clearpassword"]))
+			unset($my_user["clearpassword"]);
+		else
+			$my_user["userpassword"] =  "{MD5}".base64_encode(pack("H*",md5($my_user["clearpassword"])));
 
                 // modify LDAP entry
                 $this->ldap->modifyUser($domain,$my_user);
@@ -124,7 +127,7 @@ class content_user_edit extends module_base
             SmartyValidate::connect($this->smarty, true);
             SmartyValidate::register_validator('cn', 'cn', 'notEmpty');
             SmartyValidate::register_validator('sn', 'sn', 'notEmpty');
-            SmartyValidate::register_validator('password', 'clearpassword:nlo_clearpassword1', 'isEqual');
+//            SmartyValidate::register_validator('password', 'clearpassword', 'notEmpty');
         }
 
         if ( $user == "new" ) {
