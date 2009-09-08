@@ -27,7 +27,7 @@ msgstr "Lösche Alias"
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:5
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:8
 msgid "Are you sure you want to delete alias %1@%2?"
-msgstr "Sind Sie sicher, daß Sie den Alias %1@%2 löschen wollen?"
+msgstr "Sind Sie sicher, dass Sie den Alias %1@%2 löschen wollen?"
 
 #. ../templates/simple/content_alias_delete.tpl
 #. ../templates/simple/content_domain_delete.tpl
@@ -284,7 +284,7 @@ msgstr ""
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:92
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:332
 msgid "Are you sure you want to delete user %1@%2?"
-msgstr "Sind Sie sicher, daß Sie den Benutzer %1@%2 löschen wollen?"
+msgstr "Sind Sie sicher, dass Sie den Benutzer %1@%2 löschen wollen?"
 
 #. ../templates/simple/content_user_edit.tpl
 #. ../templates/simple/content_user_edit.tpl
@@ -376,7 +376,7 @@ msgstr "Passwort"
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:128
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:404
 msgid "Users and aliases for domain"
-msgstr "Benutzer und Aliase für Domäne"
+msgstr "Benutzer und Aliasse für Domäne"
 
 #. ../templates/simple/login.tpl
 #. ../templates/simple/login.tpl
@@ -577,7 +577,7 @@ msgstr "Benutzer"
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:170
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:221
 msgid "Aliases"
-msgstr "Aliase"
+msgstr "Aliasse"
 
 #. ../templates/simple/content_globaladmins_edit.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:188
