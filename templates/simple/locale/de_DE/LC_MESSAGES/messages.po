@@ -699,6 +699,11 @@ msgid "Redirect"
 msgstr "Umleiten"
 
 #. ../templates/simple/content_user_edit.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:353
+msgid "Local delivery"
+msgstr "Lokal zustellen"
+
+#. ../templates/simple/content_user_edit.tpl
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:356
 msgid "Recipient:"
 msgstr "Empfänger:"

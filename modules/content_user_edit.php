@@ -82,6 +82,12 @@ class content_user_edit extends module_base
                 if (! isset($_POST["nlo_redirectstatus"])) {
                     $eximFilterValues["redirect"]["values"]["STATUS"] = "#";
                 }
+		
+		$eximFilterValues["keep"]["values"] = array( "STATUS" => "",
+                                                              "RECIPIENT" => $_POST["uid"].'@'.$domain);
+                if (! isset($_POST["nlo_keepstatus"])) {
+                    $eximFilterValues["keep"]["values"]["STATUS"] = "#";
+                }
 
                 // remove all non LDAP objects from submited form
                 // an the submit and mode value
@@ -134,11 +140,12 @@ class content_user_edit extends module_base
             $this->smarty->assign("mode","add");
 	} else {
 	    $my_user = $this->ldap->getUser($domain,$user);
-            $eximFilterValues = parseEximFilter($my_user["mailsievefilter"][0]);    
+	    $eximFilterValues = parseEximFilter($my_user["mailsievefilter"][0]);    
             $this->smarty->assign("mode","modify");
             $this->smarty->assign("user",$my_user);
             $this->smarty->assign("vacationsettings",$eximFilterValues["vacation"]["values"]);
             $this->smarty->assign("redirectsettings",$eximFilterValues["redirect"]["values"]);
+            $this->smarty->assign("keepsettings",$eximFilterValues["keep"]["values"]);
         }
     }
 

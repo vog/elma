@@ -48,8 +48,8 @@
                                     <select name="mailspamfilter">
                                         <option {if $domain.mailspamfilter.0 eq "FALSE"}selected{/if} value="FALSE">{t}disabled{/t}</option>
                                         <option {if $domain.mailspamfilter.0 eq "DISCARD"}selected{/if} value="DISCARD">{t}discard email{/t}</option>
-                                        <option {if $domain.mailspamfilter.0 eq "REDIRECT"}selected{/if} value="REDIRECT">{t}redirect to{/t} spam@{$domain.dc.0}</option>
-                                        <option {if $domain.mailspamfilter.0 eq "FOLDER"}selected{/if} value="FOLDER">{t}save in user's spamfolder{/t}</option>
+<!--                                        <option {if $domain.mailspamfilter.0 eq "REDIRECT"}selected{/if} value="REDIRECT">{t}redirect to{/t} spam@{$domain.dc.0}</option>
+                                        <option {if $domain.mailspamfilter.0 eq "FOLDER"}selected{/if} value="FOLDER">{t}save in user's spamfolder{/t}</option>-->
                                     </select>
                                 </td>
                             </tr>

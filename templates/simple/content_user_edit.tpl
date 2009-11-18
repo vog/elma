@@ -58,6 +58,14 @@
 				            </tr>
 			                <tr>
 				                <td>
+                                    {t}Local delivery{/t}
+                                </td>
+                                <td>
+                                    <input type="checkbox" name="nlo_keepstatus" {if $keepsettings.STATUS eq "#"}{else}checked="checked"{/if} />
+                                </td>
+				            </tr>
+			                <tr>
+				                <td>
                                     {t}Recipient:{/t}
                                 </td>
                                 <td>
