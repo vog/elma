@@ -69,3 +69,21 @@ function addDomain() {
 		}
 	}
 }
+
+// hide redirectoptions when redirect is disabled, show redirectoptions when redirect is enabled
+function switchRedirect() {
+	var redirect = document.getElementsByName("nlo_redirectstatus");
+	var keep = document.getElementsByName("nlo_keepstatus");
+	var keeptr = document.getElementById("keepoption");
+	var recipienttr = document.getElementById("recipientoption");
+
+	if (redirect[0].checked == true) {
+		var display = "table-row";
+	} else {
+		var display = "none";
+	}
+
+	keeptr.style.display = display;
+	keep[0].checked = true;
+	recipienttr.style.display = display;
+}

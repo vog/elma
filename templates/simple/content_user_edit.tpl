@@ -53,10 +53,10 @@
                                     {t}Redirect{/t}
                                 </td>
                                 <td>
-                                    <input type="checkbox" name="nlo_redirectstatus" {if $redirectsettings.STATUS eq "#"}{else}checked="checked"{/if} />
+                                    <input type="checkbox" name="nlo_redirectstatus" onchange="switchRedirect()" {if $redirectsettings.STATUS eq "#"}{else}checked="checked"{/if}/>
                                 </td>
 				            </tr>
-			                <tr>
+			                <tr id="keepoption">
 				                <td>
                                     {t}Local delivery{/t}
                                 </td>
@@ -64,7 +64,7 @@
                                     <input type="checkbox" name="nlo_keepstatus" {if $keepsettings.STATUS eq "#"}{else}checked="checked"{/if} />
                                 </td>
 				            </tr>
-			                <tr>
+			                <tr id="recipientoption">
 				                <td>
                                     {t}Recipient:{/t}
                                 </td>
@@ -105,7 +105,7 @@
                                 </td>
                                 <td>
                                     <input type="text" name="clearpassword" size="10" value=""><br />
-				    {t}If you do not want to change the password leave this field empty{/t}
+				    {t}If you do not want to change the password leave this field empty.{/t}
                                 </td>
                             </tr>
     			            <tr>

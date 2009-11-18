@@ -717,3 +717,9 @@ msgstr "abwesend?"
 #: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:362
 msgid "Message:"
 msgstr "Nachricht:"
+
+#. ../templates/simple/content_user_edit.tpl
+#: ../templates/simple/locale/de_DE/LC_MESSAGES/messages.c:362
+msgid "If you do not want to change the password leave this field empty."
+msgstr "Dieses Feld freilassen, wenn Sie Ihr Kennwort nicht ändern wollen."
+
