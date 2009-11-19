@@ -80,9 +80,21 @@ class content_domain_edit extends module_base
                     $my_domain["mailstatus"] = "TRUE";
                 } else {
                     $my_domain["mailstatus"] = "FALSE";
+		}
+
+                $eximFilterValues["maildomainalias"]["values"] = array( "STATUS" => "",
+                                                              "TARGETDOMAIN" => $_POST["nlo_maildomainaliastarget"]);
+                if (! isset($_POST["nlo_maildomainalias"])) {
+                    $eximFilterValues["maildomainalias"]["values"]["STATUS"] = "#";
                 }
+
+		#FIXME!!
+		if(($eximFilterValues["maildomainalias"]["values"]["STATUS"] == "") && ($eximFilterValues["maildomainalias"]["values"]["TARGETDOMAIN"] == "")) {
+		    die("Please set a Targetdomain when enabling Domainaliasing!");
+		}
+
                 $my_domain["mailSieveFilter"] = createEximFilter( $eximFilterValues );
-                
+
                 $this->ldap->modifyDomain($my_domain);
 
                 $admins_cur = $this->ldap->listAdminUsers($domain, TRUE);
@@ -165,6 +177,8 @@ class content_domain_edit extends module_base
         /* parse Exim filter and assign values */
         $eximFilterValues = parseEximFilter($my_domain["mailsievefilter"][0]);
         $this->smarty->assign("spamfiltersettings",$eximFilterValues["spamfilter"]["values"]);
+	$this->smarty->assign("maildomainaliassettings",$eximFilterValues["maildomainalias"]["values"]);
+
     }
 
     /**

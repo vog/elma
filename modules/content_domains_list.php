@@ -51,10 +51,13 @@ class content_domains_list extends module_base {
 
         $my_domains = array();
 
-        $domains = $this->ldap->listDomains();
-        for ( $i = 0; $i < $domains["count"]; $i++ ) {
+	$domains = $this->ldap->listDomains();
+	for ( $i = 0; $i < $domains["count"]; $i++ ) {
+	    $eximFilterValues = parseEximFilter($domains[$i]['mailsievefilter'][0]);
             $domain['dc'] = $domains[$i]["dc"][0]; 
-            $domain['mailstatus'] = $domains[$i]["mailstatus"][0];
+	    $domain['mailstatus'] = $domains[$i]["mailstatus"][0];
+	    $domain['maildomainaliasstatus'] = (($eximFilterValues['maildomainalias']['values']['STATUS'] == '') && ($eximFilterValues['maildomainalias']['values']['TARGETDOMAIN'] != ''))?1:0;
+	    $domain['maildomainaliastarget'] = $eximFilterValues['maildomainalias']['values']['TARGETDOMAIN'];
             $domain['userslink'] = $_SERVER['PHP_SELF']."?module=users_list&amp;domain=".$domain['dc'];
             $domain['deletelink'] = $_SERVER['PHP_SELF']."?module=domain_delete&amp;domain=".$domain['dc'];
             $domain['editlink'] = $_SERVER['PHP_SELF']."?module=domain_edit&amp;domain=".$domain['dc']; 
@@ -65,7 +68,7 @@ class content_domains_list extends module_base {
             array_push($my_domains,$domain);
         }
         $this->smarty->assign("link_newdomain",$_SERVER['PHP_SELF']."?module=domain_new");
-        $this->smarty->assign('domains',$my_domains);   
+	$this->smarty->assign('domains',$my_domains);
 	}
 
     /**

@@ -39,6 +39,27 @@
                                     <hr />
                                 </td>
                             </tr>
+	               	    <tr>
+			        <td>
+                                    {t}Use Domain as Alias?{/t}
+                                </td>
+                                <td>
+                                    <input type="checkbox" name="nlo_maildomainalias" {if $maildomainaliassettings.STATUS eq "#"}{else}checked="checked"{/if} />
+                                </td>
+			    </tr>
+	               	    <tr>
+			        <td>
+                                    {t}Targetdomain{/t}
+                                </td>
+                                <td>
+                                    <input type="text" name="nlo_maildomainaliastarget" value="{$maildomainaliassettings.TARGETDOMAIN}" />
+                                </td>
+			    </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <hr />
+                                </td>
+                            </tr>
                             {if @in_array("domain_edit.spamfilter",$acl) }
                             <tr>
                                 <td>

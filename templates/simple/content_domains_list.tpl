@@ -11,7 +11,12 @@
 		            {section name=domains_sec loop=$domains}
 		            <tr>
                         <td>
-                            <a href="{$domains[domains_sec].userslink}">{$domains[domains_sec].dc}</a>
+                            {if $domains[domains_sec].maildomainaliasstatus == 0}
+				<a href="{$domains[domains_sec].userslink}">{$domains[domains_sec].dc}</a>
+			    {else}
+				{$domains[domains_sec].dc}<br />
+				<span class="isAliasFor">({t}Alias for{/t} {$domains[domains_sec].maildomainaliastarget})</span>
+			    {/if}
                         </td>
                         <td class="status">
                             {$domains[domains_sec].users}/{$domains[domains_sec].usersactive}

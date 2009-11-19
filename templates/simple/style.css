@@ -263,3 +263,8 @@ div#Content table.inside {
   margin: 0;
   text-align: center;
 }
+
+span.isAliasFor {
+  font-size: 9pt;
+  padding-left: 10px;
+}

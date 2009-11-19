@@ -107,7 +107,7 @@ class ELMA {
      * @attribute       array   array of ldap attributes to return, empty array returns everything
      */
     function listDomains ($active="*", $attributes=array() ) {
-        $domains = $this->getDomain("*", $active="*", $attributes=array());
+        $domains = $this->getDomain("*", $active="*", $attributes);
         return $domains;
     }
 

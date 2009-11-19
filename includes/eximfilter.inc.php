@@ -15,6 +15,12 @@ function loadEximFilterTemplates() {
     $eximFilter["filtertype"]["template"] = '%STATUS% Exim filter';
     $eximFilter["filtertype"]["regex"] = '/^(.*) Exim filter$/i';
     $eximFilter["filtertype"]["values"] = array("STATUS" => "#");
+    
+    // DomainAlias Template
+    $eximFilter["maildomainalias"]["template"] = '%STATUS%deliver $local_part@%TARGETDOMAIN% # DOMAINALIAS';
+    $eximFilter["maildomainalias"]["regex"] = '/^(.*)deliver \$local_part@(.*) # DOMAINALIAS$/i';
+    $eximFilter["maildomainalias"]["values"] = array("STATUS" => "#",
+	    					"TARGETDOMAIN" => "");
 
     // Redirect Template
     $eximFilter["redirect"]["template"] = '%STATUS%deliver %RECIPIENT% # REDIRECT';
@@ -27,7 +33,6 @@ function loadEximFilterTemplates() {
     $eximFilter["keep"]["regex"] = '/^(.*)deliver (.*) # KEEP$/i';
     $eximFilter["keep"]["values"] = array("STATUS" => "#",
 	    					"RECIPIENT" => "");
-
 
     // Spamfilter Template
     $eximFilter["spamfilter"]["template"] = '%STATUS%if $header_X-Spam-Flag: contains "YES" then %FILTERACTION% endif # SPAMFILTER %ACTION%';

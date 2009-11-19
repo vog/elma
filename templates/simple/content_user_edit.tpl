@@ -56,7 +56,7 @@
                                     <input type="checkbox" name="nlo_redirectstatus" onchange="switchRedirect()" {if $redirectsettings.STATUS eq "#"}{else}checked="checked"{/if}/>
                                 </td>
 				            </tr>
-			                <tr id="keepoption">
+			                <tr id="keepoption" {if $redirectsettings.STATUS eq "#"}style="display:none"{/if}>
 				                <td>
                                     {t}Local delivery{/t}
                                 </td>
@@ -64,7 +64,7 @@
                                     <input type="checkbox" name="nlo_keepstatus" {if $keepsettings.STATUS eq "#"}{else}checked="checked"{/if} />
                                 </td>
 				            </tr>
-			                <tr id="recipientoption">
+			                <tr id="recipientoption" {if $redirectsettings.STATUS eq "#"}style="display:none"{/if}>
 				                <td>
                                     {t}Recipient:{/t}
                                 </td>
