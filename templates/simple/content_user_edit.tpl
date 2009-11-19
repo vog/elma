@@ -2,7 +2,7 @@
             {validate id="sn" message="Last name not valid or empty" append="validation_errors"}
 
             <div id="Content">
-                <h2>{t}Edit user{/t} {$user.uid.0}@{$domain}</h2>
+                <h2>{t}Edit user{/t}</h2>
 		        {if $smarty.post.submit}
                     {include file="print_submit_status.tpl"}
                 {/if}

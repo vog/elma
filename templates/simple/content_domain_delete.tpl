@@ -1,5 +1,5 @@
             <div id="Content">
-                <h2>{t}Delete domain{/t} {$domain}</h2>
+                <h2>{t}Delete domain{/t}</h2>
 		        {if $smarty.post.submit}
                     {include file="print_submit_status.tpl"}
                     <br />

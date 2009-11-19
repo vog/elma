@@ -1,7 +1,7 @@
             {validate id="nlo_mailaliasedname" message="Destinations must not be empty" append="validation_errors"}
 
             <div id="Content">
-                <h2>{t}Edit alias{/t} {$alias.uid.0}@{$domain}</h2>
+                <h2>{t}Edit alias{/t}</h2>
 		        {if $smarty.post.submit}
                     {include file="print_submit_status.tpl"}
                 {/if}

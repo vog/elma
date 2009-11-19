@@ -1,7 +1,7 @@
              {validate id="dc" message="Domain not valid or empty" append="validation_errors"}
 
             <div id="Content">
-                <h2>{t }Edit domain{/t} {$domain.dc}</h2>
+                <h2>{t }Edit domain{/t}</h2>
 		        {if $smarty.post.submit}
                     {include file="print_submit_status.tpl"}
                 {/if}

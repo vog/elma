@@ -1,5 +1,5 @@
             <div id="Content">
-                <h2>{t}Delete systemuser{/t} {$user.uid.0}</h2>
+                <h2>{t}Delete systemuser{/t}</h2>
 		        {if $smarty.post.submit}
                     {include file="print_submit_status.tpl"}
                     <br />
