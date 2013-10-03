@@ -35,6 +35,15 @@ if (!file_exists('templates_c')) {
     mkdir('templates_c', 0700);
 }
 
+if (isset($_GET['action']) && $_GET['action'] === 'login') {
+    require_once 'includes/login.inc.php';
+    exit;
+}
+if (isset($_GET['action']) && $_GET['action'] === 'logout') {
+    require_once 'includes/logout.inc.php';
+    exit;
+}
+
 session_start();
 
 require("includes/config.inc.php");

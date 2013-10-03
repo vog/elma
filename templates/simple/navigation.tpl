@@ -10,7 +10,7 @@
                     {if @in_array("settings",$acl) }
                     <li><a href="{$smarty.server.PHP_SELF}?module=settings">{t}Settings{/t}</a></li>
                     {/if}
-                    <li><a href="logout.php">{t}Logout{/t}</a></li>
+                    <li><a href="{$smarty.server.PHP_SELF}?action=logout">{t}Logout{/t}</a></li>
                 </ul>
             </div>
 
