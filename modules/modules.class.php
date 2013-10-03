@@ -43,12 +43,12 @@ class modules {
      * @return object class on success, error message on error
      */
     function &factory($type = "main") {  
-        if (!file_exists(APPROOT."/modules/content_${type}.php")) {   
+        if (!file_exists(dirname(__FILE__)."/content_${type}.php")) {
             $type = "main";
         }
         $classname = "content_${type}";
 
-        include(APPROOT."/modules/${classname}.php");
+        include(dirname(__FILE__)."/${classname}.php");
 
         if (!class_exists($classname)) {   
             echo "error!";

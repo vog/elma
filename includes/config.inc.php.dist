@@ -72,9 +72,6 @@ define ("TEMPLATE","simple");
 
 /* ######## Application Settings #### */
 
-// Define the applications root directory, getcwd() should work in most cases
-define('APPROOT',getcwd());
-
 // Define the session variable encryption key
 define('MYCRYPT_KEY',"my mcrypt encryption key");
 

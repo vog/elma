@@ -29,6 +29,8 @@
 
 date_default_timezone_set('UTC');
 
+chdir(dirname(__FILE__));
+
 session_start();
 
 require("includes/config.inc.php");
