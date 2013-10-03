@@ -58,11 +58,11 @@ class content_users_list extends module_base {
         for ($i = 0; $i < $users["count"]; $i++) {
             $user['uid'] = $users[$i]["uid"][0]; 
             $user['mailstatus'] = $users[$i]["mailstatus"][0];
-            $user['deletelink'] = $_SERVER['PHP_SELF']."?module=user_delete&amp;domain=".$domain."&amp;user=".$user['uid']."&amp;mode=delete";
-            $user['editlink'] = $_SERVER['PHP_SELF']."?module=user_edit&amp;domain=".$domain."&amp;user=".$user['uid']; 
+            $user['deletelink'] = "?module=user_delete&amp;domain=".$domain."&amp;user=".$user['uid']."&amp;mode=delete";
+            $user['editlink'] = "?module=user_edit&amp;domain=".$domain."&amp;user=".$user['uid'];
             array_push($my_users,$user);
         }
-        $this->smarty->assign("link_newuser",$_SERVER['PHP_SELF']."?module=user_new&amp;domain=".$domain);
+        $this->smarty->assign("link_newuser","?module=user_new&amp;domain=".$domain);
         $this->smarty->assign('users',$my_users);
 
         // prepare aliases array for smarty output
@@ -72,11 +72,11 @@ class content_users_list extends module_base {
             $alias['uid'] = $aliases[$i]["uid"][0]; 
             $alias['mailaliasedname'] = $aliases[$i]["mailaliasedname"];
             $alias['mailstatus'] = $aliases[$i]["mailstatus"][0];
-            $alias['deletelink'] = $_SERVER['PHP_SELF']."?module=alias_delete&amp;domain=".$domain."&amp;alias=".$alias['uid'];
-            $alias['editlink'] = $_SERVER['PHP_SELF']."?module=alias_edit&amp;domain=".$domain."&amp;alias=".$alias['uid']; 
+            $alias['deletelink'] = "?module=alias_delete&amp;domain=".$domain."&amp;alias=".$alias['uid'];
+            $alias['editlink'] = "?module=alias_edit&amp;domain=".$domain."&amp;alias=".$alias['uid'];
             array_push($my_aliases,$alias);
         }
-        $this->smarty->assign("link_newalias",$_SERVER['PHP_SELF']."?module=alias_new&amp;domain=".$domain);
+        $this->smarty->assign("link_newalias","?module=alias_new&amp;domain=".$domain);
         $this->smarty->assign('aliases',$my_aliases);
     }
 

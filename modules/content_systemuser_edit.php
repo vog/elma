@@ -121,11 +121,11 @@ class content_systemuser_edit extends module_base
                     $systemuser = $my_systemuser["uid"];
                     switch($next_step) {
                     case 'show_overview':
-                        Header("Location: index.php?module=systemusers_list" );
+                        Header("Location: ?module=systemusers_list" );
                         exit;
                         break;
                     case 'add_another':
-                        Header("Location: index.php?module=systemuser_edit&user=new") ;
+                        Header("Location: ?module=systemuser_edit&user=new") ;
                         exit;
                         break;
                     case 'edit_current':

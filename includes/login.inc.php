@@ -72,14 +72,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION["ldap_binddn"] = $crypt->encrypt($LDAP_BINDDN);
             $_SESSION["ldap_bindpass"] = $crypt->encrypt($LDAP_BINDPASS);
         
-            header ("Location: index.php");
+            header ("Location: ?");
             exit;
         } else  {
             session_destroy();
-            header ("Location: index.php?loginerror=TRUE");
+            header ("Location: ?loginerror=TRUE");
         }
     } else {
-        header ("Location: index.php?loginerror=TRUE");
+        header ("Location: ?loginerror=TRUE");
     }
 }
 // vim:tabstop=4:expandtab:shiftwidth=4:filetype=php:syntax:ruler:

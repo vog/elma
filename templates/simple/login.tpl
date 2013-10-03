@@ -1,5 +1,5 @@
             <div id="Content">
-                <form action="{$smarty.server.PHP_SELF}?action=login" method="post">
+                <form action="?action=login" method="post">
 		            <table>
                         <tr>
 			                <th colspan="3" class="login">

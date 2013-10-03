@@ -58,16 +58,16 @@ class content_domains_list extends module_base {
 	    $domain['mailstatus'] = $domains[$i]["mailstatus"][0];
 	    $domain['maildomainaliasstatus'] = (($eximFilterValues['maildomainalias']['values']['STATUS'] == '') && ($eximFilterValues['maildomainalias']['values']['TARGETDOMAIN'] != ''))?1:0;
 	    $domain['maildomainaliastarget'] = $eximFilterValues['maildomainalias']['values']['TARGETDOMAIN'];
-            $domain['userslink'] = $_SERVER['PHP_SELF']."?module=users_list&amp;domain=".$domain['dc'];
-            $domain['deletelink'] = $_SERVER['PHP_SELF']."?module=domain_delete&amp;domain=".$domain['dc'];
-            $domain['editlink'] = $_SERVER['PHP_SELF']."?module=domain_edit&amp;domain=".$domain['dc']; 
+            $domain['userslink'] = "?module=users_list&amp;domain=".$domain['dc'];
+            $domain['deletelink'] = "?module=domain_delete&amp;domain=".$domain['dc'];
+            $domain['editlink'] = "?module=domain_edit&amp;domain=".$domain['dc'];
             $domain['users'] = $this->ldap->userCount($domain['dc']);
             $domain['usersactive'] = $this->ldap->userCount($domain['dc'], "TRUE");
             $domain['aliases'] = $this->ldap->aliasCount($domain['dc']);
             $domain['aliasesactive'] = $this->ldap->aliasCount($domain['dc'], "TRUE");
             array_push($my_domains,$domain);
         }
-        $this->smarty->assign("link_newdomain",$_SERVER['PHP_SELF']."?module=domain_new");
+        $this->smarty->assign("link_newdomain","?module=domain_new");
 	$this->smarty->assign('domains',$my_domains);
 	}
 

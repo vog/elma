@@ -105,11 +105,11 @@ class content_domain_new extends module_base
                     switch($next_step) {
                     case 'show_overview':
                         SmartyValidate::disconnect();
-                        Header("Location: index.php?module=users_list&domain=" . urlencode($domain) );
+                        Header("Location: ?module=users_list&domain=" . urlencode($domain) );
                         exit;
                         break;
                     case 'show_domain_list':
-                        Header("Location: index.php?module=domains_list");
+                        Header("Location: ?module=domains_list");
                         exit;
                         break;
                     case 'add_another':

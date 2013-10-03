@@ -3,7 +3,7 @@
 		        {if $smarty.post.submit}
                     {include file="print_submit_status.tpl"}
                     <br />
-                    <a href="index.php?module=systemusers_list">{t}Back to Systemusers overview{/t}</a>
+                    <a href="?module=systemusers_list">{t}Back to Systemusers overview{/t}</a>
                 {else}
 		        <form action="{$smarty.server.REQUEST_URI}" method="post">
 			        <fieldset>

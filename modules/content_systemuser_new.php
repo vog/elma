@@ -109,12 +109,12 @@ class content_systemuser_new extends module_base
                     switch($next_step) {
                     case 'show_overview':
                         SmartyValidate::disconnect();
-                        Header("Location: index.php?module=systemusers_list" );
+                        Header("Location: ?module=systemusers_list" );
                         exit;
                         break;
                     case 'edit_current':
                         SmartyValidate::disconnect();
-                        Header("Location: index.php?module=systemuser_edit&user=" . urlencode($my_systemuser["uid"]));
+                        Header("Location: ?module=systemuser_edit&user=" . urlencode($my_systemuser["uid"]));
                         exit;
                         break;
                     case 'add_another':

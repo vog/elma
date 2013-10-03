@@ -60,12 +60,12 @@ class content_systemusers_list extends module_base
             $user['lname'] = $users[$i]['cn'][0];
             $user['fname'] = $users[$i]['sn'][0];
 
-            $user['deletelink'] = $_SERVER['PHP_SELF']."?module=systemuser_delete&amp;user=".$user['uid'];
-            $user['editlink'] = $_SERVER['PHP_SELF']."?module=systemuser_edit&amp;user=".$user['uid']; 
+            $user['deletelink'] = "?module=systemuser_delete&amp;user=".$user['uid'];
+            $user['editlink'] = "?module=systemuser_edit&amp;user=".$user['uid'];
             array_push($my_users,$user);
         }
 
-        $this->smarty->assign("link_newsystemuser",$_SERVER['PHP_SELF']."?module=systemuser_new");
+        $this->smarty->assign("link_newsystemuser","?module=systemuser_new");
         $this->smarty->assign('systemusers',$my_users);   
     }
 

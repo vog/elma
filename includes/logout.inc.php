@@ -29,7 +29,7 @@
 
 session_start();
 session_destroy();
-Header('Location: index.php');
+Header('Location: ?');
 exit;
 
 // vim:tabstop=4:expandtab:shiftwidth=4:filetype=php:syntax:ruler:
