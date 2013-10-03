@@ -31,6 +31,10 @@ date_default_timezone_set('UTC');
 
 chdir(dirname(__FILE__));
 
+if (!file_exists('templates_c')) {
+    mkdir('templates_c', 0700);
+}
+
 session_start();
 
 require("includes/config.inc.php");
