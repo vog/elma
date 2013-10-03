@@ -31,7 +31,7 @@
  * module factory
  *
  * This class contains a factory to call modules. This makes
- * calling modules by index.php much easier.
+ * calling modules by main.inc.php much easier.
  */
 
 class modules {
