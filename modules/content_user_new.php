@@ -100,7 +100,7 @@ class content_user_new extends module_base
                             break;
                         case 'edit_current':
                             SmartyValidate::disconnect();
-                            header("Location: index.php?module=systemuser_edit&&user=" . urlencode($user) );
+                            header("Location: index.php?module=systemuser_edit&user=" . urlencode($user) );
                             exit;
                             break;
                         case 'add_another':
