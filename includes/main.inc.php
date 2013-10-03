@@ -31,9 +31,12 @@ date_default_timezone_set('UTC');
 
 chdir(dirname(__FILE__).'/..');
 
-if (!file_exists('templates_c')) {
-    mkdir('templates_c', 0700);
-}
+if (!file_exists('var')) mkdir('var', 0700);
+if (!file_exists('var/cache')) mkdir('var/cache', 0700);
+if (!file_exists('var/templates_c')) mkdir('var/templates_c', 0700);
+if (!file_exists('var/php')) mkdir('var/php', 0700);
+
+session_save_path(dirname(__FILE__).'/../var/php');
 
 if (isset($_GET['action']) && $_GET['action'] === 'login') {
     require_once 'includes/login.inc.php';

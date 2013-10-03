@@ -35,7 +35,7 @@ $smarty->template_dir = getcwd().'/templates/'.TEMPLATE.'/';
 $smarty->caching = false;
 $smarty->php_handling = SMARTY_PHP_REMOVE;
 $smarty->assign('template_path',"templates/".TEMPLATE);
-$smarty->compile_dir = getcwd().'/templates_c';
-$smarty->cache_dir = getcwd().'/cache';
+$smarty->compile_dir = getcwd().'/var/templates_c';
+$smarty->cache_dir = getcwd().'/var/cache';
 
 // vim:tabstop=4:expandtab:shiftwidth=4:filetype=php:syntax:ruler:
