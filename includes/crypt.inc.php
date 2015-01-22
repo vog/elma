@@ -58,7 +58,8 @@ class mycrypt {
      * decryption function
      */
     function decrypt ($text) {
-        $return_text = mcrypt_decrypt($this->cipher, $this->key, $text, $this->mode, $this->iv);
+        $return_text_padded = mcrypt_decrypt($this->cipher, $this->key, $text, $this->mode, $this->iv);
+        $return_text = rtrim($return_text_padded, "\x00");
         return $return_text;
     } 
 }
