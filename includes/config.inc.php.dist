@@ -73,7 +73,7 @@ define ("TEMPLATE","simple");
 /* ######## Application Settings #### */
 
 // Define the session variable encryption key
-define('MYCRYPT_KEY',"my mcrypt encryption key");
+define('MYCRYPT_KEY',"mcrypt encryption key (32 bytes)");
 
 // Should ELMA save the cleartext password in the LDAP database (needed for cram-md5 authentification)
 // a value with anything else than an empty string will enable cleatext password saving!!
