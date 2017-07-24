@@ -53,7 +53,7 @@ class modules {
         if (!class_exists($classname)) {   
             echo "error!";
         }
-        @$obj =& new $classname;
+        @$obj = new $classname;
 
         return $obj;
     }
